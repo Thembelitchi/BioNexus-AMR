@@ -1,3 +1,4 @@
+
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 
 // Data Models
@@ -6,7 +7,8 @@ export enum NodeType {
   SAMPLE = 'SAMPLE',
   ORGANISM = 'ORGANISM',
   ANTIBIOTIC = 'ANTIBIOTIC',
-  LOCATION = 'LOCATION'
+  LOCATION = 'LOCATION',
+  GENE = 'GENE'
 }
 
 export interface GraphNode extends SimulationNodeDatum {
@@ -46,6 +48,26 @@ export interface OrganismData {
   investigations: string[];
   antibiotics: AntibioticInfo[];
   alert?: string;
+}
+
+export interface GenomicData {
+  sampleId: string;
+  geneDetected: string;
+  mechanism: string;
+  clinicalImpact: string;
+}
+
+export interface SurveillanceData {
+  PatientID: string;
+  SampleID: string;
+  Date: string;
+  Ward: string;
+  SpecimenSource: string;
+  Organism: string;
+  Phenotype: string;
+  Antibiotic: string;
+  Result: 'R' | 'S' | 'I';
+  MIC: string;
 }
 
 export interface ChatMessage {

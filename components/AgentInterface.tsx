@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2, Sparkles, Paperclip, FileText, X, ExternalLink } from 'lucide-react';
+import { Send, Bot, User, Loader2, Sparkles, Paperclip, FileText, X, ExternalLink, Dna } from 'lucide-react';
 import { ChatMessage } from '../types';
 import { geminiService } from '../services/geminiService';
 
@@ -8,7 +8,7 @@ const AgentInterface: React.FC = () => {
     {
       id: 'init',
       role: 'model',
-      content: 'Hello, I am BioNexus Agent. I can analyze **Lab Reports** (upload PDF/Images), generate **Cypher queries**, or search the web for **R&D updates**.',
+      content: 'Hello, I am **BioNexus 2026**. I can analyze **Genomic Data**, interpret **Agar Plates**, and draft **Stewardship Notes**.',
       timestamp: new Date()
     }
   ]);
@@ -74,13 +74,14 @@ const AgentInterface: React.FC = () => {
       let groundingData = undefined;
 
       if (selectedFile) {
-        // Module B: Ingestion Engine
+        // Module B: Ingestion Engine (Enhanced for 2026)
         const base64 = await convertFileToBase64(selectedFile);
         responseText = await geminiService.analyzeLabReport(base64, selectedFile.type);
         clearFile();
       } else {
         // Module A & C: Agent Chat
-        const mockContext = "Active Cluster: 3 MRSA cases in ICU (Resistant to Oxacillin). Patient 103: K. pneumoniae (Burn Unit).";
+        // In a real app, this context would be dynamically constructed from the current Dashboard state (Graph + Genomics)
+        const mockContext = "Active Cluster: 3 MRSA cases in ICU. Genomic Data: blaNDM-1 detected in Sample S-20045 (K. pneumoniae).";
         const result = await geminiService.chatWithAgent(userMsg.content, mockContext);
         responseText = result.text;
         groundingData = result.groundingMetadata;
@@ -148,40 +149,40 @@ const AgentInterface: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[600px] bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="flex flex-col h-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       {/* Header */}
       <div className="bg-slate-900 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-            <div className="p-2 bg-violet-600 rounded-lg">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="p-2 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-lg shadow-lg">
+              <Dna className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="text-white font-semibold">BioNexus Micro-Brain</h3>
-              <p className="text-slate-400 text-xs">Orchestrator • R&D Scout</p>
+              <h3 className="text-white font-semibold">BioNexus Intelligence</h3>
+              <p className="text-slate-400 text-[10px] uppercase tracking-wider">Genomics • Vision • Stewardship</p>
             </div>
         </div>
-        <div className="text-[10px] text-slate-500 bg-slate-800 px-2 py-1 rounded">
-            v1.0.0
+        <div className="text-[10px] text-emerald-400 bg-emerald-950/30 border border-emerald-900/50 px-2 py-1 rounded flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"/> Online
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50" ref={scrollRef}>
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50" ref={scrollRef}>
         {messages.map((msg) => (
           <div key={msg.id} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-              msg.role === 'user' ? 'bg-blue-100 text-blue-600' : 'bg-violet-100 text-violet-600'
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border ${
+              msg.role === 'user' ? 'bg-blue-100 text-blue-600 border-blue-200' : 'bg-violet-100 text-violet-600 border-violet-200'
             }`}>
               {msg.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
             </div>
-            <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
+            <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
               msg.role === 'user' 
                 ? 'bg-blue-600 text-white rounded-tr-none' 
-                : 'bg-white text-slate-700 border border-slate-200 shadow-sm rounded-tl-none'
+                : 'bg-white text-slate-700 border border-slate-200 rounded-tl-none'
             }`}>
               {/* Attachment Badge */}
               {msg.attachment && (
-                 <div className="mb-2 p-2 bg-white/20 rounded flex items-center gap-2 text-xs">
+                 <div className="mb-2 p-2 bg-white/20 rounded-lg flex items-center gap-2 text-xs border border-white/10">
                     <FileText className="w-4 h-4" />
                     <span className="truncate max-w-[150px]">{msg.attachment.name}</span>
                  </div>
@@ -193,7 +194,7 @@ const AgentInterface: React.FC = () => {
                     if (i % 2 === 1) {
                       // Code Block (likely Cypher)
                       return (
-                        <pre key={i} className="bg-slate-900 text-green-400 p-3 rounded-lg my-2 overflow-x-auto text-xs font-mono">
+                        <pre key={i} className="bg-slate-900 text-emerald-400 p-3 rounded-lg my-2 overflow-x-auto text-xs font-mono border border-slate-800">
                           {part}
                         </pre>
                       );
@@ -202,7 +203,7 @@ const AgentInterface: React.FC = () => {
                     return (
                         <span key={i}>
                             {part.split('**').map((subPart, j) => 
-                                j % 2 === 1 ? <strong key={j} className={msg.role === 'model' ? "text-slate-900" : "font-bold"}>{subPart}</strong> : subPart
+                                j % 2 === 1 ? <strong key={j} className={msg.role === 'model' ? "text-slate-900 font-bold" : "font-bold"}>{subPart}</strong> : subPart
                             )}
                         </span>
                     );
@@ -217,13 +218,13 @@ const AgentInterface: React.FC = () => {
         
         {isLoading && (
           <div className="flex gap-3 animate-pulse">
-             <div className="w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center shrink-0">
+             <div className="w-8 h-8 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center shrink-0 border border-violet-200">
                <Bot className="w-5 h-5" />
              </div>
              <div className="bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-2">
-               <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
-               <span className="text-xs text-slate-500">
-                  {selectedFile ? 'Parsing Lab Report...' : 'Searching & Reasoning...'}
+               <Loader2 className="w-4 h-4 animate-spin text-violet-500" />
+               <span className="text-xs text-slate-500 font-medium">
+                  {selectedFile ? 'Processing Visual/Data Artifact...' : 'Consulting BioNexus Brain...'}
                </span>
              </div>
           </div>
@@ -235,10 +236,10 @@ const AgentInterface: React.FC = () => {
         
         {/* File Preview */}
         {selectedFile && (
-            <div className="mb-2 flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm w-fit border border-blue-100">
+            <div className="mb-2 flex items-center gap-2 bg-violet-50 text-violet-700 px-3 py-2 rounded-lg text-sm w-fit border border-violet-100 shadow-sm animate-fade-in">
                 <FileText className="w-4 h-4" />
-                <span className="max-w-[200px] truncate">{selectedFile.name}</span>
-                <button onClick={clearFile} className="ml-2 hover:bg-blue-100 rounded-full p-0.5"><X className="w-3 h-3" /></button>
+                <span className="max-w-[200px] truncate font-medium">{selectedFile.name}</span>
+                <button onClick={clearFile} className="ml-2 hover:bg-violet-100 rounded-full p-1 transition-colors"><X className="w-3 h-3" /></button>
             </div>
         )}
 
@@ -247,13 +248,13 @@ const AgentInterface: React.FC = () => {
                 type="file" 
                 ref={fileInputRef} 
                 className="hidden" 
-                accept="image/*,.pdf"
+                accept="image/*,.pdf,.csv"
                 onChange={handleFileSelect}
             />
             <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-xl transition-colors"
-                title="Upload Lab Report"
+                className="p-3 text-slate-400 hover:text-violet-600 hover:bg-violet-50 rounded-xl transition-all border border-transparent hover:border-violet-100"
+                title="Upload Image (Agar Plate), PDF (Report), or CSV"
             >
                 <Paperclip className="w-5 h-5" />
             </button>
@@ -261,17 +262,17 @@ const AgentInterface: React.FC = () => {
             <div className="relative flex-1">
                 <input
                     type="text"
-                    className="w-full pl-4 pr-12 py-3 bg-slate-100 border border-transparent rounded-xl focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                    placeholder="Ask BioNexus or upload report..."
+                    className="w-full pl-4 pr-12 py-3 bg-slate-100 border border-transparent rounded-xl focus:bg-white focus:border-violet-500 focus:ring-2 focus:ring-violet-100 outline-none transition-all placeholder:text-slate-400"
+                    placeholder="Ask about genomics, stewardship, or upload data..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    disabled={!!selectedFile} // Disable text if file is selected (for simplicity in this flow)
+                    disabled={!!selectedFile} 
                 />
                 <button 
                     onClick={handleSend}
                     disabled={isLoading || (!input.trim() && !selectedFile)}
-                    className="absolute right-2 top-2 p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="absolute right-2 top-2 p-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                 >
                     <Send className="w-4 h-4" />
                 </button>

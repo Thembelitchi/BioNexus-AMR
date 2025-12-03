@@ -1,4 +1,4 @@
-import { GraphData, NodeType, OrganismData } from './types';
+import { GraphData, NodeType, OrganismData, GenomicData } from './types';
 
 // Mock Knowledge Graph Data simulating clusters of "Superbugs" (CRE, MRSA, C. auris)
 export const INITIAL_GRAPH_DATA: GraphData = {
@@ -73,6 +73,13 @@ export const INITIAL_GRAPH_DATA: GraphData = {
     { source: 'ORG-CAURIS', target: 'ABX-MIC', relationship: 'SUSCEPTIBLE_TO', details: { mic: '0.12' } },
   ]
 };
+
+export const INITIAL_GENOMIC_DATA: GenomicData[] = [
+  { sampleId: 'SMP-A1', geneDetected: 'mecA', mechanism: 'PBP2a Production', clinicalImpact: 'Methicillin Resistance (MRSA)' },
+  { sampleId: 'SMP-B1', geneDetected: 'blaKPC', mechanism: 'Carbapenemase', clinicalImpact: 'High-Level Carbapenem Resistance' },
+  { sampleId: 'SMP-B2', geneDetected: 'blaNDM-1', mechanism: 'Metallo-Beta-Lactamase', clinicalImpact: 'CRITICAL: Pan-drug resistance potential' },
+  { sampleId: 'S-20045', geneDetected: 'blaNDM-1', mechanism: 'Metallo-Beta-Lactamase', clinicalImpact: 'CRITICAL: Hydrolyzes all carbapenems' },
+];
 
 // Knowledge Base for Smart Select - Updated with Superbugs
 export const ORGANISM_KB: Record<string, OrganismData> = {
