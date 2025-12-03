@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell 
 } from 'recharts';
-import { Activity, ShieldAlert, Users, LayoutDashboard, Network, UploadCloud, Link as LinkIcon, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Activity, ShieldAlert, Users, LayoutDashboard, Network, UploadCloud, Link as LinkIcon, ArrowRight, ArrowLeft, Microscope, Search } from 'lucide-react';
 import KnowledgeGraph from './KnowledgeGraph';
 import SmartSelect from './SmartSelect';
 import AgentInterface from './AgentInterface';
@@ -10,7 +10,7 @@ import { INITIAL_GRAPH_DATA } from '../constants';
 import { GraphNode, GraphData, NodeType, GraphLink } from '../types';
 
 const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'surveillance' | 'investigation'>('surveillance');
+  const [activeTab, setActiveTab] = useState<'surveillance' | 'graph' | 'investigation'>('surveillance');
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [graphData, setGraphData] = useState<GraphData>(INITIAL_GRAPH_DATA);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -168,7 +168,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0">
+      <aside className="w-full md:w-64 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 z-50">
         <div className="p-6 border-b border-slate-800">
           <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
             <Activity className="text-blue-500" />
@@ -182,14 +182,21 @@ const Dashboard: React.FC = () => {
             onClick={() => setActiveTab('surveillance')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'surveillance' ? 'bg-blue-600 text-white' : 'hover:bg-slate-800'}`}
           >
+            <LayoutDashboard className="w-5 h-5" />
+            Surveillance
+          </button>
+          <button 
+            onClick={() => setActiveTab('graph')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'graph' ? 'bg-blue-600 text-white' : 'hover:bg-slate-800'}`}
+          >
             <Network className="w-5 h-5" />
-            Surveillance Graph
+            Graph Explorer
           </button>
           <button 
             onClick={() => setActiveTab('investigation')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === 'investigation' ? 'bg-blue-600 text-white' : 'hover:bg-slate-800'}`}
           >
-            <LayoutDashboard className="w-5 h-5" />
+            <Microscope className="w-5 h-5" />
             Clinical Investigation
           </button>
         </nav>
@@ -210,32 +217,19 @@ const Dashboard: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto overflow-x-hidden">
+        
+        {/* TAB 1: SURVEILLANCE DASHBOARD */}
         {activeTab === 'surveillance' && (
           <div className="space-y-6">
             <header className="flex justify-between items-center mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-slate-800">Live Surveillance Map</h2>
-                <p className="text-slate-500">Real-time visualization of patient-pathogen relationships.</p>
-              </div>
-              <div>
-                <input 
-                  type="file" 
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept=".csv"
-                  className="hidden" 
-                />
-                <button 
-                  onClick={handleImportClick}
-                  className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 shadow-sm transition"
-                >
-                  <UploadCloud className="w-4 h-4" /> Import CSV Data
-                </button>
+                <h2 className="text-2xl font-bold text-slate-800">Live Surveillance Overview</h2>
+                <p className="text-slate-500">Real-time statistics and alert monitoring.</p>
               </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Stats Cards */}
               <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                  <div className="flex items-center justify-between mb-4">
@@ -264,14 +258,61 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
+            {/* Regional Resistance Chart */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <h3 className="text-lg font-bold text-slate-800 mb-6">Regional Resistance Patterns</h3>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={resistanceData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
+                    <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
+                    <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}} />
+                    <Bar dataKey="cases" radius={[4, 4, 0, 0]}>
+                      {resistanceData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.risk === 'Critical' || entry.risk === 'High' ? '#e11d48' : '#3b82f6'} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: GRAPH EXPLORER */}
+        {activeTab === 'graph' && (
+          <div className="space-y-6 h-[calc(100vh-6rem)] flex flex-col">
+            <header className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-800">Knowledge Graph Explorer</h2>
+                <p className="text-slate-500">Interactive visualization of patient-pathogen relationships.</p>
+              </div>
+              <div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept=".csv"
+                  className="hidden" 
+                />
+                <button 
+                  onClick={handleImportClick}
+                  className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 shadow-sm transition"
+                >
+                  <UploadCloud className="w-4 h-4" /> Import CSV Data
+                </button>
+              </div>
+            </header>
+
+            <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
               {/* Graph Vis */}
-              <div className="lg:col-span-2 h-full">
+              <div className="lg:col-span-2 h-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 <KnowledgeGraph data={graphData} onNodeClick={handleNodeClick} />
               </div>
 
               {/* Node Details Panel */}
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-y-auto flex flex-col">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-y-auto">
                 {selectedNode ? (
                   <div className="animate-fade-in space-y-6">
                      {/* Header */}
@@ -319,7 +360,7 @@ const Dashboard: React.FC = () => {
                        <div className="space-y-2">
                          {neighbors.length > 0 ? (
                            neighbors.map((n, idx) => (
-                             <div key={idx} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg hover:border-blue-300 transition-colors group">
+                             <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-lg hover:bg-white hover:border-blue-300 transition-all group">
                                <div className="flex items-center gap-3">
                                   <div className={`w-2 h-2 rounded-full ${
                                       n.direction === 'outgoing' ? 'bg-blue-400' : 'bg-violet-400'
@@ -369,33 +410,30 @@ const Dashboard: React.FC = () => {
           </div>
         )}
 
+        {/* TAB 3: CLINICAL INVESTIGATION */}
         {activeTab === 'investigation' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="space-y-8">
-               <SmartSelect />
-               
-               <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                 <h3 className="text-lg font-bold text-slate-800 mb-6">Regional Resistance Patterns</h3>
-                 <div className="h-64">
-                   <ResponsiveContainer width="100%" height="100%">
-                     <BarChart data={resistanceData}>
-                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
-                       <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
-                       <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}} />
-                       <Bar dataKey="cases" radius={[4, 4, 0, 0]}>
-                         {resistanceData.map((entry, index) => (
-                           <Cell key={`cell-${index}`} fill={entry.risk === 'Critical' || entry.risk === 'High' ? '#e11d48' : '#3b82f6'} />
-                         ))}
-                       </Bar>
-                     </BarChart>
-                   </ResponsiveContainer>
+          <div className="space-y-6">
+             <header className="mb-6">
+                <h2 className="text-2xl font-bold text-slate-800">Clinical Investigation Tools</h2>
+                <p className="text-slate-500">AI-powered analysis and antibiotic stewardship.</p>
+             </header>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-8">
+                 <SmartSelect />
+                 <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <h3 className="text-blue-900 font-bold flex items-center gap-2 mb-2">
+                      <Search className="w-5 h-5" /> Need specific data?
+                    </h3>
+                    <p className="text-sm text-blue-800">
+                      Use the Agent on the right to query the database or search for external guidelines.
+                    </p>
                  </div>
-               </div>
-            </div>
-            
-            <div className="space-y-6">
-              <AgentInterface />
+              </div>
+              
+              <div className="space-y-6">
+                <AgentInterface />
+              </div>
             </div>
           </div>
         )}

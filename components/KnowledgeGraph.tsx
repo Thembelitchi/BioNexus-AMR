@@ -14,6 +14,8 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
   const simulationRef = useRef<d3.Simulation<GraphNode, GraphLink> | null>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
   // Update dimensions on resize
   useEffect(() => {
@@ -195,6 +197,16 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       .on("click", (event, d) => {
         event.stopPropagation(); // Stop zoom/pan event from firing
         onNodeClick(d as GraphNode);
+      })
+      .on("mouseover", (event, d) => {
+        setHoveredNode(d as GraphNode);
+        setTooltipPos({ x: event.clientX, y: event.clientY });
+      })
+      .on("mousemove", (event) => {
+        setTooltipPos({ x: event.clientX, y: event.clientY });
+      })
+      .on("mouseout", () => {
+        setHoveredNode(null);
       });
 
     const labels = container.append("g")
@@ -284,6 +296,23 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
           </button>
         </div>
       </div>
+
+      {/* Tooltip */}
+      {hoveredNode && (
+        <div 
+          style={{ 
+            position: 'fixed', 
+            left: tooltipPos.x + 15, 
+            top: tooltipPos.y - 10,
+            zIndex: 50
+          }}
+          className="bg-slate-800/90 text-white text-xs p-2 rounded-lg shadow-xl backdrop-blur-sm pointer-events-none border border-slate-700"
+        >
+          <div className="font-bold mb-0.5">{hoveredNode.label}</div>
+          <div className="opacity-80 text-[10px] uppercase tracking-wider">{hoveredNode.type}</div>
+          {hoveredNode.group && <div className="opacity-60 text-[10px] mt-1">Cluster Group: {hoveredNode.group}</div>}
+        </div>
+      )}
 
       <svg ref={svgRef} className="w-full h-full cursor-grab active:cursor-grabbing"></svg>
     </div>
