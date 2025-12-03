@@ -17,6 +17,8 @@ export interface GraphNode extends SimulationNodeDatum {
   details?: Record<string, any>;
   x?: number;
   y?: number;
+  fx?: number | null;
+  fy?: number | null;
 }
 
 export interface GraphLink extends SimulationLinkDatum<GraphNode> {

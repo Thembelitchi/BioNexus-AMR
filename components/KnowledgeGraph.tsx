@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { Save, Download, RotateCcw } from 'lucide-react';
 import { GraphData, GraphNode, GraphLink, NodeType } from '../types';
 
 interface KnowledgeGraphProps {
@@ -10,6 +11,7 @@ interface KnowledgeGraphProps {
 const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const simulationRef = useRef<d3.Simulation<GraphNode, GraphLink> | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
   // Update dimensions on resize
@@ -27,6 +29,75 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Save Layout to LocalStorage
+  const handleSaveLayout = () => {
+    if (!data.nodes.length) return;
+    
+    const layout = data.nodes.map(node => ({
+      id: node.id,
+      x: node.x,
+      y: node.y,
+      fx: node.fx,
+      fy: node.fy
+    }));
+
+    try {
+      localStorage.setItem('bionexus_graph_layout', JSON.stringify(layout));
+      alert("Layout saved successfully!");
+    } catch (e) {
+      console.error("Failed to save layout", e);
+      alert("Error saving layout.");
+    }
+  };
+
+  // Load Layout from LocalStorage
+  const handleLoadLayout = () => {
+    try {
+      const savedLayout = localStorage.getItem('bionexus_graph_layout');
+      if (!savedLayout) {
+        alert("No saved layout found.");
+        return;
+      }
+
+      const layoutMap = new Map<string, any>(JSON.parse(savedLayout).map((n: any) => [n.id, n]));
+      let appliedCount = 0;
+
+      data.nodes.forEach(node => {
+        const saved = layoutMap.get(node.id);
+        if (saved) {
+          node.x = saved.x;
+          node.y = saved.y;
+          // Fix the position to match saved state exactly
+          node.fx = saved.x;
+          node.fy = saved.y;
+          appliedCount++;
+        }
+      });
+
+      if (simulationRef.current) {
+        // Restart simulation with low alpha to settle links without disturbing nodes too much
+        simulationRef.current.alpha(0.3).restart();
+      }
+      
+      alert(`Layout loaded. Applied positions to ${appliedCount} nodes.`);
+    } catch (e) {
+      console.error("Failed to load layout", e);
+      alert("Error loading layout.");
+    }
+  };
+
+  // Reset Layout (Clear fixed positions)
+  const handleResetLayout = () => {
+    data.nodes.forEach(node => {
+      node.fx = null;
+      node.fy = null;
+    });
+    
+    if (simulationRef.current) {
+      simulationRef.current.alpha(1).restart();
+    }
+  };
+
   useEffect(() => {
     if (!svgRef.current || !data.nodes.length) return;
 
@@ -42,6 +113,8 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collide", d3.forceCollide(30));
+
+    simulationRef.current = simulation;
 
     // Elements
     const link = svg.append("g")
@@ -137,6 +210,19 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
         <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-emerald-500"></span> Antibiotic</div>
         <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-amber-500"></span> Location</div>
       </div>
+
+      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+        <button onClick={handleSaveLayout} title="Save Layout" className="p-2 bg-white rounded shadow text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors">
+          <Save className="w-4 h-4" />
+        </button>
+        <button onClick={handleLoadLayout} title="Load Layout" className="p-2 bg-white rounded shadow text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors">
+          <Download className="w-4 h-4" />
+        </button>
+        <button onClick={handleResetLayout} title="Reset Layout" className="p-2 bg-white rounded shadow text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors">
+          <RotateCcw className="w-4 h-4" />
+        </button>
+      </div>
+
       <svg ref={svgRef} className="w-full h-full cursor-grab active:cursor-grabbing"></svg>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell 
 } from 'recharts';
@@ -7,11 +7,13 @@ import KnowledgeGraph from './KnowledgeGraph';
 import SmartSelect from './SmartSelect';
 import AgentInterface from './AgentInterface';
 import { INITIAL_GRAPH_DATA } from '../constants';
-import { GraphNode } from '../types';
+import { GraphNode, GraphData, NodeType, GraphLink } from '../types';
 
 const Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'surveillance' | 'investigation'>('surveillance');
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [graphData, setGraphData] = useState<GraphData>(INITIAL_GRAPH_DATA);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Mock stats data
   const resistanceData = [
@@ -21,12 +23,120 @@ const Dashboard: React.FC = () => {
     { name: 'C. auris', cases: 2, risk: 'Critical' },
   ];
 
-  const handleNodeClick = (node: GraphNode) => {
+  // Memoize handleNodeClick to prevent KnowledgeGraph re-rendering loop
+  const handleNodeClick = useCallback((node: GraphNode) => {
     setSelectedNode(node);
+  }, []);
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      processCSV(text);
+    };
+    reader.readAsText(file);
+    // Reset input
+    event.target.value = '';
+  };
+
+  const processCSV = (csvText: string) => {
+    try {
+      const lines = csvText.split('\n');
+      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+      
+      // Basic validation
+      if (!headers.includes('patientid') || !headers.includes('organism')) {
+        alert("Invalid CSV format. Expected columns: PatientID, Ward, SampleID, Organism, Antibiotic, Result, MIC");
+        return;
+      }
+
+      // Clone existing data to avoid mutation during iteration
+      const newNodes = new Map(graphData.nodes.map(n => [n.id, { ...n }]));
+      const newLinks = [...graphData.links];
+
+      // Helper to add node if missing
+      const addNode = (id: string, label: string, type: NodeType, group: number) => {
+        if (!newNodes.has(id)) {
+          newNodes.set(id, { id, label, type, group });
+        }
+        return id;
+      };
+
+      // Helper to add link
+      const addLink = (source: string, target: string, relationship: string, details?: any) => {
+        // Check if link exists
+        const exists = newLinks.some(l => 
+          (typeof l.source === 'string' ? l.source === source : (l.source as GraphNode).id === source) &&
+          (typeof l.target === 'string' ? l.target === target : (l.target as GraphNode).id === target) &&
+          l.relationship === relationship
+        );
+        
+        if (!exists) {
+          newLinks.push({ source, target, relationship, details });
+        }
+      };
+
+      // Process rows
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        const cols = line.split(',').map(c => c.trim());
+        const row: Record<string, string> = {};
+        headers.forEach((h, idx) => { row[h] = cols[idx] || ''; });
+
+        if (!row['patientid'] || !row['sampleid']) continue;
+
+        // 1. Nodes
+        const locId = `LOC-${row['ward'] || 'Unknown'}`;
+        const patientId = row['patientid']; // Assuming ID is already unique/prefixed in CSV or raw
+        const sampleId = row['sampleid'];
+        const orgId = `ORG-${row['organism'].replace(/\s+/g, '-')}`;
+        const abxId = `ABX-${row['antibiotic']}`;
+
+        addNode(locId, row['ward'] || 'Unknown Ward', NodeType.LOCATION, 1);
+        addNode(patientId, row['patientid'], NodeType.PATIENT, 2);
+        addNode(sampleId, row['sampleid'], NodeType.SAMPLE, 3);
+        addNode(orgId, row['organism'], NodeType.ORGANISM, 4);
+        
+        if (row['antibiotic']) {
+          addNode(abxId, row['antibiotic'], NodeType.ANTIBIOTIC, 5);
+        }
+
+        // 2. Links
+        addLink(patientId, sampleId, 'PROVIDED_SAMPLE');
+        addLink(sampleId, locId, 'COLLECTED_AT');
+        addLink(sampleId, orgId, 'IDENTIFIED');
+
+        if (row['antibiotic'] && row['result']) {
+          const relationship = row['result'].toUpperCase().startsWith('R') ? 'RESISTANT_TO' : 'SUSCEPTIBLE_TO';
+          const details = { mic: row['mic'] || 'N/A' };
+          addLink(orgId, abxId, relationship, details);
+        }
+      }
+
+      setGraphData({
+        nodes: Array.from(newNodes.values()),
+        links: newLinks
+      });
+      
+      alert(`Successfully imported ${lines.length - 1} records.`);
+
+    } catch (e) {
+      console.error("CSV Import Error", e);
+      alert("Failed to parse CSV. Please check the console for details.");
+    }
   };
 
   const getNeighbors = (node: GraphNode) => {
-    return INITIAL_GRAPH_DATA.links
+    return graphData.links
       .filter(link => {
         const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
         const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
@@ -37,7 +147,7 @@ const Dashboard: React.FC = () => {
         const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
         const isSource = sourceId === node.id;
         const neighborId = isSource ? targetId : sourceId;
-        const neighborNode = INITIAL_GRAPH_DATA.nodes.find(n => n.id === neighborId);
+        const neighborNode = graphData.nodes.find(n => n.id === neighborId);
         
         return {
           relationship: link.relationship,
@@ -108,9 +218,21 @@ const Dashboard: React.FC = () => {
                 <h2 className="text-2xl font-bold text-slate-800">Live Surveillance Map</h2>
                 <p className="text-slate-500">Real-time visualization of patient-pathogen relationships.</p>
               </div>
-              <button className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 shadow-sm transition">
-                <UploadCloud className="w-4 h-4" /> Import CSV Data
-              </button>
+              <div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept=".csv"
+                  className="hidden" 
+                />
+                <button 
+                  onClick={handleImportClick}
+                  className="flex items-center gap-2 bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 shadow-sm transition"
+                >
+                  <UploadCloud className="w-4 h-4" /> Import CSV Data
+                </button>
+              </div>
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -120,8 +242,8 @@ const Dashboard: React.FC = () => {
                     <h3 className="text-sm font-medium text-slate-500">Total Active Cases</h3>
                     <Users className="w-5 h-5 text-blue-500" />
                  </div>
-                 <p className="text-3xl font-bold text-slate-800">1,248</p>
-                 <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded mt-2 inline-block">↓ 2.4% from last week</span>
+                 <p className="text-3xl font-bold text-slate-800">{1248 + (graphData.nodes.length - INITIAL_GRAPH_DATA.nodes.length)}</p>
+                 <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded mt-2 inline-block">Live Data</span>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                  <div className="flex items-center justify-between mb-4">
@@ -145,7 +267,7 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[600px]">
               {/* Graph Vis */}
               <div className="lg:col-span-2 h-full">
-                <KnowledgeGraph data={INITIAL_GRAPH_DATA} onNodeClick={handleNodeClick} />
+                <KnowledgeGraph data={graphData} onNodeClick={handleNodeClick} />
               </div>
 
               {/* Node Details Panel */}
