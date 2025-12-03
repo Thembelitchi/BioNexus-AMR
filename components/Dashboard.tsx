@@ -14,7 +14,7 @@ import SmartSelect from './SmartSelect';
 import AgentInterface from './AgentInterface';
 import GenomicPredictor from './GenomicPredictor';
 import { INITIAL_GRAPH_DATA, INITIAL_GENOMIC_DATA } from '../constants';
-import { GraphNode, GraphData, NodeType, GenomicData, SurveillanceData } from '../types';
+import { GraphNode, GraphData, NodeType, GenomicData, SurveillanceData, GraphLink } from '../types';
 
 const Dashboard: React.FC = () => {
   type TabType = 'surveillance' | 'graph' | 'visual_dx' | 'genomics' | 'stewardship';
@@ -93,27 +93,124 @@ const Dashboard: React.FC = () => {
   };
 
   const processSurveillanceCSV = (csvText: string) => {
-    try {
-      const lines = csvText.split('\n');
-      const headers = lines[0].split(',').map(h => h.trim());
-      const data: SurveillanceData[] = [];
+    triggerToast("Syncing data to Knowledge Graph...", "info");
 
-      for (let i = 1; i < lines.length; i++) {
-        const currentLine = lines[i].split(',');
-        if (currentLine.length === headers.length) {
-          const row: any = {};
-          headers.forEach((header, index) => {
-            row[header] = currentLine[index].trim();
-          });
-          data.push(row as SurveillanceData);
+    // Use setTimeout to allow UI to render the 'Syncing' toast before blocking operation
+    setTimeout(() => {
+        try {
+            const lines = csvText.split('\n');
+            // Basic CSV parsing (assuming standard comma separation)
+            const headers = lines[0].split(',').map(h => h.trim());
+            const data: SurveillanceData[] = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const currentLine = lines[i].split(',');
+                if (currentLine.length >= headers.length) {
+                    const row: any = {};
+                    headers.forEach((header, index) => {
+                        row[header] = currentLine[index]?.trim() || '';
+                    });
+                    if (row.PatientID && row.Organism) {
+                        data.push(row as SurveillanceData);
+                    }
+                }
+            }
+            
+            setSurveillanceData(data);
+
+            // --- SYNC TO GRAPH (Neo4j MERGE Simulation) ---
+            setGraphData(prev => {
+                const newNodes = [...prev.nodes];
+                const newLinks = [...prev.links];
+                
+                // Maps to track existing entities to prevent duplicates (MERGE logic)
+                const nodeMap = new Map<string, GraphNode>(newNodes.map(n => [n.id, n]));
+                const linkSet = new Set<string>(newLinks.map(l => {
+                    const src = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
+                    const tgt = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
+                    return `${src}-${tgt}-${l.relationship}`;
+                }));
+
+                data.forEach(row => {
+                    // ID Generation (Simulate Unique Keys)
+                    const pid = row.PatientID;
+                    const sid = row.SampleID || `S-${pid}-${row.Date}`;
+                    const locId = `LOC-${row.Ward.replace(/\s+/g, '-')}`;
+                    const orgId = `ORG-${row.Organism.replace(/\s+/g, '-')}`;
+                    const abxId = `ABX-${row.Antibiotic.replace(/\s+/g, '-')}`;
+
+                    // 1. MERGE Patient
+                    if (!nodeMap.has(pid)) {
+                        const n: GraphNode = { id: pid, label: pid, type: NodeType.PATIENT, group: 2 };
+                        newNodes.push(n); nodeMap.set(pid, n);
+                    }
+
+                    // 2. MERGE Location
+                    if (!nodeMap.has(locId)) {
+                        const n: GraphNode = { id: locId, label: row.Ward, type: NodeType.LOCATION, group: 1 };
+                        newNodes.push(n); nodeMap.set(locId, n);
+                    }
+
+                    // 3. MERGE Sample
+                    if (!nodeMap.has(sid)) {
+                        const n: GraphNode = { 
+                            id: sid, 
+                            label: sid, 
+                            type: NodeType.SAMPLE, 
+                            group: 3,
+                            details: { date: row.Date, specimen: row.SpecimenSource }
+                        };
+                        newNodes.push(n); nodeMap.set(sid, n);
+                    }
+
+                    // 4. MERGE Organism
+                    if (!nodeMap.has(orgId)) {
+                        const n: GraphNode = { id: orgId, label: row.Organism, type: NodeType.ORGANISM, group: 4 };
+                        newNodes.push(n); nodeMap.set(orgId, n);
+                    }
+
+                    // 5. MERGE Antibiotic
+                    if (!nodeMap.has(abxId)) {
+                        const n: GraphNode = { id: abxId, label: row.Antibiotic, type: NodeType.ANTIBIOTIC, group: 5 };
+                        newNodes.push(n); nodeMap.set(abxId, n);
+                    }
+
+                    // --- RELATIONSHIPS ---
+                    const addLink = (src: string, tgt: string, rel: string, details?: any) => {
+                        const key = `${src}-${tgt}-${rel}`;
+                        if (!linkSet.has(key)) {
+                            newLinks.push({ source: src, target: tgt, relationship: rel, details });
+                            linkSet.add(key);
+                        }
+                    };
+
+                    // (Patient)-[:PROVIDED_SAMPLE]->(Sample)
+                    addLink(pid, sid, 'PROVIDED_SAMPLE');
+
+                    // (Sample)-[:COLLECTED_AT]->(Location)
+                    addLink(sid, locId, 'COLLECTED_AT');
+
+                    // (Sample)-[:HAS_ORGANISM]->(Organism)
+                    addLink(sid, orgId, 'HAS_ORGANISM');
+
+                    // (Organism)-[:RESISTANT_TO | :SUSCEPTIBLE_TO]->(Antibiotic)
+                    const relType = row.Result === 'R' ? 'RESISTANT_TO' : 
+                                    row.Result === 'S' ? 'SUSCEPTIBLE_TO' : 'INTERMEDIATE';
+                    
+                    if (relType !== 'INTERMEDIATE') {
+                        addLink(orgId, abxId, relType, { mic: row.MIC });
+                    }
+                });
+
+                return { nodes: newNodes, links: newLinks };
+            });
+
+            triggerToast(`Synced ${data.length} records to Knowledge Graph! ✅`, 'success');
+        } catch (e) {
+            console.error(e);
+            triggerToast("Error parsing CSV.", 'info');
         }
-      }
-      setSurveillanceData(data);
-      triggerToast(`Loaded ${data.length} records successfully! ✅`, 'success');
-    } catch (e) {
-      console.error(e);
-      triggerToast("Error parsing CSV file.", 'info');
-    }
+    }, 100);
   };
 
   const processLabCSV = (csvText: string) => {
