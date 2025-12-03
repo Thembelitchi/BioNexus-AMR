@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Save, Download, RotateCcw } from 'lucide-react';
+import { Save, Download, RotateCcw, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
 import { GraphData, GraphNode, GraphLink, NodeType } from '../types';
 
 interface KnowledgeGraphProps {
@@ -12,6 +12,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
   const svgRef = useRef<SVGSVGElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const simulationRef = useRef<d3.Simulation<GraphNode, GraphLink> | null>(null);
+  const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
   // Update dimensions on resize
@@ -98,6 +99,34 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
     }
   };
 
+  // Zoom Control Handlers
+  const handleZoomIn = () => {
+    if (svgRef.current && zoomRef.current) {
+      d3.select(svgRef.current)
+        .transition()
+        .duration(300)
+        .call(zoomRef.current.scaleBy, 1.2);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (svgRef.current && zoomRef.current) {
+      d3.select(svgRef.current)
+        .transition()
+        .duration(300)
+        .call(zoomRef.current.scaleBy, 0.8);
+    }
+  };
+
+  const handleResetView = () => {
+    if (svgRef.current && zoomRef.current) {
+      d3.select(svgRef.current)
+        .transition()
+        .duration(750)
+        .call(zoomRef.current.transform, d3.zoomIdentity);
+    }
+  };
+
   useEffect(() => {
     if (!svgRef.current || !data.nodes.length) return;
 
@@ -106,6 +135,19 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
 
     const width = dimensions.width;
     const height = dimensions.height;
+
+    // Create a container group for zooming that holds all graph elements
+    const container = svg.append("g").attr("class", "zoom-container");
+
+    // Zoom Behavior setup
+    const zoom = d3.zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.1, 8])
+      .on("zoom", (event) => {
+        container.attr("transform", event.transform);
+      });
+
+    svg.call(zoom);
+    zoomRef.current = zoom;
 
     // Simulation Setup
     const simulation = d3.forceSimulation<GraphNode>(data.nodes)
@@ -116,8 +158,8 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
 
     simulationRef.current = simulation;
 
-    // Elements
-    const link = svg.append("g")
+    // Elements - Append to 'container' instead of 'svg' to support zooming
+    const link = container.append("g")
       .attr("stroke", "#94a3b8")
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
@@ -136,7 +178,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       }
     };
 
-    const node = svg.append("g")
+    const node = container.append("g")
       .attr("stroke", "#fff")
       .attr("stroke-width", 1.5)
       .selectAll("circle")
@@ -144,14 +186,18 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       .join("circle")
       .attr("r", 12)
       .attr("fill", (d: GraphNode) => getColor(d.type))
+      .style("cursor", "pointer")
       .call(d3.drag<SVGCircleElement, GraphNode>()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended) as any
       )
-      .on("click", (event, d) => onNodeClick(d as GraphNode));
+      .on("click", (event, d) => {
+        event.stopPropagation(); // Stop zoom/pan event from firing
+        onNodeClick(d as GraphNode);
+      });
 
-    const labels = svg.append("g")
+    const labels = container.append("g")
       .selectAll("text")
       .data(data.nodes)
       .join("text")
@@ -203,7 +249,8 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
   }, [data, dimensions, onNodeClick]);
 
   return (
-    <div ref={wrapperRef} className="w-full h-full bg-slate-50 rounded-xl border border-slate-200 shadow-inner overflow-hidden relative">
+    <div ref={wrapperRef} className="w-full h-full bg-slate-50 rounded-xl border border-slate-200 shadow-inner overflow-hidden relative group">
+      {/* Legend */}
       <div className="absolute top-4 left-4 z-10 bg-white/90 p-2 rounded shadow backdrop-blur-sm text-xs text-slate-600">
         <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-blue-500"></span> Patient</div>
         <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-red-600"></span> Organism</div>
@@ -211,16 +258,31 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
         <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-amber-500"></span> Location</div>
       </div>
 
+      {/* Control Buttons */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
-        <button onClick={handleSaveLayout} title="Save Layout" className="p-2 bg-white rounded shadow text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors">
-          <Save className="w-4 h-4" />
-        </button>
-        <button onClick={handleLoadLayout} title="Load Layout" className="p-2 bg-white rounded shadow text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors">
-          <Download className="w-4 h-4" />
-        </button>
-        <button onClick={handleResetLayout} title="Reset Layout" className="p-2 bg-white rounded shadow text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition-colors">
-          <RotateCcw className="w-4 h-4" />
-        </button>
+        <div className="flex flex-col gap-1 bg-white rounded shadow p-1">
+          <button onClick={handleZoomIn} title="Zoom In" className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded transition-colors">
+            <ZoomIn className="w-4 h-4" />
+          </button>
+          <button onClick={handleZoomOut} title="Zoom Out" className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded transition-colors">
+            <ZoomOut className="w-4 h-4" />
+          </button>
+          <button onClick={handleResetView} title="Fit View" className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded transition-colors">
+            <Maximize className="w-4 h-4" />
+          </button>
+        </div>
+        
+        <div className="flex flex-col gap-1 bg-white rounded shadow p-1 mt-2">
+          <button onClick={handleSaveLayout} title="Save Layout" className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded transition-colors">
+            <Save className="w-4 h-4" />
+          </button>
+          <button onClick={handleLoadLayout} title="Load Layout" className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded transition-colors">
+            <Download className="w-4 h-4" />
+          </button>
+          <button onClick={handleResetLayout} title="Reset Node Positions" className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded transition-colors">
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       <svg ref={svgRef} className="w-full h-full cursor-grab active:cursor-grabbing"></svg>
