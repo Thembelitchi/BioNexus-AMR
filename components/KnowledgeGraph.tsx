@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, memo } from 'react';
 import * as d3 from 'd3';
 import { Save, Download, RotateCcw, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
 import { GraphData, GraphNode, GraphLink, NodeType } from '../types';
@@ -13,23 +13,25 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
   const wrapperRef = useRef<HTMLDivElement>(null);
   const simulationRef = useRef<d3.Simulation<GraphNode, GraphLink> | null>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
-  // Update dimensions on resize
+  // 1. PERFORMANCE: Use ResizeObserver instead of window 'resize' listener
   useEffect(() => {
-    const handleResize = () => {
-      if (wrapperRef.current) {
-        setDimensions({
-          width: wrapperRef.current.offsetWidth,
-          height: wrapperRef.current.offsetHeight
-        });
+    if (!wrapperRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        // Debounce slightly or just set
+        setDimensions({ width, height });
       }
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Init
-    return () => window.removeEventListener('resize', handleResize);
+    });
+
+    resizeObserver.observe(wrapperRef.current);
+    return () => resizeObserver.disconnect();
   }, []);
 
   // Save Layout to LocalStorage
@@ -70,7 +72,6 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
         if (saved) {
           node.x = saved.x;
           node.y = saved.y;
-          // Fix the position to match saved state exactly
           node.fx = saved.x;
           node.fy = saved.y;
           appliedCount++;
@@ -78,7 +79,6 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       });
 
       if (simulationRef.current) {
-        // Restart simulation with low alpha to settle links without disturbing nodes too much
         simulationRef.current.alpha(0.3).restart();
       }
       
@@ -89,7 +89,6 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
     }
   };
 
-  // Reset Layout (Clear fixed positions)
   const handleResetLayout = () => {
     data.nodes.forEach(node => {
       node.fx = null;
@@ -101,7 +100,6 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
     }
   };
 
-  // Zoom Control Handlers
   const handleZoomIn = () => {
     if (svgRef.current && zoomRef.current) {
       d3.select(svgRef.current)
@@ -133,49 +131,62 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
     if (!svgRef.current || !data.nodes.length) return;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove(); // Clear previous render
+    svg.selectAll("*").remove(); 
 
     const width = dimensions.width;
     const height = dimensions.height;
 
-    // Create a container group for zooming that holds all graph elements
     const container = svg.append("g").attr("class", "zoom-container");
 
-    // Zoom Behavior setup
+    // 2. PERFORMANCE: Level of Detail (LOD) handling in Zoom
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.1, 8])
       .on("zoom", (event) => {
         container.attr("transform", event.transform);
+        
+        // Semantic LOD: Hide labels when zoomed out to reduce rendering cost
+        if (event.transform.k < 0.6) {
+          container.selectAll("text").style("opacity", 0);
+        } else {
+          container.selectAll("text").style("opacity", 1);
+        }
       });
 
     svg.call(zoom);
     zoomRef.current = zoom;
 
-    // Simulation Setup
+    // 3. PERFORMANCE: Optimized Simulation Parameters
     const simulation = d3.forceSimulation<GraphNode>(data.nodes)
       .force("link", d3.forceLink<GraphNode, GraphLink>(data.links).id(d => d.id).distance(100))
-      .force("charge", d3.forceManyBody().strength(-300))
+      .force("charge", d3.forceManyBody()
+        .strength(-300)
+        .theta(0.9) // Barnes-Hut approximation: 0.9 is faster/less accurate than default 0.8
+        .distanceMax(500) // Don't calculate forces for far away nodes
+      )
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collide", d3.forceCollide(30));
+      .force("collide", d3.forceCollide(25).iterations(1)); // Reduce collision iterations
+
+    // Stop simulation sooner to save CPU
+    simulation.alphaDecay(0.02); // Settle faster
+    simulation.alphaMin(0.01); 
 
     simulationRef.current = simulation;
 
-    // Elements - Append to 'container' instead of 'svg' to support zooming
     const link = container.append("g")
       .attr("stroke", "#94a3b8")
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(data.links)
       .join("line")
-      .attr("stroke-width", 2);
+      .attr("stroke-width", 1.5); // Slightly thinner for performance
 
-    // Color mapper based on Node Type
     const getColor = (type: NodeType) => {
       switch (type) {
-        case NodeType.PATIENT: return "#3b82f6"; // Blue
-        case NodeType.ORGANISM: return "#dc2626"; // Red
-        case NodeType.ANTIBIOTIC: return "#10b981"; // Emerald
-        case NodeType.LOCATION: return "#f59e0b"; // Amber
+        case NodeType.PATIENT: return "#3b82f6";
+        case NodeType.ORGANISM: return "#dc2626";
+        case NodeType.ANTIBIOTIC: return "#10b981";
+        case NodeType.LOCATION: return "#f59e0b";
+        case NodeType.GENE: return "#8b5cf6";
         default: return "#64748b";
       }
     };
@@ -186,7 +197,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       .selectAll("circle")
       .data(data.nodes)
       .join("circle")
-      .attr("r", 12)
+      .attr("r", 10) // Slightly smaller radius
       .attr("fill", (d: GraphNode) => getColor(d.type))
       .style("cursor", "pointer")
       .call(d3.drag<SVGCircleElement, GraphNode>()
@@ -195,7 +206,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
         .on("end", dragended) as any
       )
       .on("click", (event, d) => {
-        event.stopPropagation(); // Stop zoom/pan event from firing
+        event.stopPropagation();
         onNodeClick(d as GraphNode);
       })
       .on("mouseover", (event, d) => {
@@ -213,20 +224,22 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
       .selectAll("text")
       .data(data.nodes)
       .join("text")
-      .attr("dx", 15)
+      .attr("dx", 14)
       .attr("dy", 4)
       .text((d: GraphNode) => d.label)
       .attr("font-size", "10px")
       .attr("fill", "#334155")
-      .style("pointer-events", "none");
+      .style("pointer-events", "none")
+      // Initial opacity based on zoom (default 1)
+      .style("opacity", 1); 
 
-    // Simulation Tick
     simulation.on("tick", () => {
+      // 4. PERFORMANCE: Batch attribute updates
       link
-        .attr("x1", (d: any) => (d.source as GraphNode).x!)
-        .attr("y1", (d: any) => (d.source as GraphNode).y!)
-        .attr("x2", (d: any) => (d.target as GraphNode).x!)
-        .attr("y2", (d: any) => (d.target as GraphNode).y!);
+        .attr("x1", (d: any) => d.source.x)
+        .attr("y1", (d: any) => d.source.y)
+        .attr("x2", (d: any) => d.target.x)
+        .attr("y2", (d: any) => d.target.y);
 
       node
         .attr("cx", (d: GraphNode) => d.x!)
@@ -237,7 +250,6 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
         .attr("y", (d: GraphNode) => d.y!);
     });
 
-    // Drag Interaction Functions
     function dragstarted(event: any, d: GraphNode) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
@@ -267,6 +279,7 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
         <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-blue-500"></span> Patient</div>
         <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-red-600"></span> Organism</div>
         <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-emerald-500"></span> Antibiotic</div>
+        <div className="flex items-center gap-2 mb-1"><span className="w-3 h-3 rounded-full bg-violet-500"></span> Gene</div>
         <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-amber-500"></span> Location</div>
       </div>
 
@@ -319,4 +332,5 @@ const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ data, onNodeClick }) =>
   );
 };
 
-export default KnowledgeGraph;
+// 5. PERFORMANCE: Prevent re-renders on parent state changes
+export default memo(KnowledgeGraph);

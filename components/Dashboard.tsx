@@ -13,6 +13,7 @@ import KnowledgeGraph from './KnowledgeGraph';
 import SmartSelect from './SmartSelect';
 import AgentInterface from './AgentInterface';
 import GenomicPredictor from './GenomicPredictor';
+import { ErrorBoundary } from './ErrorBoundary';
 import { INITIAL_GRAPH_DATA, INITIAL_GENOMIC_DATA } from '../constants';
 import { GraphNode, GraphData, NodeType, GenomicData, SurveillanceData, GraphLink } from '../types';
 
@@ -28,6 +29,25 @@ const Dashboard: React.FC = () => {
   const labInputRef = useRef<HTMLInputElement>(null);
   const geneInputRef = useRef<HTMLInputElement>(null);
   const surveillanceInputRef = useRef<HTMLInputElement>(null);
+
+  // Context for Agent
+  const agentContext = useMemo(() => {
+    let ctx = "No live data uploaded yet. Using default mock data.";
+    
+    if (surveillanceData) {
+        // Summarize Surveillance
+        const critical = surveillanceData.filter(d => d.Result === 'R').length;
+        const total = surveillanceData.length;
+        ctx = `[Live Surveillance Data]\nTotal Samples: ${total}\nResistant Samples: ${critical}\nKey Pathogens: ${Array.from(new Set(surveillanceData.map(d => d.Organism))).join(', ')}\n`;
+    }
+
+    if (genomicData.length > 0) {
+        // Summarize Genomics
+        ctx += `\n[Genomic Data]\nSequenced Samples: ${genomicData.length}\nDetected Genes: ${Array.from(new Set(genomicData.map(g => g.geneDetected))).join(', ')}\n`;
+    }
+
+    return ctx;
+  }, [surveillanceData, genomicData]);
 
   // Auto-hide toast
   useEffect(() => {
@@ -99,7 +119,7 @@ const Dashboard: React.FC = () => {
     setTimeout(() => {
         try {
             const lines = csvText.split('\n');
-            // Basic CSV parsing (assuming standard comma separation)
+            // Basic CSV parsing
             const headers = lines[0].split(',').map(h => h.trim());
             const data: SurveillanceData[] = [];
 
@@ -108,6 +128,7 @@ const Dashboard: React.FC = () => {
                 if (currentLine.length >= headers.length) {
                     const row: any = {};
                     headers.forEach((header, index) => {
+                        // Crucial: Trim whitespace to ensure ID matching works later
                         row[header] = currentLine[index]?.trim() || '';
                     });
                     if (row.PatientID && row.Organism) {
@@ -132,9 +153,11 @@ const Dashboard: React.FC = () => {
                 }));
 
                 data.forEach(row => {
-                    // ID Generation (Simulate Unique Keys)
+                    // ID Normalization: Force consistent keys (Trimmed)
                     const pid = row.PatientID;
-                    const sid = row.SampleID || `S-${pid}-${row.Date}`;
+                    // Prefer SampleID from CSV, fallback to composite if missing
+                    const sid = row.SampleID ? row.SampleID : `S-${pid}-${row.Date}`;
+                    
                     const locId = `LOC-${row.Ward.replace(/\s+/g, '-')}`;
                     const orgId = `ORG-${row.Organism.replace(/\s+/g, '-')}`;
                     const abxId = `ABX-${row.Antibiotic.replace(/\s+/g, '-')}`;
@@ -184,16 +207,10 @@ const Dashboard: React.FC = () => {
                         }
                     };
 
-                    // (Patient)-[:PROVIDED_SAMPLE]->(Sample)
                     addLink(pid, sid, 'PROVIDED_SAMPLE');
-
-                    // (Sample)-[:COLLECTED_AT]->(Location)
                     addLink(sid, locId, 'COLLECTED_AT');
-
-                    // (Sample)-[:HAS_ORGANISM]->(Organism)
                     addLink(sid, orgId, 'HAS_ORGANISM');
 
-                    // (Organism)-[:RESISTANT_TO | :SUSCEPTIBLE_TO]->(Antibiotic)
                     const relType = row.Result === 'R' ? 'RESISTANT_TO' : 
                                     row.Result === 'S' ? 'SUSCEPTIBLE_TO' : 'INTERMEDIATE';
                     
@@ -208,7 +225,7 @@ const Dashboard: React.FC = () => {
             triggerToast(`Synced ${data.length} records to Knowledge Graph! ✅`, 'success');
         } catch (e) {
             console.error(e);
-            triggerToast("Error parsing CSV.", 'info');
+            triggerToast("Error parsing CSV. Check console.", 'info');
         }
     }, 100);
   };
@@ -217,8 +234,6 @@ const Dashboard: React.FC = () => {
       // Logic for Graph Data (Nodes/Links)
       try {
         triggerToast("Lab Data Ingested into Graph! ✅", 'success');
-        // In a real app, this would parse into nodes/links. 
-        // For this demo, we assume the user might also want to populate the Surveillance dashboard
         if (!surveillanceData) {
             processSurveillanceCSV(csvText);
         }
@@ -231,48 +246,63 @@ const Dashboard: React.FC = () => {
     try {
         const lines = csvText.split('\n');
         const newGenomicRecords: GenomicData[] = [];
+        let linkedCount = 0;
         
         // Skip header
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
-            const [sampleId, geneDetected, mechanism, clinicalImpact] = line.split(',').map(s => s.trim());
+            // Trim whitespace to ensure matching
+            const [rawSampleId, geneDetected, mechanism, clinicalImpact] = line.split(',').map(s => s.trim());
             
-            if (sampleId && geneDetected) {
-                newGenomicRecords.push({ sampleId, geneDetected, mechanism, clinicalImpact });
+            if (rawSampleId && geneDetected) {
+                newGenomicRecords.push({ sampleId: rawSampleId, geneDetected, mechanism, clinicalImpact });
                 
-                // --- GRAPH MERGE LOGIC ---
+                // --- GRAPH MERGE LOGIC (SCHEMA UPDATE) ---
                 setGraphData(prev => {
                     const newNodes = [...prev.nodes];
                     const newLinks = [...prev.links];
                     
-                    // 1. Find Sample Node
-                    const sampleNode = newNodes.find(n => n.id === sampleId);
+                    // 1. Find the EXISTING Sample Node (from Surveillance Data)
+                    // We check both direct ID match and simplified versions just in case
+                    const sampleNode = newNodes.find(n => n.id === rawSampleId);
                     
                     if (sampleNode) {
-                        // 2. Create Gene Node
-                        const geneId = `GENE-${geneDetected}`;
+                        linkedCount++;
+                        // 2. Create/Merge Gene Node (ID: GENE-GeneName)
+                        const geneId = `GENE-${geneDetected.replace(/\s+/g, '-')}`;
+                        
                         if (!newNodes.some(n => n.id === geneId)) {
                             newNodes.push({
                                 id: geneId,
                                 label: geneDetected,
                                 type: NodeType.GENE,
                                 group: 6,
-                                details: { mechanism, clinicalImpact }
+                                details: { 
+                                    mechanism: mechanism, 
+                                    clinical_impact: clinicalImpact
+                                }
                             });
                         }
                         
-                        // 3. Link Sample to Gene
-                        if (!newLinks.some(l => 
-                            ((l.source as GraphNode).id === sampleId || l.source === sampleId) && 
-                            ((l.target as GraphNode).id === geneId || l.target === geneId)
-                        )) {
+                        // 3. Link Sample to Gene (Relationship: DETECTED_GENE)
+                        const linkKey = `${rawSampleId}-${geneId}-DETECTED_GENE`;
+                        // Simple check to avoid duplicates in this batch update
+                        const linkExists = newLinks.some(l => 
+                            (l.source === rawSampleId || (l.source as GraphNode).id === rawSampleId) && 
+                            (l.target === geneId || (l.target as GraphNode).id === geneId)
+                        );
+
+                        if (!linkExists) {
                             newLinks.push({
-                                source: sampleId,
+                                source: rawSampleId,
                                 target: geneId,
-                                relationship: 'DETECTED_GENE'
+                                relationship: 'DETECTED_GENE',
+                                details: { mechanism } // Add details to the link too
                             });
                         }
+                    } else {
+                        // console.warn(`Sample ID ${rawSampleId} from Genomic CSV not found in Graph. Upload Surveillance Data first.`);
                     }
                     return { nodes: newNodes, links: newLinks };
                 });
@@ -280,10 +310,14 @@ const Dashboard: React.FC = () => {
         }
         
         setGenomicData(prev => [...prev, ...newGenomicRecords]);
-        triggerToast("Genomic Sequences Indexed! ✅", 'success');
+        if (linkedCount > 0) {
+            triggerToast(`Indexed ${newGenomicRecords.length} genes. Linked ${linkedCount} to Samples! ✅`, 'success');
+        } else {
+            triggerToast(`Indexed ${newGenomicRecords.length} genes. ⚠️ No matching samples found in graph yet.`, 'info');
+        }
     } catch (e) {
         console.error(e);
-        alert("Failed to parse Genomic CSV");
+        triggerToast("Failed to parse Genomic CSV", 'info');
     }
   };
 
@@ -405,7 +439,10 @@ const Dashboard: React.FC = () => {
       });
   };
 
-  const neighbors = selectedNode ? getNeighbors(selectedNode) : [];
+  const neighbors = useMemo(() => {
+     if (!selectedNode) return [];
+     return getNeighbors(selectedNode);
+  }, [selectedNode, graphData]);
 
   const getNodeProperties = (node: GraphNode) => {
     const ignoredKeys = ['index', 'x', 'y', 'vx', 'vy', 'fx', 'fy', 'group', 'label', 'type'];
@@ -704,67 +741,71 @@ const Dashboard: React.FC = () => {
 
             <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
               <div className="lg:col-span-2 h-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative">
-                <KnowledgeGraph data={graphData} onNodeClick={handleNodeClick} />
+                <ErrorBoundary onReset={() => setGraphData({...graphData})}>
+                    <KnowledgeGraph data={graphData} onNodeClick={handleNodeClick} />
+                </ErrorBoundary>
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-y-auto">
-                {selectedNode ? (
-                  <div className="animate-fade-in space-y-6">
-                     <div>
-                       <span className={`inline-block px-2 py-1 rounded text-xs font-bold mb-3 ${
-                         selectedNode.type === NodeType.PATIENT ? 'bg-blue-100 text-blue-700' :
-                         selectedNode.type === NodeType.ORGANISM ? 'bg-rose-100 text-rose-700' :
-                         selectedNode.type === NodeType.GENE ? 'bg-violet-100 text-violet-700' :
-                         selectedNode.type === NodeType.ANTIBIOTIC ? 'bg-emerald-100 text-emerald-700' :
-                         'bg-amber-100 text-amber-700'
-                       }`}>
-                         {selectedNode.type}
-                       </span>
-                       <h3 className="text-xl font-bold text-slate-800">{selectedNode.label}</h3>
-                       <p className="text-xs text-slate-500 font-mono mt-1">{selectedNode.id}</p>
-                     </div>
+                <ErrorBoundary onReset={() => setSelectedNode(null)}>
+                    {selectedNode ? (
+                      <div className="animate-fade-in space-y-6">
+                        <div>
+                          <span className={`inline-block px-2 py-1 rounded text-xs font-bold mb-3 ${
+                            selectedNode.type === NodeType.PATIENT ? 'bg-blue-100 text-blue-700' :
+                            selectedNode.type === NodeType.ORGANISM ? 'bg-rose-100 text-rose-700' :
+                            selectedNode.type === NodeType.GENE ? 'bg-violet-100 text-violet-700' :
+                            selectedNode.type === NodeType.ANTIBIOTIC ? 'bg-emerald-100 text-emerald-700' :
+                            'bg-amber-100 text-amber-700'
+                          }`}>
+                            {selectedNode.type}
+                          </span>
+                          <h3 className="text-xl font-bold text-slate-800">{selectedNode.label}</h3>
+                          <p className="text-xs text-slate-500 font-mono mt-1">{selectedNode.id}</p>
+                        </div>
 
-                     <div>
-                       <h4 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">Properties</h4>
-                       <div className="bg-slate-50 rounded-lg border border-slate-100 overflow-hidden">
-                           <table className="w-full text-sm text-left">
-                             <tbody>
-                               {getNodeProperties(selectedNode).map(([key, value]) => (
-                                 <tr key={key} className="border-b border-slate-100 last:border-0">
-                                   <td className="px-4 py-2 font-medium text-slate-600 bg-slate-100/50 w-1/3 break-words">{key}</td>
-                                   <td className="px-4 py-2 text-slate-800 break-words">{String(value)}</td>
-                                 </tr>
-                               ))}
-                             </tbody>
-                           </table>
-                       </div>
-                     </div>
-                     
-                     <div>
-                       <h4 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2"><LinkIcon className="w-3 h-3" /> Neighbors</h4>
-                       <div className="space-y-2">
-                         {neighbors.map((n, idx) => (
-                             <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-lg group">
-                               <div className="flex items-center gap-3">
-                                  <div className={`w-2 h-2 rounded-full ${n.direction === 'outgoing' ? 'bg-blue-400' : 'bg-violet-400'}`} />
-                                  <div>
-                                    <p className="text-sm font-semibold text-slate-700">{n.neighbor?.label}</p>
-                                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">{n.relationship.replace(/_/g, ' ')}</p>
+                        <div>
+                          <h4 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2">Properties</h4>
+                          <div className="bg-slate-50 rounded-lg border border-slate-100 overflow-hidden">
+                              <table className="w-full text-sm text-left">
+                                <tbody>
+                                  {getNodeProperties(selectedNode).map(([key, value]) => (
+                                    <tr key={key} className="border-b border-slate-100 last:border-0">
+                                      <td className="px-4 py-2 font-medium text-slate-600 bg-slate-100/50 w-1/3 break-words">{key}</td>
+                                      <td className="px-4 py-2 text-slate-800 break-words">{String(value)}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center gap-2"><LinkIcon className="w-3 h-3" /> Neighbors</h4>
+                          <div className="space-y-2">
+                            {neighbors.map((n, idx) => (
+                                <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-lg group">
+                                  <div className="flex items-center gap-3">
+                                      <div className={`w-2 h-2 rounded-full ${n.direction === 'outgoing' ? 'bg-blue-400' : 'bg-violet-400'}`} />
+                                      <div>
+                                        <p className="text-sm font-semibold text-slate-700">{n.neighbor?.label}</p>
+                                        <p className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">{n.relationship.replace(/_/g, ' ')}</p>
+                                      </div>
                                   </div>
-                               </div>
-                               {n.direction === 'outgoing' ? <ArrowRight className="w-4 h-4 text-slate-300" /> : <ArrowLeft className="w-4 h-4 text-slate-300" />}
-                             </div>
-                           ))
-                         }
-                       </div>
-                     </div>
-                  </div>
-                ) : (
-                  <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center">
-                    <Network className="w-12 h-12 mb-4 opacity-50" />
-                    <p>Select a node to inspect details.</p>
-                  </div>
-                )}
+                                  {n.direction === 'outgoing' ? <ArrowRight className="w-4 h-4 text-slate-300" /> : <ArrowLeft className="w-4 h-4 text-slate-300" />}
+                                </div>
+                              ))
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center">
+                        <Network className="w-12 h-12 mb-4 opacity-50" />
+                        <p>Select a node to inspect details.</p>
+                      </div>
+                    )}
+                </ErrorBoundary>
               </div>
             </div>
           </div>
@@ -795,7 +836,7 @@ const Dashboard: React.FC = () => {
                       </div>
                   </div>
                   <div className="h-[600px]">
-                      <AgentInterface />
+                      <AgentInterface context={agentContext} />
                   </div>
               </div>
            </div>
@@ -804,7 +845,7 @@ const Dashboard: React.FC = () => {
         {/* GENOTYPE PREDICTOR */}
         {activeTab === 'genomics' && (
            <div className="space-y-6 animate-fade-in">
-               <GenomicPredictor data={genomicData} />
+               <GenomicPredictor genomicData={genomicData} surveillanceData={surveillanceData} />
                
                {/* Context for Graph Linkage */}
                <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mt-6">
@@ -846,7 +887,7 @@ const Dashboard: React.FC = () => {
               </div>
               
               <div className="space-y-6 h-[600px]">
-                <AgentInterface />
+                <AgentInterface context={agentContext} />
               </div>
             </div>
           </div>

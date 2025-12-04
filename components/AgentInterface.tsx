@@ -3,7 +3,11 @@ import { Send, Bot, User, Loader2, Sparkles, Paperclip, FileText, X, ExternalLin
 import { ChatMessage } from '../types';
 import { geminiService } from '../services/geminiService';
 
-const AgentInterface: React.FC = () => {
+interface AgentInterfaceProps {
+  context?: string;
+}
+
+const AgentInterface: React.FC<AgentInterfaceProps> = ({ context }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'init',
@@ -81,8 +85,8 @@ const AgentInterface: React.FC = () => {
       } else {
         // Module A & C: Agent Chat
         // In a real app, this context would be dynamically constructed from the current Dashboard state (Graph + Genomics)
-        const mockContext = "Active Cluster: 3 MRSA cases in ICU. Genomic Data: blaNDM-1 detected in Sample S-20045 (K. pneumoniae).";
-        const result = await geminiService.chatWithAgent(userMsg.content, mockContext);
+        const activeContext = context || "Active Cluster: 3 MRSA cases in ICU. Genomic Data: blaNDM-1 detected in Sample S-20045 (K. pneumoniae).";
+        const result = await geminiService.chatWithAgent(userMsg.content, activeContext);
         responseText = result.text;
         groundingData = result.groundingMetadata;
       }
