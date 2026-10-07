@@ -8,7 +8,7 @@ matching in the prototype frontend.
 ## Graph model
 
 ```
-(:Patient)-[:HAD_ENCOUNTER]->(:Encounter)-[:GENERATED_EVENT]->(:LocationEvent)-[:AT_LOCATION]->(:Ward)
+(:Patient {sex})-[:HAD_ENCOUNTER]->(:Encounter {age_years})-[:GENERATED_EVENT]->(:LocationEvent)-[:AT_LOCATION]->(:Ward)-[:PART_OF]->(:Facility {province})
 (:Encounter)-[:ISOLATED]->(:Isolate)-[:IDENTIFIED_AS]->(:Pathogen)
 (:Encounter)-[:TREATED_WITH]->(:Antibiotic)
 (:Isolate)-[:EXHIBITS {sir, mic, mic_qualifier, mic_unit, guideline}]->(:Antibiotic)
@@ -22,18 +22,37 @@ matching in the prototype frontend.
 | Pathogen | `ncbi_taxid` | NCBI Taxonomy, e.g. 1280 = *S. aureus*. Lab shorthand such as "MRSA"/"CRE" is split off into `Isolate.phenotype_labels`. |
 | Antibiotic | `atc_code` | WHO ATC, e.g. J01DH02 = meropenem |
 | Gene | `aro_id` | CARD ARO, e.g. ARO:3000589 = NDM-1 |
-| SequenceType | `key` (`scheme:STn`) | MLST scheme + ST number |
-| Ward / Patient / Encounter / LocationEvent / Isolate / MobileGeneticElement | `name` / `id` / `key` | source identifiers |
+| SequenceType | `key` (`scheme:STn`) | PubMLST scheme as named by the `mlst` tool, e.g. `klebsiella:ST307` |
+| Ward | `key` (`FACILITY:ward`, or the bare ward name without a facility) | source identifiers; ward names repeat across hospitals |
+| Facility | `code` | source identifiers, with name and province |
+| Patient / Encounter / LocationEvent / Isolate / MobileGeneticElement | `id` / `key` | source identifiers |
 
 MIC values are stored as numbers with a separate qualifier (`>16` becomes
-`mic: 16.0, mic_qualifier: ">"`), kept apart from the reported S/I/R category.
+`mic: 16.0, mic_qualifier: ">"`), kept apart from the reported category
+(S, I, SDD or R; SDD is CLSI's susceptible-dose-dependent category).
 
 ### Where the identifiers come from
 
-* **CARD ARO accessions** were looked up in CARD's `aro.owl`
-  (github.com/arpcard/aro), not typed from memory.
-* **NCBI Taxonomy IDs and ATC codes** are curated reference values in
-  `bionexus/ontology.py`. Check new entries against NCBI and the WHO ATC index.
+Every identifier is checked against its authoritative source by
+`tools/verify_vocabulary.py` (install the `verify` extra first):
+
+| Vocabulary | Source |
+|---|---|
+| NCBI Taxonomy IDs | NCBI's taxdb name index (NCBI's BLAST database bucket on AWS) |
+| Species names | LPSN, via the AMR package |
+| CARD ARO accessions | CARD's `aro.owl` (github.com/arpcard/aro) |
+| WHO ATC codes | the AMR package's antimicrobials table |
+| MLST schemes and STs | PubMLST profiles in the Bioconda `mlst` package |
+| CLSI 2025 MIC breakpoints | the AMR package's clinical_breakpoints table |
+
+```bash
+pip install -e ".[verify]"
+python tools/verify_vocabulary.py --dataset data/demo --report vocabulary_report.md
+```
+
+The latest report is committed at `docs/vocabulary_verification.md`.
+The tool exits non-zero on any mismatch; planted errors (a wrong ARO,
+ATC code or taxid) are caught.
 * The vocabulary is deliberately closed. An unknown organism, drug, gene or
   phenotype label rejects the row with a line-numbered error; extend
   `ontology.py` to accept it.
@@ -61,7 +80,10 @@ MIC values are stored as numbers with a separate qualifier (`>16` becomes
 
 **clinical** (required), one row per susceptibility test:
 `PatientID, SampleID, Date, Ward, Specimen, Treatment, Organism, Antibiotic, Result, MIC`
-and optionally `EncounterID, AdmitDate, DischargeDate, Guideline`.
+and optionally `EncounterID, AdmitDate, DischargeDate, Guideline, Facility,
+FacilityName, Province, Sex, AgeYears`.
+When `Guideline` is `CLSI 2025`, each MIC is re-interpreted, and a reported
+category that disagrees is flagged as a warning.
 Several rows with the same `SampleID` make up one isolate's antibiogram.
 
 **genomic** (optional), one row per determinant call, joined on `SampleID`:
@@ -70,7 +92,11 @@ and optionally `MGE_Type` (`Plasmid`/`Integron`/`Transposon`) with `MGE_Replicon
 If `PatientID` or the organism disagrees with the clinical record, that
 isolate's genomic data is dropped and the conflict is reported.
 
-**movements** (optional ADT feed): `PatientID, EncounterID, Ward, Timestamp`.
+**movements** (optional ADT feed): `PatientID, EncounterID, Ward, Timestamp`,
+optionally with `Facility, FacilityName, Province`.
+
+A realistic 600-patient South African demonstration dataset with planted
+outbreaks lives in `data/demo/`; see its README.
 
 Ingest is idempotent: every write is a `MERGE` on a constrained key, inside
 batched `execute_write` transactions. Loading a new genomic report for an
@@ -127,10 +153,10 @@ centrality and the HTTP API.
 
 ## Known limitations
 
-* S/I/R is stored as reported. MICs are not reinterpreted against CLSI or
-  EUCAST breakpoints. The `guideline` property records the source when the
-  input provides one.
-* The sample data are synthetic and not biologically consistent. For
+* Only CLSI 2025 MIC breakpoints are embedded. Rows with another guideline,
+  or none, are stored as reported without re-interpretation. EUCAST is
+  available from the same source table if needed.
+* The original sample data in `data/*.csv` are synthetic and not biologically consistent. For
   example, 20 of the 32 vancomycin-resistant *S. aureus* isolates carry no
   *vanA*, while 28 MRSA isolates do carry *vanA*, which is clinically very
   rare (VRSA). Treat the analytics output on these files as a demonstration

@@ -1,0 +1,146 @@
+{
+  "S1": {
+    "title": "Neonatal ICU outbreak: OXA-181 K. pneumoniae ST307",
+    "facility": "GAH",
+    "ward": "GAH:Neonatal ICU",
+    "period": [
+      "2025-08-04",
+      "2025-09-15"
+    ],
+    "patients": 14,
+    "expect": {
+      "cluster": {
+        "ward": "GAH:Neonatal ICU",
+        "sequence_type": "klebsiella:ST307",
+        "gene": "blaOXA-181",
+        "min_size": 14
+      }
+    }
+  },
+  "S3": {
+    "title": "Plasmid-mediated NDM-5 spread (IncX3) across E. coli, K. pneumoniae and E. cloacae",
+    "facility": "KRH",
+    "ward": "KRH:Surgical",
+    "period": [
+      "2025-10-01",
+      "2025-11-20"
+    ],
+    "patients": 9,
+    "expect": {
+      "hgt": {
+        "gene": "blaNDM-5",
+        "taxa_include": [
+          "Enterobacter cloacae",
+          "Escherichia coli",
+          "Klebsiella pneumoniae"
+        ],
+        "replicon": "Plasmid:IncX3"
+      }
+    }
+  },
+  "S4": {
+    "title": "VRE (vanA) E. faecium ST80 on haematology-oncology",
+    "facility": "WTH",
+    "ward": "WTH:Haematology-Oncology",
+    "period": [
+      "2025-11-03",
+      "2025-12-15"
+    ],
+    "patients": 8,
+    "expect": {
+      "cluster": {
+        "ward": "WTH:Haematology-Oncology",
+        "sequence_type": "efaecium:ST80",
+        "gene": "vanA",
+        "min_size": 8
+      }
+    }
+  },
+  "S5": {
+    "title": "Referral importation of OXA-181 K. pneumoniae ST307 from a district hospital into an adult ICU",
+    "facility": "GDH -> GAH",
+    "ward": "GAH:Adult ICU",
+    "period": [
+      "2025-09-01",
+      "2025-10-25"
+    ],
+    "patients": 10,
+    "expect": {
+      "transfer_edge": {
+        "wards": [
+          "GAH:Adult ICU",
+          "GDH:Medical"
+        ],
+        "min_transfers": 6
+      },
+      "cluster": {
+        "ward": "GAH:Adult ICU",
+        "sequence_type": "klebsiella:ST307",
+        "gene": "blaOXA-181",
+        "min_size": 6
+      }
+    }
+  },
+  "S6": {
+    "title": "MRSA ST612 cluster in a burns unit",
+    "facility": "GAH",
+    "ward": "GAH:Burns",
+    "period": [
+      "2025-07-07",
+      "2025-08-15"
+    ],
+    "patients": 6,
+    "expect": {
+      "cluster": {
+        "ward": "GAH:Burns",
+        "sequence_type": "saureus:ST612",
+        "gene": "mecA",
+        "min_size": 6
+      }
+    }
+  },
+  "S7": {
+    "title": "Sentinel: KPC-2 K. pneumoniae ST258 (uncommon in South Africa; possible importation)",
+    "facility": "WTH",
+    "ward": "WTH:Adult ICU",
+    "period": [
+      "2025-10-14",
+      "2025-10-14"
+    ],
+    "patients": 1,
+    "expect": {
+      "gene_present": "blaKPC-2"
+    }
+  },
+  "S8": {
+    "title": "Sentinel: plasmid-mediated colistin resistance (mcr-1) in E. coli",
+    "facility": "KRH",
+    "ward": "KRH:Medical",
+    "period": [
+      "2025-11-26",
+      "2025-11-26"
+    ],
+    "patients": 1,
+    "expect": {
+      "gene_present": "mcr-1.1"
+    }
+  },
+  "S2": {
+    "title": "Endemic carbapenem-resistant A. baumannii (OXA-23, IC2/ST2) in adult ICUs",
+    "facility": "all",
+    "ward": "*:Adult ICU",
+    "period": [
+      "2025-07-01",
+      "2025-12-31"
+    ],
+    "patients": null,
+    "expect": {
+      "cluster": {
+        "ward_suffix": ":Adult ICU",
+        "sequence_type": "abaumannii_2:ST2",
+        "gene": "blaOXA-23",
+        "min_size": 2
+      }
+    }
+  }
+}

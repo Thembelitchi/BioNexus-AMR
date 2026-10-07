@@ -17,7 +17,8 @@ from . import ontology
 
 IDENTIFIER_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
 
-SIR = Literal["S", "I", "R"]
+# SDD: susceptible-dose-dependent, a CLSI category for e.g. cefepime.
+SIR = Literal["S", "I", "SDD", "R"]
 MicQualifier = Literal["=", "<", "<=", ">", ">="]
 
 _MIC_RE = re.compile(r"^\s*(?P<op><=|>=|<|>|=|≤|≥)?\s*(?P<value>\d+(?:\.\d+)?|\.\d+)\s*(?:mg/l|µg/ml|ug/ml)?\s*$", re.IGNORECASE)
@@ -55,7 +56,10 @@ def canonical_ward(raw: str) -> str:
     name = " ".join((raw or "").split())
     if not name:
         raise ValueError("ward is required")
-    return name.upper() if len(name) <= 4 else name.title()
+    if len(name) <= 4:
+        return name.upper()
+    # Tidy names typed in lowercase; otherwise keep acronyms such as "ICU".
+    return name.title() if name.islower() else name
 
 
 def _blank_to_none(value: Any) -> Any:
@@ -71,13 +75,45 @@ class _CsvRow(BaseModel):
 # --------------------------------------------------------------------------
 
 
-class ClinicalRow(_CsvRow):
+class _LocatedRow(_CsvRow):
+    """Columns placing an event in a ward, optionally within a facility."""
+
+    ward: str = Field(alias="Ward")
+    facility: str | None = Field(default=None, alias="Facility", pattern=IDENTIFIER_PATTERN)
+    facility_name: str | None = Field(default=None, alias="FacilityName", max_length=120)
+    province: str | None = Field(default=None, alias="Province", max_length=80)
+
+    @field_validator("ward", mode="before")
+    @classmethod
+    def _ward(cls, value: Any) -> str:
+        return canonical_ward(value)
+
+    @field_validator("facility_name", "province", mode="before")
+    @classmethod
+    def _collapse_whitespace(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            return " ".join(value.split()) or None
+        return value
+
+    def ward_ref(self) -> WardRef:
+        return WardRef(
+            key=f"{self.facility}:{self.ward}" if self.facility else self.ward,
+            name=self.ward,
+            facility=self.facility,
+            facility_name=self.facility_name,
+            province=self.province,
+        )
+
+
+_SEX = {"f": "F", "female": "F", "m": "M", "male": "M", "u": "U", "unknown": "U"}
+
+
+class ClinicalRow(_LocatedRow):
     """One antimicrobial susceptibility test result for one specimen."""
 
     patient_id: str = Field(alias="PatientID", pattern=IDENTIFIER_PATTERN)
     sample_id: str = Field(alias="SampleID", pattern=IDENTIFIER_PATTERN)
     collected: datetime = Field(validation_alias=AliasChoices("Date", "CollectedAt", "collected"))
-    ward: str = Field(alias="Ward")
     specimen: str = Field(validation_alias=AliasChoices("Specimen", "SpecimenSource", "specimen"), min_length=1)
     treatment: ontology.AntibioticRef | None = Field(default=None, alias="Treatment")
     organism: ontology.OrganismRef = Field(alias="Organism")
@@ -90,6 +126,8 @@ class ClinicalRow(_CsvRow):
     encounter_id: str | None = Field(default=None, alias="EncounterID", pattern=IDENTIFIER_PATTERN)
     admitted: datetime | None = Field(default=None, alias="AdmitDate")
     discharged: datetime | None = Field(default=None, alias="DischargeDate")
+    sex: Literal["F", "M", "U"] | None = Field(default=None, alias="Sex")
+    age_years: float | None = Field(default=None, alias="AgeYears", ge=0, le=125)
 
     @model_validator(mode="before")
     @classmethod
@@ -111,10 +149,14 @@ class ClinicalRow(_CsvRow):
     def _timestamp(cls, value: Any) -> Any:
         return None if value is None else parse_timestamp(value)
 
-    @field_validator("ward", mode="before")
+    @field_validator("sex", mode="before")
     @classmethod
-    def _ward(cls, value: Any) -> str:
-        return canonical_ward(value)
+    def _sex(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            if value.strip().lower() not in _SEX:
+                raise ValueError(f"sex must be F, M or U, not {value!r}")
+            return _SEX[value.strip().lower()]
+        return value
 
     @field_validator("antibiotic", "treatment", mode="before")
     @classmethod
@@ -177,18 +219,12 @@ class GenomicRow(_CsvRow):
         return self
 
 
-class MovementRow(_CsvRow):
+class MovementRow(_LocatedRow):
     """An admission/transfer/discharge (ADT) event placing a patient in a ward."""
 
     patient_id: str = Field(alias="PatientID", pattern=IDENTIFIER_PATTERN)
     encounter_id: str = Field(alias="EncounterID", pattern=IDENTIFIER_PATTERN)
-    ward: str = Field(alias="Ward")
     timestamp: datetime = Field(alias="Timestamp")
-
-    @field_validator("ward", mode="before")
-    @classmethod
-    def _ward(cls, value: Any) -> str:
-        return canonical_ward(value)
 
     @field_validator("timestamp", mode="before")
     @classmethod
@@ -203,6 +239,14 @@ class MovementRow(_CsvRow):
 
 class _Record(BaseModel):
     model_config = ConfigDict(frozen=True)
+
+
+class WardRef(_Record):
+    key: str
+    name: str
+    facility: str | None = None
+    facility_name: str | None = None
+    province: str | None = None
 
 
 class AntibioticNode(_Record):
@@ -250,7 +294,9 @@ class IsolateRecord(_Record):
     admitted: datetime | None
     discharged: datetime | None
     location_event_id: str
-    ward: str
+    ward: WardRef
+    sex: Literal["F", "M", "U"] | None = None
+    age_years: float | None = None
     isolate_id: str
     collected: datetime
     specimen: str
@@ -270,7 +316,7 @@ class MovementRecord(_Record):
     patient_id: str
     encounter_id: str
     location_event_id: str
-    ward: str
+    ward: WardRef
     timestamp: datetime
 
 

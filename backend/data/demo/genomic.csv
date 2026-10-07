@@ -1,0 +1,257 @@
+PatientID,SampleID,Organism,Strain_Subtype,GeneDetected,Mechanism,MGE_Type,MGE_Replicon
+PT-204174,LAB25-786600,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-204174,LAB25-786600,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-980625,LAB25-111932,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-980625,LAB25-111932,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-249205,LAB25-537570,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-249205,LAB25-537570,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-759060,LAB25-124570,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-759060,LAB25-124570,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-837326,LAB25-788362,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-837326,LAB25-788362,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-866065,LAB25-255354,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-866065,LAB25-255354,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-762086,LAB25-301504,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-762086,LAB25-301504,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-785278,LAB25-470818,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-785278,LAB25-470818,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-875616,LAB25-810631,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-875616,LAB25-810631,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-421728,LAB25-530968,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-421728,LAB25-530968,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-576337,LAB25-523021,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-576337,LAB25-523021,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-301203,LAB25-399327,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-301203,LAB25-399327,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-494937,LAB25-552558,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-494937,LAB25-552558,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-646804,LAB25-679149,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-646804,LAB25-679149,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-556154,LAB25-169463,Klebsiella pneumoniae,ST15,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-556154,LAB25-169463,Klebsiella pneumoniae,ST15,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-196185,LAB25-335962,Klebsiella pneumoniae,ST15,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-196185,LAB25-335962,Klebsiella pneumoniae,ST15,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-849432,LAB25-304428,Escherichia coli,ST410,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-323499,LAB25-802903,Klebsiella pneumoniae,ST15,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-323499,LAB25-802903,Klebsiella pneumoniae,ST15,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-445201,LAB25-843164,Escherichia coli,ST410,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-303127,LAB25-143066,Escherichia coli,ST410,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-672670,LAB25-411586,Enterobacter cloacae,ST78,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-660822,LAB25-376951,Escherichia coli,ST410,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-608386,LAB25-824468,Enterobacter cloacae,ST78,blaNDM-5,Antibiotic inactivation (metallo-beta-lactamase),Plasmid,IncX3
+PT-849269,LAB25-384716,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-208120,LAB25-187015,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-430853,LAB25-685085,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-696259,LAB25-731363,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-363033,LAB25-159772,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-743661,LAB25-455817,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-421452,LAB25-101433,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-492659,LAB25-110614,Enterococcus faecium,ST80,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-666642,LAB25-648953,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-666642,LAB25-648953,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-705555,LAB25-298387,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-705555,LAB25-298387,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-535708,LAB25-698071,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-535708,LAB25-698071,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-248843,LAB25-228815,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-248843,LAB25-228815,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-121579,LAB25-610823,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-121579,LAB25-610823,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-344591,LAB25-614191,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-344591,LAB25-614191,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-483535,LAB25-737069,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-483535,LAB25-737069,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-299457,LAB25-588519,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-299457,LAB25-588519,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-485909,LAB25-186300,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-485909,LAB25-186300,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-274805,LAB25-400757,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-274805,LAB25-400757,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-326551,LAB25-582021,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-300402,LAB25-865173,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-770805,LAB25-837836,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-990390,LAB25-156641,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-841326,LAB25-134548,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-241321,LAB25-466086,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-747926,LAB25-589829,Klebsiella pneumoniae,ST258,blaKPC-2,Antibiotic inactivation (class A serine carbapenemase),Transposon,Tn4401
+PT-754922,LAB25-469906,Escherichia coli,ST10,mcr-1.1,Antibiotic target alteration (lipid A phosphoethanolamine transferase),Plasmid,IncI2
+PT-190264,LAB25-378920,Enterobacter cloacae,ST171,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-737423,LAB25-898145,Enterococcus faecium,ST17,vanA,Antibiotic target alteration (D-Ala-D-Lac),,
+PT-348774,LAB25-682518,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-348774,LAB25-682518,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-122661,LAB25-585739,Enterobacter cloacae,ST78,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-122661,LAB25-585739,Enterobacter cloacae,ST78,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-121884,LAB25-771330,Staphylococcus aureus,ST152,None,Wild type,,
+PT-646598,LAB25-200785,Pseudomonas aeruginosa,ST235,oprD,Reduced permeability (OprD porin loss),,
+PT-371174,LAB25-153264,Klebsiella pneumoniae,ST152,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-371174,LAB25-153264,Klebsiella pneumoniae,ST152,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-527679,LAB25-528681,Enterococcus faecium,ST17,vanA,Antibiotic target alteration (D-Ala-D-Lac),Transposon,Tn1546
+PT-406931,LAB25-260920,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-406931,LAB25-260920,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-911867,LAB25-145465,Enterococcus faecium,ST17,None,Wild type,,
+PT-131626,LAB25-746017,Escherichia coli,ST410,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-131626,LAB25-746017,Escherichia coli,ST410,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-802216,LAB25-882718,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-802216,LAB25-882718,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-799780,LAB25-120955,Staphylococcus aureus,ST5,mecA,Antibiotic target replacement (PBP2a),,
+PT-769006,LAB25-781365,Klebsiella pneumoniae,ST15,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-491280,LAB25-238844,Pseudomonas aeruginosa,ST235,blaVIM-2,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-199694,LAB25-933615,Klebsiella pneumoniae,ST14,None,Wild type,,
+PT-108577,LAB25-685596,Pseudomonas aeruginosa,ST235,blaVIM-2,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-909242,LAB25-491441,Enterococcus faecium,ST203,None,Wild type,,
+PT-187335,LAB25-662953,Staphylococcus aureus,ST30,ermC,Antibiotic target alteration (23S rRNA methylation),,
+PT-803982,LAB25-617173,Pseudomonas aeruginosa,ST111,blaVIM-2,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-559268,LAB25-586418,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-986981,LAB25-402871,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-986981,LAB25-143206,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-872834,LAB25-440187,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-541819,LAB25-530507,Klebsiella pneumoniae,ST17,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-693003,LAB25-712153,Enterobacter cloacae,ST171,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-661206,LAB25-681456,Klebsiella pneumoniae,ST101,blaOXA-232,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-278570,LAB25-307742,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-882925,LAB25-733075,Klebsiella pneumoniae,ST14,blaOXA-232,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-615869,LAB25-874554,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-191357,LAB25-243865,Staphylococcus aureus,ST5,None,Wild type,,
+PT-349507,LAB25-976753,Klebsiella pneumoniae,ST14,None,Wild type,,
+PT-602527,LAB25-817780,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-242432,LAB25-297455,Klebsiella pneumoniae,ST14,blaOXA-232,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,ColKP3
+PT-656642,LAB25-731797,Staphylococcus aureus,ST5,mecA,Antibiotic target replacement (PBP2a),,
+PT-132375,LAB25-573302,Staphylococcus aureus,ST5,mecA,Antibiotic target replacement (PBP2a),,
+PT-581558,LAB25-333253,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-218966,LAB25-695769,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-595718,LAB25-782065,Klebsiella pneumoniae,ST101,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-595718,LAB25-782065,Klebsiella pneumoniae,ST101,blaOXA-48,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-112062,LAB25-739043,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-967681,LAB25-449999,Staphylococcus aureus,ST239,mecA,Antibiotic target replacement (PBP2a),,
+PT-967681,LAB25-449999,Staphylococcus aureus,ST239,ermC,Antibiotic target alteration (23S rRNA methylation),,
+PT-888995,LAB25-696604,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-980326,LAB25-820172,Acinetobacter baumannii,ST1,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-332774,LAB25-572029,Klebsiella pneumoniae,ST17,None,Wild type,,
+PT-725814,LAB25-443213,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-624746,LAB25-205516,Enterobacter cloacae,ST171,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-323351,LAB25-392649,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-323351,LAB25-392649,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-272843,LAB25-210542,Klebsiella pneumoniae,ST101,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-272843,LAB25-210542,Klebsiella pneumoniae,ST101,blaOXA-48,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-302720,LAB25-921560,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-302720,LAB25-712283,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-106507,LAB25-277785,Staphylococcus aureus,ST152,None,Wild type,,
+PT-168457,LAB25-319544,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-172315,LAB25-221181,Enterobacter cloacae,ST90,None,Wild type,,
+PT-342031,LAB25-383249,Pseudomonas aeruginosa,ST111,oprD,Reduced permeability (OprD porin loss),,
+PT-735022,LAB25-997240,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-977694,LAB25-699881,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-249742,LAB25-432553,Klebsiella pneumoniae,ST14,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-249742,LAB25-432553,Klebsiella pneumoniae,ST14,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-674549,LAB25-180944,Klebsiella pneumoniae,ST14,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-674549,LAB25-180944,Klebsiella pneumoniae,ST14,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-671943,LAB25-703393,Klebsiella pneumoniae,ST101,None,Wild type,,
+PT-124729,LAB25-972452,Staphylococcus aureus,ST5,None,Wild type,,
+PT-995940,LAB25-479548,Escherichia coli,ST131,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-881904,LAB25-189386,Klebsiella pneumoniae,ST15,None,Wild type,,
+PT-490667,LAB25-605923,Enterobacter cloacae,ST78,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-893789,LAB25-285148,Staphylococcus aureus,ST30,None,Wild type,,
+PT-642538,LAB25-234260,Klebsiella pneumoniae,ST14,None,Wild type,,
+PT-139339,LAB25-452334,Pseudomonas aeruginosa,ST235,None,Wild type,,
+PT-139339,LAB25-371169,Pseudomonas aeruginosa,ST235,None,Wild type,,
+PT-183095,LAB25-699817,Klebsiella pneumoniae,ST101,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-183095,LAB25-699817,Klebsiella pneumoniae,ST101,blaOXA-48,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncL
+PT-183095,LAB25-411003,Pseudomonas aeruginosa,ST244,None,Wild type,,
+PT-650519,LAB25-395135,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-650519,LAB25-395135,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-996609,LAB25-252516,Pseudomonas aeruginosa,ST244,oprD,Reduced permeability (OprD porin loss),,
+PT-397227,LAB25-680898,Klebsiella pneumoniae,ST15,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-162417,LAB25-997941,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-162417,LAB25-196217,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-639310,LAB25-219117,Staphylococcus aureus,ST239,mecA,Antibiotic target replacement (PBP2a),,
+PT-639310,LAB25-219117,Staphylococcus aureus,ST239,ermC,Antibiotic target alteration (23S rRNA methylation),,
+PT-970173,LAB25-596657,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-584311,LAB25-912577,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-595541,LAB25-786545,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-693555,LAB25-335590,Klebsiella pneumoniae,ST15,None,Wild type,,
+PT-693555,LAB25-544150,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-528084,LAB25-616445,Pseudomonas aeruginosa,ST111,None,Wild type,,
+PT-990093,LAB25-348548,Klebsiella pneumoniae,ST15,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-413985,LAB25-428144,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-962065,LAB25-284414,Staphylococcus aureus,ST5,mecA,Antibiotic target replacement (PBP2a),,
+PT-962065,LAB25-205202,Staphylococcus aureus,ST5,mecA,Antibiotic target replacement (PBP2a),,
+PT-875085,LAB25-725963,Klebsiella pneumoniae,ST152,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-875085,LAB25-725963,Klebsiella pneumoniae,ST152,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-393152,LAB25-396463,Klebsiella pneumoniae,ST14,blaOXA-232,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-947559,LAB25-963186,Staphylococcus aureus,ST239,mecA,Antibiotic target replacement (PBP2a),,
+PT-947559,LAB25-963186,Staphylococcus aureus,ST239,ermC,Antibiotic target alteration (23S rRNA methylation),,
+PT-178966,LAB25-984103,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-178966,LAB25-984103,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-200892,LAB25-860408,Klebsiella pneumoniae,ST14,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-200892,LAB25-860408,Klebsiella pneumoniae,ST14,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-981470,LAB25-358411,Enterobacter cloacae,ST90,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-191559,LAB25-887192,Pseudomonas aeruginosa,ST244,oprD,Reduced permeability (OprD porin loss),,
+PT-125218,LAB25-695869,Klebsiella pneumoniae,ST101,None,Wild type,,
+PT-273995,LAB25-414498,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-611450,LAB25-561888,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-638916,LAB25-556654,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-915055,LAB25-993576,Escherichia coli,ST10,None,Wild type,,
+PT-904954,LAB25-342941,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-414161,LAB25-283935,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-156790,LAB25-186717,Staphylococcus aureus,ST152,None,Wild type,,
+PT-204026,LAB25-806060,Staphylococcus aureus,ST15,None,Wild type,,
+PT-857771,LAB25-923270,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-929231,LAB25-789656,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-929231,LAB25-789656,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-984768,LAB25-994785,Enterobacter cloacae,ST171,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-947956,LAB25-644078,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-119200,LAB25-466850,Klebsiella pneumoniae,ST152,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-119200,LAB25-466850,Klebsiella pneumoniae,ST152,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-651477,LAB25-134986,Enterobacter cloacae,ST90,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-192541,LAB25-564748,Enterobacter cloacae,ST171,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-192541,LAB25-103617,Enterobacter cloacae,ST171,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-571561,LAB25-866760,Escherichia coli,ST73,None,Wild type,,
+PT-142000,LAB25-301920,Klebsiella pneumoniae,ST101,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-142000,LAB25-301920,Klebsiella pneumoniae,ST101,blaOXA-48,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncL
+PT-783183,LAB25-499548,Klebsiella pneumoniae,ST14,blaOXA-232,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,ColKP3
+PT-285591,LAB25-269724,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-543053,LAB25-427557,Klebsiella pneumoniae,ST14,None,Wild type,,
+PT-419369,LAB25-107987,Staphylococcus aureus,ST5,mecA,Antibiotic target replacement (PBP2a),,
+PT-999386,LAB25-814291,Klebsiella pneumoniae,ST152,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-999386,LAB25-814291,Klebsiella pneumoniae,ST152,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-446805,LAB25-702971,Klebsiella pneumoniae,ST14,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-446805,LAB25-702971,Klebsiella pneumoniae,ST14,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-713637,LAB25-918004,Escherichia coli,ST73,None,Wild type,,
+PT-786550,LAB25-830630,Pseudomonas aeruginosa,ST235,None,Wild type,,
+PT-826380,LAB25-494859,Enterobacter cloacae,ST171,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",,
+PT-419307,LAB25-522595,Pseudomonas aeruginosa,ST111,oprD,Reduced permeability (OprD porin loss),,
+PT-595121,LAB25-575313,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-101516,LAB25-739678,Escherichia coli,ST410,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-101516,LAB25-739678,Escherichia coli,ST410,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-899861,LAB25-921616,Pseudomonas aeruginosa,ST274,None,Wild type,,
+PT-407606,LAB25-765529,Staphylococcus aureus,ST36,mecA,Antibiotic target replacement (PBP2a),,
+PT-146605,LAB25-738852,Staphylococcus aureus,ST121,None,Wild type,,
+PT-110716,LAB25-106951,Klebsiella pneumoniae,ST14,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-110716,LAB25-106951,Klebsiella pneumoniae,ST14,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-758878,LAB25-988160,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-410983,LAB25-552614,Staphylococcus aureus,ST5,None,Wild type,,
+PT-771201,LAB25-737250,Klebsiella pneumoniae,ST152,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-771201,LAB25-737250,Klebsiella pneumoniae,ST152,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-866029,LAB25-871488,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",,
+PT-902902,LAB25-594958,Klebsiella pneumoniae,ST152,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-902902,LAB25-594958,Klebsiella pneumoniae,ST152,blaNDM-1,Antibiotic inactivation (metallo-beta-lactamase),,
+PT-414744,LAB25-542194,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-796971,LAB25-741064,Staphylococcus aureus,ST239,mecA,Antibiotic target replacement (PBP2a),,
+PT-796971,LAB25-741064,Staphylococcus aureus,ST239,ermC,Antibiotic target alteration (23S rRNA methylation),,
+PT-249756,LAB25-266052,Staphylococcus aureus,ST239,mecA,Antibiotic target replacement (PBP2a),,
+PT-249756,LAB25-266052,Staphylococcus aureus,ST239,ermC,Antibiotic target alteration (23S rRNA methylation),,
+PT-613551,LAB25-743423,Acinetobacter baumannii,ST2,blaOXA-23,"Antibiotic inactivation (class D carbapenemase, OXA-23 group)",Transposon,Tn2006
+PT-894077,LAB25-755631,Pseudomonas aeruginosa,ST235,oprD,Reduced permeability (OprD porin loss),,
+PT-894077,LAB25-759654,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-160073,LAB25-568994,Klebsiella pneumoniae,ST101,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-160073,LAB25-568994,Klebsiella pneumoniae,ST101,blaOXA-48,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncL
+PT-248727,LAB25-655613,Klebsiella pneumoniae,ST101,None,Wild type,,
+PT-534367,LAB25-436103,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-420363,LAB25-962725,Klebsiella pneumoniae,ST14,blaOXA-232,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,ColKP3
+PT-273414,LAB25-606950,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-273414,LAB25-606950,Klebsiella pneumoniae,ST307,blaOXA-181,"Antibiotic inactivation (class D carbapenemase, OXA-48-like)",Plasmid,IncX3
+PT-562230,LAB25-764031,Escherichia coli,ST131,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,
+PT-346663,LAB25-169956,Staphylococcus aureus,ST612,mecA,Antibiotic target replacement (PBP2a),,
+PT-398096,LAB25-505526,Pseudomonas aeruginosa,ST111,blaVIM-2,Antibiotic inactivation (metallo-beta-lactamase),Integron,class 1 integron
+PT-668930,LAB25-747018,Pseudomonas aeruginosa,ST235,None,Wild type,,
+PT-559144,LAB25-708658,Klebsiella pneumoniae,ST307,blaCTX-M-15,Antibiotic inactivation (class A extended-spectrum beta-lactamase),,

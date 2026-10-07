@@ -18,7 +18,7 @@ from typing import Iterable, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from . import ontology
+from . import breakpoints, ontology
 from .models import (
     AntibioticNode,
     ClinicalRow,
@@ -124,16 +124,18 @@ def transform(
             result.isolates.append(record)
 
     for _, row in movement_rows:
+        ward = row.ward_ref()
         result.movements.append(
             MovementRecord(
                 patient_id=row.patient_id,
                 encounter_id=row.encounter_id,
-                location_event_id=location_event_key(row.encounter_id, row.ward, row.timestamp),
-                ward=row.ward,
+                location_event_id=location_event_key(row.encounter_id, ward.key, row.timestamp),
+                ward=ward,
                 timestamp=row.timestamp,
             )
         )
 
+    _check_facility_metadata(result)
     log.info(
         "transformed %d isolates and %d movements (%d issues)",
         len(result.isolates),
@@ -143,7 +145,19 @@ def transform(
     return result
 
 
-_SPECIMEN_FIELDS = ("patient_id", "collected", "ward", "specimen", "organism", "encounter_id")
+def _check_facility_metadata(result: TransformResult) -> None:
+    """Warn when one facility code arrives with different names or provinces."""
+    seen: dict[str, set[tuple[str | None, str | None]]] = defaultdict(set)
+    for ward in [r.ward for r in result.isolates] + [m.ward for m in result.movements]:
+        if ward.facility:
+            seen[ward.facility].add((ward.facility_name, ward.province))
+    for code, variants in sorted(seen.items()):
+        named = {v for v in variants if v != (None, None)}
+        if len(named) > 1:
+            result.warn("clinical", f"facility {code} has conflicting name/province values {sorted(named, key=str)}")
+
+
+_SPECIMEN_FIELDS = ("patient_id", "collected", "ward", "facility", "specimen", "organism", "encounter_id", "sex", "age_years")
 
 
 def _build_isolate(
@@ -182,6 +196,7 @@ def _build_isolate(
             mic_qualifier=row.mic_qualifier,
             guideline=row.guideline or "as reported",
         )
+        _check_interpretation(row, sample_id, line, result)
         previous = susceptibility.get(test.atc_code)
         if previous and previous != test:
             result.reject("clinical", f"conflicting duplicate {test.name} result ignored", line=line, sample_id=sample_id)
@@ -190,13 +205,16 @@ def _build_isolate(
 
     sequence_type, genes, mobile, status = _resolve_genotype(sample_id, first, genomic, result)
     encounter_id = encounter_key(first)
+    ward = first.ward_ref()
     return IsolateRecord(
         patient_id=first.patient_id,
         encounter_id=encounter_id,
         admitted=admitted,
         discharged=discharged,
-        location_event_id=location_event_key(encounter_id, first.ward, first.collected),
-        ward=first.ward,
+        location_event_id=location_event_key(encounter_id, ward.key, first.collected),
+        ward=ward,
+        sex=first.sex,
+        age_years=first.age_years,
         isolate_id=sample_id,
         collected=first.collected,
         specimen=first.specimen,
@@ -211,6 +229,21 @@ def _build_isolate(
         direct_genes=genes,
         mobile_elements=mobile,
     )
+
+
+def _check_interpretation(row: ClinicalRow, sample_id: str, line: int, result: TransformResult) -> None:
+    """Warn when a reported category contradicts the MIC under the stated guideline."""
+    if row.mic is None or row.guideline != breakpoints.BREAKPOINT_SOURCE:
+        return
+    expected = breakpoints.interpret(row.organism.ncbi_taxid, row.antibiotic.amr_code, row.mic, row.mic_qualifier)
+    if expected is not None and expected != row.sir:
+        mic = f"{row.mic_qualifier if row.mic_qualifier != '=' else ''}{row.mic:g}"
+        result.warn(
+            "clinical",
+            f"{row.antibiotic.name} reported {row.sir} but MIC {mic} mg/L reads {expected} under {row.guideline}",
+            line=line,
+            sample_id=sample_id,
+        )
 
 
 def _resolve_genotype(sample_id, clinical: ClinicalRow, genomic: list[tuple[int, GenomicRow]], result: TransformResult):

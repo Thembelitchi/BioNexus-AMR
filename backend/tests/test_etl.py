@@ -100,3 +100,49 @@ def test_invalid_rows_are_reported_with_line_numbers():
     assert len(result.isolates) == 1
     [issue] = errors(result)
     assert issue.line == 3 and issue.sample_id == "S-2" and "taxonomy vocabulary" in issue.message
+
+
+def test_facility_scoped_wards_and_demographics():
+    result = run(
+        [
+            clinical_row("S-1", "P-1", KP, Ward="ICU", Facility="GAH", FacilityName="Gauteng Academic", Province="Gauteng", Sex="female", AgeYears="0.02"),
+            clinical_row("S-2", "P-2", KP, Ward="ICU", Facility="KRH", FacilityName="KZN Regional", Province="KwaZulu-Natal", Sex="M", AgeYears="54"),
+        ]
+    )
+    wards = {r.isolate_id: r.ward for r in result.isolates}
+    assert (wards["S-1"].key, wards["S-2"].key) == ("GAH:ICU", "KRH:ICU")
+    assert wards["S-1"].province == "Gauteng"
+    first = next(r for r in result.isolates if r.isolate_id == "S-1")
+    assert (first.sex, first.age_years) == ("F", 0.02)
+
+
+def test_conflicting_facility_metadata_is_flagged():
+    result = run(
+        [
+            clinical_row("S-1", "P-1", KP, Facility="GAH", FacilityName="Gauteng Academic", Province="Gauteng"),
+            clinical_row("S-2", "P-2", KP, Facility="GAH", FacilityName="Somewhere Else", Province="Gauteng"),
+        ]
+    )
+    assert any("facility GAH has conflicting" in issue.message for issue in result.issues)
+
+
+def test_reported_category_is_checked_against_clsi_breakpoints():
+    result = run(
+        [
+            clinical_row("S-1", "P-1", KP, Antibiotic="Meropenem", Result="S", MIC=">=16", Guideline="CLSI 2025"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Cefepime", Result="SDD", MIC="4", Guideline="CLSI 2025"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Colistin", Result="I", MIC="<=0.5", Guideline="CLSI 2025"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Ertapenem", Result="S", MIC="4", Guideline="CLSI 2025"),
+        ]
+    )
+    warnings = [issue.message for issue in result.issues if issue.severity == "warning"]
+    assert warnings == [
+        "Meropenem reported S but MIC >=16 mg/L reads R under CLSI 2025",
+        "Ertapenem reported S but MIC 4 mg/L reads R under CLSI 2025",
+    ]
+    assert {t.name: t.sir for t in result.isolates[0].susceptibility}["Cefepime"] == "SDD"
+
+
+def test_unstated_guideline_is_not_reinterpreted():
+    result = run([clinical_row("S-1", "P-1", KP, Antibiotic="Meropenem", Result="S", MIC=">=16")])
+    assert result.issues == []

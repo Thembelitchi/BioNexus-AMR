@@ -1,0 +1,648 @@
+PatientID,EncounterID,EventType,Facility,FacilityName,Province,Ward,Timestamp
+PT-774551,ENC-483166,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-06-21T16:30:00+02:00
+PT-471003,ENC-431343,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-06-21T23:45:00+02:00
+PT-957253,ENC-307854,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-06-22T14:45:00+02:00
+PT-680344,ENC-817297,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-06-22T22:00:00+02:00
+PT-569859,ENC-688988,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-06-23T03:15:00+02:00
+PT-703843,ENC-516170,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-06-23T14:00:00+02:00
+PT-829062,ENC-946188,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-06-24T01:45:00+02:00
+PT-156249,ENC-249741,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-06-24T05:45:00+02:00
+PT-737701,ENC-133657,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-06-24T18:30:00+02:00
+PT-937143,ENC-174560,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-06-25T16:00:00+02:00
+PT-482949,ENC-176239,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-06-26T03:00:00+02:00
+PT-986981,ENC-619087,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-06-27T08:45:00+02:00
+PT-345495,ENC-633221,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-06-28T12:15:00+02:00
+PT-132375,ENC-178932,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-06-29T06:15:00+02:00
+PT-960626,ENC-196133,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-06-29T09:45:00+02:00
+PT-970971,ENC-966798,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-06-30T04:45:00+02:00
+PT-941972,ENC-740007,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-06-30T19:15:00+02:00
+PT-122661,ENC-839699,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-07-01T13:15:00+02:00
+PT-602256,ENC-117991,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-01T17:15:00+02:00
+PT-462970,ENC-334150,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-02T01:30:00+02:00
+PT-338813,ENC-499367,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-02T22:30:00+02:00
+PT-919653,ENC-654397,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-03T11:15:00+02:00
+PT-108577,ENC-328416,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-07-04T01:15:00+02:00
+PT-266137,ENC-317250,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-04T01:15:00+02:00
+PT-595541,ENC-453700,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-04T06:00:00+02:00
+PT-879171,ENC-228867,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-04T09:15:00+02:00
+PT-148859,ENC-819767,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-04T10:15:00+02:00
+PT-832502,ENC-857065,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-05T11:30:00+02:00
+PT-844037,ENC-293420,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-07-05T14:30:00+02:00
+PT-276399,ENC-604590,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-05T17:00:00+02:00
+PT-326551,ENC-503934,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-06T08:00:00+02:00
+PT-888000,ENC-460894,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-06T23:00:00+02:00
+PT-714148,ENC-434830,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-07T11:30:00+02:00
+PT-559973,ENC-598918,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-07T12:30:00+02:00
+PT-875085,ENC-839025,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-07-07T18:15:00+02:00
+PT-980977,ENC-197663,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-07-08T05:30:00+02:00
+PT-827263,ENC-437211,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-07-08T07:15:00+02:00
+PT-645653,ENC-616494,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-07-09T11:15:00+02:00
+PT-532620,ENC-960808,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-10T22:30:00+02:00
+PT-280118,ENC-959321,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-11T05:00:00+02:00
+PT-680392,ENC-658108,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-07-11T08:30:00+02:00
+PT-601190,ENC-423853,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-07-11T13:30:00+02:00
+PT-168457,ENC-905979,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-07-11T22:00:00+02:00
+PT-902902,ENC-152289,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-12T16:15:00+02:00
+PT-770805,ENC-955741,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-12T17:15:00+02:00
+PT-160073,ENC-144346,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-13T05:30:00+02:00
+PT-278570,ENC-497729,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-07-13T09:30:00+02:00
+PT-172315,ENC-691792,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-13T12:45:00+02:00
+PT-624439,ENC-826971,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-14T05:00:00+02:00
+PT-944440,ENC-260524,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-14T05:45:00+02:00
+PT-302171,ENC-459519,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-07-14T06:15:00+02:00
+PT-587641,ENC-956807,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-07-14T09:45:00+02:00
+PT-110716,ENC-322177,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-07-15T11:45:00+02:00
+PT-982691,ENC-421976,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-07-15T12:30:00+02:00
+PT-439634,ENC-297271,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-07-16T11:30:00+02:00
+PT-278570,ENC-497729,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-16T15:27:21.351703+02:00
+PT-982691,ENC-421976,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-17T05:40:50.476147+02:00
+PT-300402,ENC-364442,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-18T03:45:00+02:00
+PT-709977,ENC-715980,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-18T14:30:00+02:00
+PT-595121,ENC-440927,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-07-18T17:15:00+02:00
+PT-465917,ENC-341351,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-07-18T20:15:00+02:00
+PT-405832,ENC-235436,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-19T08:45:00+02:00
+PT-885975,ENC-512929,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-07-19T18:45:00+02:00
+PT-655546,ENC-202697,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-19T22:00:00+02:00
+PT-559268,ENC-331541,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-07-20T05:00:00+02:00
+PT-856856,ENC-128897,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-20T06:00:00+02:00
+PT-301296,ENC-784627,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-20T10:15:00+02:00
+PT-173289,ENC-492825,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-07-20T20:30:00+02:00
+PT-462789,ENC-490529,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-07-21T08:15:00+02:00
+PT-462789,ENC-490529,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-07-21T15:27:05.210320+02:00
+PT-928419,ENC-593380,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-22T05:15:00+02:00
+PT-839768,ENC-338059,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-07-22T11:30:00+02:00
+PT-285591,ENC-282835,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-07-22T13:00:00+02:00
+PT-852488,ENC-293771,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-22T22:45:00+02:00
+PT-204026,ENC-848630,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-07-23T07:45:00+02:00
+PT-770195,ENC-328413,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-23T08:00:00+02:00
+PT-624513,ENC-265996,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-24T08:15:00+02:00
+PT-341375,ENC-988319,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-07-24T13:15:00+02:00
+PT-273414,ENC-172498,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-07-25T06:00:00+02:00
+PT-931376,ENC-959360,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-07-25T12:15:00+02:00
+PT-551405,ENC-900729,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-25T12:30:00+02:00
+PT-948624,ENC-543972,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-25T17:15:00+02:00
+PT-990390,ENC-320983,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-26T03:45:00+02:00
+PT-451954,ENC-431235,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-26T04:15:00+02:00
+PT-515353,ENC-892362,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-26T05:00:00+02:00
+PT-285591,ENC-282835,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-07-26T05:36:40.541207+02:00
+PT-146605,ENC-349444,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-26T06:15:00+02:00
+PT-645269,ENC-268065,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-07-27T03:45:00+02:00
+PT-249205,ENC-430389,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-27T06:45:00+02:00
+PT-880626,ENC-333245,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-27T14:45:00+02:00
+PT-933702,ENC-510965,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-27T16:45:00+02:00
+PT-530282,ENC-221067,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-28T05:30:00+02:00
+PT-502208,ENC-806870,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-07-28T06:00:00+02:00
+PT-146605,ENC-349444,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-07-28T10:14:58.409925+02:00
+PT-489665,ENC-374153,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-07-28T14:15:00+02:00
+PT-274940,ENC-325720,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-07-28T19:30:00+02:00
+PT-508163,ENC-592833,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-07-29T03:30:00+02:00
+PT-868330,ENC-719368,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-07-29T06:30:00+02:00
+PT-348774,ENC-389084,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-07-29T08:30:00+02:00
+PT-480850,ENC-540157,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-07-29T10:45:00+02:00
+PT-482956,ENC-987446,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-07-29T10:45:00+02:00
+PT-438365,ENC-824203,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-07-29T13:15:00+02:00
+PT-759060,ENC-219103,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-29T14:30:00+02:00
+PT-980625,ENC-656999,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-07-30T03:30:00+02:00
+PT-500898,ENC-452275,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-07-30T08:30:00+02:00
+PT-983003,ENC-906672,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-07-30T15:00:00+02:00
+PT-983003,ENC-906672,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-07-30T23:15:28.644144+02:00
+PT-690009,ENC-216656,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-07-31T09:45:00+02:00
+PT-867389,ENC-553009,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-07-31T14:30:00+02:00
+PT-500397,ENC-998240,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-08-01T06:45:00+02:00
+PT-210399,ENC-816658,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-01T13:45:00+02:00
+PT-632617,ENC-659946,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-08-01T15:45:00+02:00
+PT-768279,ENC-713736,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-01T20:45:00+02:00
+PT-615869,ENC-285409,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-01T22:15:00+02:00
+PT-535678,ENC-193008,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-08-02T01:15:00+02:00
+PT-538682,ENC-280366,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-08-02T06:30:00+02:00
+PT-299803,ENC-649506,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-02T12:30:00+02:00
+PT-940678,ENC-369846,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-02T12:45:00+02:00
+PT-996609,ENC-413631,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-02T18:30:00+02:00
+PT-204174,ENC-680663,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-03T00:15:00+02:00
+PT-836940,ENC-206452,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-03T00:15:00+02:00
+PT-650519,ENC-693126,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-03T08:30:00+02:00
+PT-142000,ENC-478905,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-03T14:15:00+02:00
+PT-119200,ENC-564465,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-08-03T14:45:00+02:00
+PT-909242,ENC-891094,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-03T20:45:00+02:00
+PT-383800,ENC-490758,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-08-04T01:30:00+02:00
+PT-740111,ENC-247529,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-04T07:15:00+02:00
+PT-480578,ENC-218431,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-08-04T07:30:00+02:00
+PT-826380,ENC-192959,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-08-04T15:30:00+02:00
+PT-346663,ENC-859468,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-08-04T18:00:00+02:00
+PT-651477,ENC-920079,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-08-05T02:45:00+02:00
+PT-900615,ENC-506417,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-05T07:45:00+02:00
+PT-190325,ENC-448195,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-05T12:15:00+02:00
+PT-248727,ENC-131361,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-05T16:15:00+02:00
+PT-161911,ENC-494190,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-05T17:00:00+02:00
+PT-615479,ENC-751500,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-05T17:15:00+02:00
+PT-841326,ENC-114574,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-06T10:45:00+02:00
+PT-241321,ENC-771202,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-06T12:00:00+02:00
+PT-249756,ENC-511509,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-06T12:15:00+02:00
+PT-803351,ENC-598289,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-06T12:45:00+02:00
+PT-867389,ENC-553009,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-06T13:26:51.677981+02:00
+PT-866065,ENC-471788,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-06T14:00:00+02:00
+PT-959979,ENC-866031,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-08-06T20:15:00+02:00
+PT-837326,ENC-510038,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-07T10:15:00+02:00
+PT-190264,ENC-581468,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-07T12:30:00+02:00
+PT-785278,ENC-599055,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-07T23:30:00+02:00
+PT-101396,ENC-795298,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-08-08T04:00:00+02:00
+PT-523887,ENC-566525,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-08-08T05:45:00+02:00
+PT-845119,ENC-408137,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-08T10:00:00+02:00
+PT-689403,ENC-595385,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-08T16:30:00+02:00
+PT-383800,ENC-490758,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-08T19:26:44.410417+02:00
+PT-944959,ENC-276712,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-08-08T21:45:00+02:00
+PT-977694,ENC-453442,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-09T05:15:00+02:00
+PT-389450,ENC-313034,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-09T07:45:00+02:00
+PT-477863,ENC-852248,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-09T11:15:00+02:00
+PT-944959,ENC-276712,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-10T00:35:55.162440+02:00
+PT-803982,ENC-740270,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-10T02:30:00+02:00
+PT-383129,ENC-880055,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-10T11:00:00+02:00
+PT-751006,ENC-893599,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-10T13:30:00+02:00
+PT-207538,ENC-777844,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-10T13:45:00+02:00
+PT-253709,ENC-524640,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-11T04:15:00+02:00
+PT-871679,ENC-143126,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-08-11T06:45:00+02:00
+PT-438490,ENC-978625,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-11T12:00:00+02:00
+PT-558768,ENC-234464,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-11T21:15:00+02:00
+PT-799780,ENC-800709,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-12T05:15:00+02:00
+PT-671943,ENC-603681,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-12T07:15:00+02:00
+PT-268446,ENC-588581,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-12T10:30:00+02:00
+PT-973171,ENC-370539,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-12T11:45:00+02:00
+PT-407606,ENC-428881,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-12T14:45:00+02:00
+PT-743321,ENC-306145,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-08-12T18:45:00+02:00
+PT-445213,ENC-898966,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-13T08:00:00+02:00
+PT-689403,ENC-595385,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-13T10:01:51.548335+02:00
+PT-762086,ENC-824241,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-13T13:30:00+02:00
+PT-743321,ENC-306145,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-13T22:55:31.950365+02:00
+PT-527223,ENC-813039,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-14T14:00:00+02:00
+PT-408398,ENC-716342,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-14T16:45:00+02:00
+PT-762636,ENC-442766,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-08-16T09:15:00+02:00
+PT-793851,ENC-106001,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-16T17:00:00+02:00
+PT-567931,ENC-450187,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-08-16T20:45:00+02:00
+PT-541819,ENC-278989,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-17T01:30:00+02:00
+PT-610619,ENC-946643,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-17T15:30:00+02:00
+PT-366966,ENC-497305,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-18T03:00:00+02:00
+PT-491280,ENC-979731,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-18T06:15:00+02:00
+PT-353321,ENC-241262,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-18T08:45:00+02:00
+PT-151603,ENC-202858,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-08-18T11:00:00+02:00
+PT-541819,ENC-278989,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-18T15:16:16.200642+02:00
+PT-700558,ENC-135107,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-08-18T20:45:00+02:00
+PT-750447,ENC-337717,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-08-18T20:45:00+02:00
+PT-559144,ENC-976427,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-19T00:00:00+02:00
+PT-323554,ENC-287254,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-08-19T07:15:00+02:00
+PT-446805,ENC-509422,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-19T10:15:00+02:00
+PT-382122,ENC-730755,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-19T11:15:00+02:00
+PT-866029,ENC-459734,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-19T18:30:00+02:00
+PT-220752,ENC-281303,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-20T09:30:00+02:00
+PT-421728,ENC-688756,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-20T15:00:00+02:00
+PT-945729,ENC-355681,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-21T06:00:00+02:00
+PT-393993,ENC-150087,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-21T10:45:00+02:00
+PT-401864,ENC-280660,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-08-22T07:00:00+02:00
+PT-233352,ENC-110929,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-08-22T14:30:00+02:00
+PT-401864,ENC-280660,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-08-22T21:54:38.825103+02:00
+PT-264237,ENC-517479,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-23T01:30:00+02:00
+PT-522112,ENC-561286,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-23T05:15:00+02:00
+PT-212996,ENC-927585,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-08-23T06:00:00+02:00
+PT-190568,ENC-876823,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-08-23T15:00:00+02:00
+PT-342031,ENC-577257,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-08-25T00:45:00+02:00
+PT-933936,ENC-768747,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-08-25T04:45:00+02:00
+PT-555364,ENC-767994,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-25T05:30:00+02:00
+PT-418383,ENC-259868,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-25T06:45:00+02:00
+PT-875616,ENC-294951,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-25T09:30:00+02:00
+PT-809752,ENC-810666,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-25T10:45:00+02:00
+PT-105840,ENC-215197,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-25T11:00:00+02:00
+PT-827398,ENC-846083,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-08-25T12:45:00+02:00
+PT-534367,ENC-954993,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-08-26T03:15:00+02:00
+PT-872834,ENC-575486,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-26T04:15:00+02:00
+PT-397227,ENC-929672,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-08-26T12:00:00+02:00
+PT-613551,ENC-704665,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-26T16:30:00+02:00
+PT-419369,ENC-691947,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-08-26T19:00:00+02:00
+PT-382814,ENC-239429,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-26T23:30:00+02:00
+PT-494937,ENC-722288,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-27T04:00:00+02:00
+PT-624746,ENC-197986,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-27T09:30:00+02:00
+PT-666642,ENC-519346,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-08-27T10:30:00+02:00
+PT-301203,ENC-515957,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-28T06:15:00+02:00
+PT-576337,ENC-640572,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-28T07:15:00+02:00
+PT-581558,ENC-764349,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-28T08:00:00+02:00
+PT-959945,ENC-969047,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-08-28T13:00:00+02:00
+PT-123667,ENC-918433,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-08-28T14:30:00+02:00
+PT-809752,ENC-810666,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-28T22:47:24.301120+02:00
+PT-714790,ENC-519748,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-08-29T01:00:00+02:00
+PT-561672,ENC-861776,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-08-29T04:30:00+02:00
+PT-837390,ENC-511150,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-29T06:30:00+02:00
+PT-845313,ENC-567300,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-29T08:30:00+02:00
+PT-628872,ENC-913276,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-08-30T08:45:00+02:00
+PT-840749,ENC-668302,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-30T09:15:00+02:00
+PT-888995,ENC-476325,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-08-30T11:45:00+02:00
+PT-123667,ENC-918433,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-08-30T20:00:01.785078+02:00
+PT-697775,ENC-492754,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-01T21:45:00+02:00
+PT-646804,ENC-321268,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-09-02T07:00:00+02:00
+PT-360943,ENC-905660,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-02T09:45:00+02:00
+PT-103437,ENC-488516,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-09-02T12:45:00+02:00
+PT-971100,ENC-588080,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-02T14:15:00+02:00
+PT-666642,ENC-266804,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-02T17:30:00+02:00
+PT-714790,ENC-519748,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-03T00:25:34.409651+02:00
+PT-922853,ENC-358720,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-09-03T01:30:00+02:00
+PT-822641,ENC-446887,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-09-03T07:30:00+02:00
+PT-225083,ENC-599953,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-04T08:15:00+02:00
+PT-452673,ENC-559750,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-04T14:15:00+02:00
+PT-191357,ENC-738168,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-05T01:45:00+02:00
+PT-553338,ENC-147766,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-09-05T08:15:00+02:00
+PT-323351,ENC-903215,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-05T16:30:00+02:00
+PT-911615,ENC-621322,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-05T20:00:00+02:00
+PT-726184,ENC-515505,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-06T03:45:00+02:00
+PT-632738,ENC-710576,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-09-06T06:45:00+02:00
+PT-893259,ENC-853691,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-06T12:00:00+02:00
+PT-211827,ENC-415629,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-06T18:30:00+02:00
+PT-706020,ENC-745242,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-08T08:00:00+02:00
+PT-303815,ENC-747484,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-08T18:30:00+02:00
+PT-417476,ENC-514428,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-09-08T19:45:00+02:00
+PT-671322,ENC-539974,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-09T06:15:00+02:00
+PT-371174,ENC-259437,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-09-09T10:00:00+02:00
+PT-324603,ENC-821982,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-09T10:15:00+02:00
+PT-392295,ENC-157814,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-10T03:00:00+02:00
+PT-585725,ENC-488007,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-10T10:30:00+02:00
+PT-105089,ENC-261932,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-10T11:30:00+02:00
+PT-793273,ENC-559354,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-11T05:00:00+02:00
+PT-419307,ENC-543634,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-11T09:30:00+02:00
+PT-693286,ENC-849917,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-09-11T12:15:00+02:00
+PT-737423,ENC-300085,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-12T10:45:00+02:00
+PT-535708,ENC-663840,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-12T12:00:00+02:00
+PT-733252,ENC-411674,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-13T06:30:00+02:00
+PT-212542,ENC-102990,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-13T07:00:00+02:00
+PT-960642,ENC-203585,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-13T12:45:00+02:00
+PT-699190,ENC-789171,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-13T21:30:00+02:00
+PT-793073,ENC-162285,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-14T05:45:00+02:00
+PT-970173,ENC-584574,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-14T06:45:00+02:00
+PT-786550,ENC-854560,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-09-14T14:45:00+02:00
+PT-935661,ENC-740419,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-14T14:45:00+02:00
+PT-705555,ENC-540118,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-14T18:15:00+02:00
+PT-528084,ENC-473876,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-15T08:45:00+02:00
+PT-527679,ENC-242498,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-09-15T10:45:00+02:00
+PT-793073,ENC-162285,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-15T16:49:05.466525+02:00
+PT-974857,ENC-506016,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-15T17:15:00+02:00
+PT-611450,ENC-594960,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-16T07:30:00+02:00
+PT-543053,ENC-941934,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-09-16T13:30:00+02:00
+PT-705555,ENC-955974,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-16T21:15:00+02:00
+PT-535751,ENC-642307,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-17T04:00:00+02:00
+PT-759657,ENC-331289,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-09-17T05:15:00+02:00
+PT-206967,ENC-503608,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-17T11:30:00+02:00
+PT-505664,ENC-635153,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-17T22:00:00+02:00
+PT-648011,ENC-630186,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-18T05:30:00+02:00
+PT-477376,ENC-522659,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-18T09:45:00+02:00
+PT-972889,ENC-952688,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-09-18T09:45:00+02:00
+PT-535708,ENC-230440,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-18T17:00:00+02:00
+PT-587493,ENC-368813,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-09-19T09:00:00+02:00
+PT-420363,ENC-521674,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-19T10:15:00+02:00
+PT-257708,ENC-156433,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-19T22:00:00+02:00
+PT-325592,ENC-766775,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-20T00:45:00+02:00
+PT-365563,ENC-714575,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-09-20T08:30:00+02:00
+PT-483535,ENC-344961,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-20T11:15:00+02:00
+PT-200892,ENC-753388,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-21T03:45:00+02:00
+PT-248883,ENC-659275,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-09-21T08:00:00+02:00
+PT-881904,ENC-786661,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-21T11:45:00+02:00
+PT-119877,ENC-378032,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-09-21T13:45:00+02:00
+PT-273995,ENC-103100,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-22T04:00:00+02:00
+PT-575369,ENC-468535,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-23T03:15:00+02:00
+PT-853700,ENC-453232,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-09-23T06:00:00+02:00
+PT-157014,ENC-740400,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-23T06:30:00+02:00
+PT-725814,ENC-185769,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-23T09:15:00+02:00
+PT-625432,ENC-249616,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-23T11:00:00+02:00
+PT-556154,ENC-344825,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-24T07:45:00+02:00
+PT-157237,ENC-781423,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-09-24T09:45:00+02:00
+PT-695995,ENC-624781,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-24T11:30:00+02:00
+PT-214393,ENC-256017,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-09-24T13:45:00+02:00
+PT-894756,ENC-672383,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-24T15:00:00+02:00
+PT-867029,ENC-436619,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-09-25T08:45:00+02:00
+PT-267962,ENC-425516,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-26T00:00:00+02:00
+PT-730353,ENC-903629,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-09-26T14:45:00+02:00
+PT-625432,ENC-249616,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-09-26T18:23:19.099951+02:00
+PT-831039,ENC-526049,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-27T14:30:00+02:00
+PT-568563,ENC-767322,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-09-27T16:15:00+02:00
+PT-187335,ENC-132559,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-09-27T18:30:00+02:00
+PT-744178,ENC-861639,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-27T22:30:00+02:00
+PT-199694,ENC-948893,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-09-28T00:15:00+02:00
+PT-977445,ENC-742024,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-28T03:00:00+02:00
+PT-713637,ENC-335892,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-28T06:00:00+02:00
+PT-343162,ENC-241704,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-28T08:45:00+02:00
+PT-326632,ENC-622334,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-28T15:00:00+02:00
+PT-725814,ENC-185769,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-28T21:28:32.185093+02:00
+PT-181126,ENC-746444,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-29T01:15:00+02:00
+PT-417914,ENC-164793,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-29T03:15:00+02:00
+PT-248843,ENC-544730,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-29T13:00:00+02:00
+PT-796971,ENC-450801,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-29T21:00:00+02:00
+PT-639310,ENC-841782,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-09-30T03:45:00+02:00
+PT-800410,ENC-882290,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-30T04:30:00+02:00
+PT-299457,ENC-146560,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-09-30T05:00:00+02:00
+PT-195425,ENC-395175,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-09-30T07:00:00+02:00
+PT-929231,ENC-668029,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-09-30T08:15:00+02:00
+PT-585402,ENC-588794,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-09-30T17:30:00+02:00
+PT-969227,ENC-556494,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-01T01:15:00+02:00
+PT-252473,ENC-967667,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-01T03:15:00+02:00
+PT-436696,ENC-577065,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-10-01T08:00:00+02:00
+PT-663640,ENC-840928,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-01T08:00:00+02:00
+PT-208640,ENC-593974,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-01T10:15:00+02:00
+PT-183095,ENC-398441,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-01T15:00:00+02:00
+PT-575369,ENC-468535,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-01T16:41:28.728469+02:00
+PT-121579,ENC-167793,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-10-01T16:45:00+02:00
+PT-644542,ENC-473733,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-10-01T18:30:00+02:00
+PT-356068,ENC-530201,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-02T01:45:00+02:00
+PT-859394,ENC-454989,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-02T03:00:00+02:00
+PT-139339,ENC-498172,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-02T03:30:00+02:00
+PT-123593,ENC-881481,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-02T12:00:00+02:00
+PT-889676,ENC-969409,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-02T13:45:00+02:00
+PT-248843,ENC-422859,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-02T18:00:00+02:00
+PT-585402,ENC-588794,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-03T09:36:47.736903+02:00
+PT-834503,ENC-783214,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-10-04T09:15:00+02:00
+PT-344591,ENC-318649,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-10-04T19:00:00+02:00
+PT-239623,ENC-778236,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-05T03:45:00+02:00
+PT-485909,ENC-512466,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-05T04:00:00+02:00
+PT-911867,ENC-634935,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-10-05T07:00:00+02:00
+PT-967681,ENC-152931,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-05T07:30:00+02:00
+PT-272843,ENC-201414,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-10-05T13:30:00+02:00
+PT-674549,ENC-107377,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-10-05T22:15:00+02:00
+PT-203978,ENC-610831,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-06T12:45:00+02:00
+PT-914085,ENC-385865,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-06T14:45:00+02:00
+PT-121579,ENC-202756,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-06T18:45:00+02:00
+PT-802216,ENC-606893,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-07T04:45:00+02:00
+PT-196185,ENC-652680,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-07T11:15:00+02:00
+PT-446529,ENC-118688,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-07T18:15:00+02:00
+PT-967681,ENC-152931,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-08T06:59:07.250157+02:00
+PT-248495,ENC-678215,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-08T11:15:00+02:00
+PT-274805,ENC-867332,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-08T12:30:00+02:00
+PT-344591,ENC-391662,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-08T23:00:00+02:00
+PT-661206,ENC-668655,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-10-09T04:15:00+02:00
+PT-394946,ENC-653122,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-09T04:45:00+02:00
+PT-849432,ENC-614092,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-09T10:00:00+02:00
+PT-363338,ENC-868781,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-09T10:15:00+02:00
+PT-915055,ENC-106821,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-10T05:30:00+02:00
+PT-162051,ENC-621416,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-10T08:30:00+02:00
+PT-917639,ENC-425556,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-10T15:30:00+02:00
+PT-789753,ENC-866005,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-11T06:30:00+02:00
+PT-445201,ENC-785662,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-11T09:30:00+02:00
+PT-747926,ENC-831244,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-11T14:45:00+02:00
+PT-223612,ENC-452792,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-12T02:30:00+02:00
+PT-478200,ENC-619841,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-10-12T09:30:00+02:00
+PT-571561,ENC-475257,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-12T13:45:00+02:00
+PT-638916,ENC-154720,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-10-12T15:00:00+02:00
+PT-763299,ENC-945871,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-10-13T09:45:00+02:00
+PT-984768,ENC-793396,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-13T13:45:00+02:00
+PT-526094,ENC-200635,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-10-13T14:00:00+02:00
+PT-527801,ENC-162940,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-13T14:30:00+02:00
+PT-414161,ENC-151907,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-10-14T05:45:00+02:00
+PT-394946,ENC-653122,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-14T06:35:10.030614+02:00
+PT-500513,ENC-282854,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-14T10:00:00+02:00
+PT-947559,ENC-954811,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-14T14:30:00+02:00
+PT-750758,ENC-736091,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-15T00:45:00+02:00
+PT-980326,ENC-985609,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-15T02:30:00+02:00
+PT-989116,ENC-810001,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-15T04:30:00+02:00
+PT-767106,ENC-399729,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-10-15T07:15:00+02:00
+PT-323499,ENC-446151,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-15T10:45:00+02:00
+PT-633550,ENC-455209,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-15T11:45:00+02:00
+PT-894077,ENC-108609,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-16T00:15:00+02:00
+PT-468928,ENC-165814,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-16T09:00:00+02:00
+PT-303127,ENC-615687,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-16T13:15:00+02:00
+PT-527801,ENC-162940,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-16T14:39:47.363714+02:00
+PT-783183,ENC-831810,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-16T22:45:00+02:00
+PT-303853,ENC-652546,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-10-16T23:45:00+02:00
+PT-917639,ENC-425556,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-17T00:15:08.732010+02:00
+PT-148903,ENC-499035,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-18T02:30:00+02:00
+PT-646598,ENC-374241,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-18T06:00:00+02:00
+PT-313269,ENC-644520,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-19T01:45:00+02:00
+PT-768986,ENC-376934,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-10-19T02:15:00+02:00
+PT-129920,ENC-450067,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-19T02:30:00+02:00
+PT-672670,ENC-893650,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-19T06:45:00+02:00
+PT-492040,ENC-633435,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-19T14:00:00+02:00
+PT-984768,ENC-793396,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-19T14:38:53.101414+02:00
+PT-112062,ENC-661156,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-10-20T06:30:00+02:00
+PT-636385,ENC-999052,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-20T16:00:00+02:00
+PT-804706,ENC-940762,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-20T19:15:00+02:00
+PT-504890,ENC-252581,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-10-21T00:00:00+02:00
+PT-741366,ENC-993502,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-21T07:15:00+02:00
+PT-977591,ENC-395248,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-21T10:45:00+02:00
+PT-264469,ENC-240106,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-21T20:30:00+02:00
+PT-666875,ENC-126305,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-21T22:30:00+02:00
+PT-885502,ENC-210545,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-22T01:30:00+02:00
+PT-798641,ENC-583482,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-22T09:00:00+02:00
+PT-507807,ENC-422713,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-22T11:30:00+02:00
+PT-650736,ENC-651672,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-22T16:15:00+02:00
+PT-728281,ENC-665228,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-10-23T05:15:00+02:00
+PT-798573,ENC-974064,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-23T08:30:00+02:00
+PT-874777,ENC-160197,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-10-23T17:00:00+02:00
+PT-218966,ENC-787362,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-24T02:45:00+02:00
+PT-966878,ENC-848084,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-24T05:45:00+02:00
+PT-106507,ENC-992455,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-24T07:15:00+02:00
+PT-556716,ENC-423643,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-24T16:45:00+02:00
+PT-602527,ENC-368091,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-25T06:00:00+02:00
+PT-618108,ENC-826632,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-10-25T12:15:00+02:00
+PT-634568,ENC-978790,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-26T09:00:00+02:00
+PT-191559,ENC-547425,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-26T09:30:00+02:00
+PT-499121,ENC-900895,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-10-26T12:30:00+02:00
+PT-125218,ENC-712817,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-26T18:00:00+02:00
+PT-162417,ENC-551976,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-10-27T09:15:00+02:00
+PT-765444,ENC-418204,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-10-27T10:45:00+02:00
+PT-638787,ENC-388495,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-10-27T11:15:00+02:00
+PT-313117,ENC-152149,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-28T05:00:00+02:00
+PT-797984,ENC-510081,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-10-28T06:45:00+02:00
+PT-454606,ENC-778352,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-10-28T09:30:00+02:00
+PT-795128,ENC-252222,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-10-29T07:45:00+02:00
+PT-230729,ENC-768202,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-10-29T09:00:00+02:00
+PT-153126,ENC-742900,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-10-29T09:30:00+02:00
+PT-466116,ENC-379064,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-30T06:15:00+02:00
+PT-646866,ENC-862140,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-10-30T09:00:00+02:00
+PT-602527,ENC-368091,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-10-30T13:42:22.017249+02:00
+PT-505767,ENC-831055,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-10-30T16:30:00+02:00
+PT-999386,ENC-144397,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-10-31T05:00:00+02:00
+PT-849269,ENC-313194,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-10-31T15:00:00+02:00
+PT-857771,ENC-197349,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-01T01:00:00+02:00
+PT-134356,ENC-754623,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-01T03:00:00+02:00
+PT-925261,ENC-284880,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-01T13:15:00+02:00
+PT-660822,ENC-271297,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-01T15:45:00+02:00
+PT-546715,ENC-379881,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-02T03:45:00+02:00
+PT-572904,ENC-800182,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-02T11:00:00+02:00
+PT-349507,ENC-934847,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-02T13:15:00+02:00
+PT-208120,ENC-400319,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-02T13:30:00+02:00
+PT-257569,ENC-863371,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-03T15:15:00+02:00
+PT-581000,ENC-988156,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-03T18:30:00+02:00
+PT-852791,ENC-479658,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-11-04T01:30:00+02:00
+PT-526172,ENC-399719,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-11-04T02:45:00+02:00
+PT-743144,ENC-558300,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-11-04T05:45:00+02:00
+PT-890923,ENC-186304,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-04T12:30:00+02:00
+PT-267372,ENC-219274,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-11-04T13:15:00+02:00
+PT-178946,ENC-325235,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-04T14:15:00+02:00
+PT-782798,ENC-397859,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-04T18:00:00+02:00
+PT-693003,ENC-947978,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-11-05T00:45:00+02:00
+PT-249742,ENC-167882,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-05T03:30:00+02:00
+PT-642538,ENC-335046,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-05T12:30:00+02:00
+PT-562230,ENC-221405,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-05T13:30:00+02:00
+PT-595718,ENC-585506,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-11-05T13:45:00+02:00
+PT-370700,ENC-227199,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-05T18:15:00+02:00
+PT-124729,ENC-666655,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-05T21:15:00+02:00
+PT-422233,ENC-978980,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-06T00:45:00+02:00
+PT-857771,ENC-197349,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-06T16:49:17.769948+02:00
+PT-632931,ENC-163156,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-11-06T22:45:00+02:00
+PT-962065,ENC-664412,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-07T06:30:00+02:00
+PT-209262,ENC-598264,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-07T09:45:00+02:00
+PT-584634,ENC-307763,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-07T10:15:00+02:00
+PT-490667,ENC-156243,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-07T17:30:00+02:00
+PT-207835,ENC-234449,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-08T01:30:00+02:00
+PT-893789,ENC-261138,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-08T06:00:00+02:00
+PT-224172,ENC-887916,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-11-08T08:00:00+02:00
+PT-460780,ENC-405166,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-11-08T08:30:00+02:00
+PT-143830,ENC-783071,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-09T01:00:00+02:00
+PT-241464,ENC-846196,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-11-09T04:45:00+02:00
+PT-743828,ENC-744030,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-09T05:15:00+02:00
+PT-973974,ENC-449021,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-09T06:15:00+02:00
+PT-693555,ENC-676085,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-11-09T08:45:00+02:00
+PT-370700,ENC-227199,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-10T01:25:29.802660+02:00
+PT-192541,ENC-998346,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-10T07:30:00+02:00
+PT-335627,ENC-989594,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-11-10T11:45:00+02:00
+PT-143830,ENC-783071,Transfer,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-10T16:18:19.660781+02:00
+PT-342431,ENC-221019,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-11-10T21:00:00+02:00
+PT-958968,ENC-712300,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-11T01:30:00+02:00
+PT-686043,ENC-463273,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-11T06:15:00+02:00
+PT-936532,ENC-923312,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-11T09:00:00+02:00
+PT-132304,ENC-466925,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-11T18:00:00+02:00
+PT-188921,ENC-652082,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-11T23:00:00+02:00
+PT-904954,ENC-697606,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-12T03:30:00+02:00
+PT-834226,ENC-883833,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-12T13:15:00+02:00
+PT-984629,ENC-648360,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-13T01:45:00+02:00
+PT-596267,ENC-434429,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-13T04:45:00+02:00
+PT-430853,ENC-608749,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-13T06:30:00+02:00
+PT-590040,ENC-406261,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-13T13:30:00+02:00
+PT-345906,ENC-974948,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-13T15:00:00+02:00
+PT-188921,ENC-652082,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-13T21:20:39.040500+02:00
+PT-896366,ENC-981567,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-14T01:15:00+02:00
+PT-305270,ENC-764266,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-11-14T09:15:00+02:00
+PT-608386,ENC-653512,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-14T09:45:00+02:00
+PT-989494,ENC-935232,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-11-14T10:15:00+02:00
+PT-651994,ENC-279316,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-11-14T22:30:00+02:00
+PT-985528,ENC-293754,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-14T22:30:00+02:00
+PT-872256,ENC-423235,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-11-15T08:00:00+02:00
+PT-179775,ENC-290794,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-15T08:15:00+02:00
+PT-999436,ENC-245499,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-15T13:30:00+02:00
+PT-880644,ENC-615445,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-11-15T14:00:00+02:00
+PT-363033,ENC-325328,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-15T14:45:00+02:00
+PT-696259,ENC-320395,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-16T01:30:00+02:00
+PT-617372,ENC-443583,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-17T00:30:00+02:00
+PT-754922,ENC-446236,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-11-17T00:30:00+02:00
+PT-104531,ENC-367049,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-11-17T04:30:00+02:00
+PT-121884,ENC-952774,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-17T10:45:00+02:00
+PT-981470,ENC-869561,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-11-17T12:00:00+02:00
+PT-651994,ENC-279316,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-18T09:03:49.438728+02:00
+PT-114597,ENC-179914,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-18T14:00:00+02:00
+PT-688038,ENC-246674,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-18T17:45:00+02:00
+PT-131626,ENC-534563,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-18T23:30:00+02:00
+PT-668930,ENC-680196,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-11-19T07:00:00+02:00
+PT-195204,ENC-787666,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-11-20T07:45:00+02:00
+PT-989236,ENC-212957,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-20T08:15:00+02:00
+PT-855236,ENC-504228,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-11-20T09:30:00+02:00
+PT-947956,ENC-688419,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-20T11:45:00+02:00
+PT-739069,ENC-572121,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-11-20T13:45:00+02:00
+PT-858879,ENC-194759,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-11-20T21:15:00+02:00
+PT-178966,ENC-181419,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-11-21T01:00:00+02:00
+PT-160742,ENC-308585,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-21T06:45:00+02:00
+PT-302720,ENC-518434,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-21T07:15:00+02:00
+PT-664727,ENC-965834,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-21T09:45:00+02:00
+PT-703276,ENC-112445,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-21T22:00:00+02:00
+PT-743661,ENC-404400,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-22T02:00:00+02:00
+PT-758878,ENC-291792,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-22T04:00:00+02:00
+PT-294390,ENC-443694,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-11-22T11:15:00+02:00
+PT-950264,ENC-225335,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-11-22T12:30:00+02:00
+PT-178903,ENC-120897,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-22T20:45:00+02:00
+PT-429041,ENC-903764,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-11-23T02:15:00+02:00
+PT-995940,ENC-937001,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-23T06:30:00+02:00
+PT-805227,ENC-829752,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-24T00:15:00+02:00
+PT-421452,ENC-743955,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-24T10:15:00+02:00
+PT-673316,ENC-271670,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-24T17:45:00+02:00
+PT-824499,ENC-243721,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-11-26T01:00:00+02:00
+PT-218974,ENC-643511,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-26T04:45:00+02:00
+PT-756129,ENC-967586,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-11-26T05:30:00+02:00
+PT-147903,ENC-300154,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-11-26T09:00:00+02:00
+PT-950264,ENC-225335,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-26T09:59:08.337508+02:00
+PT-885930,ENC-520359,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-11-26T10:15:00+02:00
+PT-449754,ENC-503692,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-11-26T10:45:00+02:00
+PT-947956,ENC-688419,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-11-27T04:21:13.102205+02:00
+PT-297436,ENC-202844,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-11-27T18:15:00+02:00
+PT-584311,ENC-104281,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-11-28T05:00:00+02:00
+PT-974445,ENC-260547,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-11-28T17:15:00+02:00
+PT-393152,ENC-417502,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-11-29T08:45:00+02:00
+PT-709753,ENC-328553,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-11-29T18:45:00+02:00
+PT-406931,ENC-410822,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-11-30T07:00:00+02:00
+PT-393152,ENC-417502,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-11-30T21:12:09.257463+02:00
+PT-769006,ENC-617350,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-12-01T05:00:00+02:00
+PT-242432,ENC-966319,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-01T08:00:00+02:00
+PT-540451,ENC-832646,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-12-01T08:00:00+02:00
+PT-171675,ENC-219211,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-12-01T11:45:00+02:00
+PT-413985,ENC-146165,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-01T13:30:00+02:00
+PT-110851,ENC-223498,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-12-02T06:45:00+02:00
+PT-255755,ENC-772629,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-02T11:00:00+02:00
+PT-279139,ENC-508507,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-03T03:00:00+02:00
+PT-255755,ENC-772629,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-03T04:38:37.509064+02:00
+PT-158681,ENC-218946,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-12-03T09:30:00+02:00
+PT-952589,ENC-176381,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-12-03T12:00:00+02:00
+PT-867671,ENC-945760,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-12-03T13:00:00+02:00
+PT-588910,ENC-267946,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-12-03T15:45:00+02:00
+PT-193230,ENC-712986,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-12-04T08:15:00+02:00
+PT-990093,ENC-666528,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-04T12:30:00+02:00
+PT-791663,ENC-501230,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-04T19:30:00+02:00
+PT-700428,ENC-270930,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-12-04T20:30:00+02:00
+PT-142773,ENC-495530,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-05T07:30:00+02:00
+PT-492659,ENC-557997,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-12-05T12:15:00+02:00
+PT-113674,ENC-599419,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-12-05T13:00:00+02:00
+PT-981265,ENC-449140,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-12-05T13:15:00+02:00
+PT-378395,ENC-598425,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-12-05T14:45:00+02:00
+PT-496959,ENC-328938,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-12-05T18:00:00+02:00
+PT-365342,ENC-321387,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-12-06T04:30:00+02:00
+PT-876292,ENC-716778,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-06T05:00:00+02:00
+PT-858431,ENC-506201,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-12-07T00:45:00+02:00
+PT-332094,ENC-615970,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-12-07T04:45:00+02:00
+PT-105765,ENC-731265,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-07T15:15:00+02:00
+PT-170604,ENC-897970,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-12-07T19:00:00+02:00
+PT-735022,ENC-647702,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-07T20:00:00+02:00
+PT-882925,ENC-126872,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-12-08T02:30:00+02:00
+PT-398096,ENC-793951,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-08T09:30:00+02:00
+PT-784517,ENC-520944,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-12-09T07:00:00+02:00
+PT-820309,ENC-337673,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-12-09T10:45:00+02:00
+PT-623530,ENC-274399,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Haematology-Oncology,2025-12-09T18:00:00+02:00
+PT-758946,ENC-924862,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-12-10T21:00:00+02:00
+PT-774170,ENC-874796,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-11T01:45:00+02:00
+PT-365342,ENC-321387,Transfer,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-12-11T11:13:48.617381+02:00
+PT-184147,ENC-438752,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-12T02:00:00+02:00
+PT-307335,ENC-819951,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-12-13T10:30:00+02:00
+PT-414744,ENC-366852,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-13T11:45:00+02:00
+PT-166463,ENC-977461,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-14T02:00:00+02:00
+PT-538697,ENC-690485,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Neonatal ICU,2025-12-15T10:15:00+02:00
+PT-414744,ENC-366852,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-15T14:41:56.452071+02:00
+PT-420767,ENC-777173,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-15T17:30:00+02:00
+PT-573324,ENC-951056,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-16T00:45:00+02:00
+PT-562075,ENC-129929,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Adult ICU,2025-12-16T03:15:00+02:00
+PT-994300,ENC-358151,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-12-16T10:00:00+02:00
+PT-266955,ENC-426974,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-16T10:30:00+02:00
+PT-832936,ENC-590115,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-16T14:45:00+02:00
+PT-332774,ENC-187834,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Neonatal ICU,2025-12-16T18:15:00+02:00
+PT-331422,ENC-351847,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-12-17T01:00:00+02:00
+PT-721473,ENC-851606,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-12-17T01:45:00+02:00
+PT-362124,ENC-853895,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Medical,2025-12-17T07:30:00+02:00
+PT-778510,ENC-933574,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-17T11:45:00+02:00
+PT-629905,ENC-847219,Admission,GDH,Gauteng District Hospital (demo),Gauteng,Paediatrics,2025-12-17T12:00:00+02:00
+PT-899861,ENC-173501,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-12-17T15:45:00+02:00
+PT-333113,ENC-405387,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-18T09:00:00+02:00
+PT-192699,ENC-352030,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-12-18T11:30:00+02:00
+PT-288302,ENC-538824,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Adult ICU,2025-12-18T13:30:00+02:00
+PT-266955,ENC-426974,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-18T22:14:40.307180+02:00
+PT-465122,ENC-822264,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-12-19T04:00:00+02:00
+PT-970900,ENC-379930,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Surgical,2025-12-19T08:15:00+02:00
+PT-438932,ENC-972868,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-20T05:15:00+02:00
+PT-438932,ENC-972868,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-20T21:49:25.974456+02:00
+PT-333113,ENC-405387,Transfer,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-21T00:11:50.191735+02:00
+PT-156790,ENC-873424,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Adult ICU,2025-12-21T05:30:00+02:00
+PT-656642,ENC-653934,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-12-21T14:00:00+02:00
+PT-288833,ENC-406773,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Burns,2025-12-23T14:30:00+02:00
+PT-339046,ENC-826114,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-12-23T16:15:00+02:00
+PT-410983,ENC-861186,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Medical,2025-12-24T00:45:00+02:00
+PT-682545,ENC-303779,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Medical,2025-12-24T10:45:00+02:00
+PT-101516,ENC-310266,Admission,WTH,Western Cape Tertiary Hospital (demo),Western Cape,Surgical,2025-12-25T14:15:00+02:00
+PT-915097,ENC-492780,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Neonatal ICU,2025-12-25T17:15:00+02:00
+PT-894590,ENC-529938,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Medical,2025-12-26T11:45:00+02:00
+PT-771201,ENC-529437,Admission,KRH,KwaZulu-Natal Regional Hospital (demo),KwaZulu-Natal,Surgical,2025-12-26T22:30:00+02:00
+PT-845579,ENC-469468,Admission,GAH,Gauteng Academic Hospital (demo),Gauteng,Haematology-Oncology,2025-12-27T12:30:00+02:00

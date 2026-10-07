@@ -23,6 +23,16 @@ log = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
+# Wards are unique per facility; a ward without a facility stands alone.
+_MERGE_WARD = """MERGE (w:Ward {key: row.ward.key})
+  ON CREATE SET w.name = row.ward.name
+FOREACH (site IN CASE WHEN row.ward.facility IS NULL THEN [] ELSE [row.ward] END |
+  MERGE (f:Facility {code: site.facility})
+  SET f.name = coalesce(site.facility_name, f.name),
+      f.province = coalesce(site.province, f.province)
+  MERGE (w)-[:PART_OF]->(f))
+"""
+
 UPSERT_ISOLATES = """
 UNWIND $rows AS row
 MERGE (p:Patient {id: row.patient_id})
@@ -31,8 +41,9 @@ MERGE (e:Encounter {id: row.encounter_id})
       e.discharged = coalesce(row.discharged, e.discharged)
 MERGE (p)-[:HAD_ENCOUNTER]->(e)
 
-MERGE (w:Ward {name: row.ward})
-MERGE (le:LocationEvent {id: row.location_event_id})
+SET p.sex = coalesce(row.sex, p.sex),
+    e.age_years = coalesce(row.age_years, e.age_years)
+{WARD}MERGE (le:LocationEvent {id: row.location_event_id})
   ON CREATE SET le.timestamp = row.collected, le.source = 'specimen_collection'
 MERGE (e)-[:GENERATED_EVENT]->(le)
 MERGE (le)-[:AT_LOCATION]->(w)
@@ -93,7 +104,7 @@ FOREACH (element IN row.mobile_elements |
     MERGE (g:Gene {aro_id: gene.aro_id})
       ON CREATE SET g.name = gene.name, g.symbol = gene.symbol, g.mechanism = gene.mechanism, g.acquired = gene.acquired
     MERGE (m)-[:HARBORS]->(g)))
-"""
+""".replace("{WARD}", _MERGE_WARD)
 
 # Movements attach to an existing Patient/Encounter (created here if the ADT
 # feed arrives before the laboratory data).
@@ -102,12 +113,11 @@ UNWIND $rows AS row
 MERGE (p:Patient {id: row.patient_id})
 MERGE (e:Encounter {id: row.encounter_id})
 MERGE (p)-[:HAD_ENCOUNTER]->(e)
-MERGE (w:Ward {name: row.ward})
-MERGE (le:LocationEvent {id: row.location_event_id})
+{WARD}MERGE (le:LocationEvent {id: row.location_event_id})
   ON CREATE SET le.timestamp = row.timestamp, le.source = 'adt'
 MERGE (e)-[:GENERATED_EVENT]->(le)
 MERGE (le)-[:AT_LOCATION]->(w)
-"""
+""".replace("{WARD}", _MERGE_WARD)
 
 
 def _batches(items: Sequence[T], size: int) -> Iterable[Sequence[T]]:

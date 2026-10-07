@@ -12,7 +12,8 @@ CONSTRAINTS = {
     "patient_id": "FOR (n:Patient) REQUIRE n.id IS UNIQUE",
     "encounter_id": "FOR (n:Encounter) REQUIRE n.id IS UNIQUE",
     "location_event_id": "FOR (n:LocationEvent) REQUIRE n.id IS UNIQUE",
-    "ward_name": "FOR (n:Ward) REQUIRE n.name IS UNIQUE",
+    "ward_key": "FOR (n:Ward) REQUIRE n.key IS UNIQUE",
+    "facility_code": "FOR (n:Facility) REQUIRE n.code IS UNIQUE",
     "isolate_id": "FOR (n:Isolate) REQUIRE n.id IS UNIQUE",
     "pathogen_taxid": "FOR (n:Pathogen) REQUIRE n.ncbi_taxid IS UNIQUE",
     "antibiotic_atc": "FOR (n:Antibiotic) REQUIRE n.atc_code IS UNIQUE",
@@ -20,6 +21,8 @@ CONSTRAINTS = {
     "gene_aro": "FOR (n:Gene) REQUIRE n.aro_id IS UNIQUE",
     "mge_key": "FOR (n:MobileGeneticElement) REQUIRE n.key IS UNIQUE",
 }
+
+OBSOLETE_CONSTRAINTS = ("ward_name",)
 
 INDEXES = {
     "isolate_collected": "FOR (n:Isolate) ON (n.collected)",
@@ -30,6 +33,9 @@ INDEXES = {
 
 def ensure_schema(client: GraphClient) -> None:
     def work(tx):
+        # Ward names are only unique within a facility (pre-facility schema).
+        for name in OBSOLETE_CONSTRAINTS:
+            tx.run(f"DROP CONSTRAINT {name} IF EXISTS")
         for name, body in CONSTRAINTS.items():
             tx.run(f"CREATE CONSTRAINT {name} IF NOT EXISTS {body}")
 

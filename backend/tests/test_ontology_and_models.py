@@ -53,7 +53,7 @@ def test_vocabulary_identifiers_are_well_formed():
 def test_sequence_type_resolution():
     kp = ontology.ORGANISMS["klebsiella pneumoniae"]
     sa = ontology.ORGANISMS["staphylococcus aureus"]
-    assert ontology.resolve_sequence_type("ST258", kp).key == "kpneumoniae:ST258"
+    assert ontology.resolve_sequence_type("ST258", kp).key == "klebsiella:ST258"
     usa300 = ontology.resolve_sequence_type("USA300", sa)
     assert (usa300.key, usa300.clone_designation) == ("saureus:ST8", "USA300")
     assert ontology.resolve_sequence_type("", kp) is None
@@ -93,3 +93,10 @@ def test_genomic_row_wild_type_and_mobile_elements():
 def test_movement_row():
     row = MovementRow.model_validate({"PatientID": "P-1", "EncounterID": "E-1", "Ward": "icu", "Timestamp": "2025-11-01T08:30:00+02:00"})
     assert row.ward == "ICU" and row.timestamp.utcoffset().total_seconds() == 7200
+
+
+@pytest.mark.parametrize("raw, expected", [("icu", "ICU"), (" general  ", "General"), ("Neonatal ICU", "Neonatal ICU"), ("haematology-oncology", "Haematology-Oncology")])
+def test_ward_names_keep_acronyms(raw, expected):
+    from bionexus.models import canonical_ward
+
+    assert canonical_ward(raw) == expected

@@ -19,6 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "httpx>=0.27"]
+verify = ["zstandard>=0.22"]
 
 [project.scripts]
 bionexus = "bionexus.cli:main"

@@ -70,7 +70,7 @@ def reference_clusters(window_days: int) -> set[tuple[str, str, str, frozenset[s
             continue
         for gene in record.direct_genes:
             if gene.acquired:
-                groups[(record.ward, record.sequence_type.key, gene.aro_id)].append(record)
+                groups[(record.ward.key, record.sequence_type.key, gene.aro_id)].append(record)
     found = set()
     for key, members in groups.items():
         parent = {m.isolate_id: m.isolate_id for m in members}
@@ -140,7 +140,7 @@ def test_corrected_genomic_report_replaces_previous_calls(graph):
     ingest(graph, clinical, to_csv(GENOMIC_HEADER, [genomic_row("S-1", "P-1", KP, "ST11", "blaNDM-1")]))
     genes = "MATCH (:Isolate {id: 'S-1'})-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene) RETURN collect(g.symbol) AS genes"
     assert graph.query(genes) == [{"genes": ["blaNDM-1"]}]
-    assert graph.query("MATCH (:Isolate {id: 'S-1'})-[:BELONGS_TO]->(s) RETURN collect(s.key) AS st") == [{"st": ["kpneumoniae:ST11"]}]
+    assert graph.query("MATCH (:Isolate {id: 'S-1'})-[:BELONGS_TO]->(s) RETURN collect(s.key) AS st") == [{"st": ["klebsiella:ST11"]}]
     assert graph.query("MATCH (m:MobileGeneticElement) RETURN count(m) AS n") == [{"n": 0}]
 
     # A later clinical-only load must not erase the genomic result.
@@ -189,3 +189,20 @@ def test_ward_centrality_on_sample_data(graph):
     assert {w.ward for w in network.wards} == {"ICU", "General", "Oncology"}
     assert network.transfer_links == 0 and network.genomic_links > 0
     assert sum(w.isolates for w in network.wards) == 300
+
+
+def test_facilities_scope_wards_and_carry_demographics(graph):
+    clinical = to_csv(
+        CLINICAL_HEADER,
+        [
+            clinical_row("S-1", "P-1", KP, Ward="ICU", Facility="GAH", FacilityName="Gauteng Academic", Province="Gauteng", Sex="F", AgeYears="0.02"),
+            clinical_row("S-2", "P-2", KP, Ward="ICU", Facility="KRH", FacilityName="KZN Regional", Province="KwaZulu-Natal", Sex="M", AgeYears="61"),
+        ],
+    )
+    ingest(graph, clinical)
+    wards = graph.query("MATCH (w:Ward)-[:PART_OF]->(f:Facility) RETURN w.key AS key, w.name AS name, f.code AS code, f.province AS province ORDER BY key")
+    assert wards == [
+        {"key": "GAH:ICU", "name": "ICU", "code": "GAH", "province": "Gauteng"},
+        {"key": "KRH:ICU", "name": "ICU", "code": "KRH", "province": "KwaZulu-Natal"},
+    ]
+    assert graph.query("MATCH (p:Patient {id: 'P-1'})-[:HAD_ENCOUNTER]->(e) RETURN p.sex AS sex, e.age_years AS age") == [{"sex": "F", "age": 0.02}]

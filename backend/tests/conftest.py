@@ -11,7 +11,7 @@ DATA = Path(__file__).resolve().parent.parent / "data"
 CLINICAL_CSV = DATA / "clinical_phenotype.csv"
 GENOMIC_CSV = DATA / "genomic_data.csv"
 
-CLINICAL_HEADER = ["PatientID", "SampleID", "Date", "Ward", "Specimen", "Treatment", "Organism", "Antibiotic", "Result", "MIC"]
+CLINICAL_HEADER = ["PatientID", "SampleID", "Date", "Ward", "Facility", "FacilityName", "Province", "Sex", "AgeYears", "Specimen", "Treatment", "Organism", "Antibiotic", "Result", "MIC", "Guideline"]
 GENOMIC_HEADER = ["PatientID", "SampleID", "Organism", "Strain_Subtype", "GeneDetected", "Mechanism", "ClinicalImpact", "MGE_Type", "MGE_Replicon"]
 
 

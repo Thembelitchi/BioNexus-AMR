@@ -38,7 +38,8 @@ MATCH (p:Patient)-[:HAD_ENCOUNTER]->(e:Encounter)-[:ISOLATED]->(i:Isolate)-[bt:B
 MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene {{acquired: true}})
 {_ISOLATE_WARD}
 RETURN DISTINCT st.key AS sequence_type, bt.clone_designation AS clone, g.aro_id AS gene_aro_id, g.symbol AS gene,
-       ward.name AS ward, i.id AS isolate_id, p.id AS patient_id, i.collected AS collected
+       ward.key AS ward, [(ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility,
+       i.id AS isolate_id, p.id AS patient_id, i.collected AS collected
 ORDER BY sequence_type, gene_aro_id, collected, isolate_id
 """
 
@@ -65,6 +66,7 @@ class ClusterMember(BaseModel):
 
 class SpatiotemporalCluster(BaseModel):
     ward: str
+    facility: str | None = None
     sequence_type: str
     clone_designation: str | None
     gene_aro_id: str
@@ -89,6 +91,7 @@ class HorizontalTransferSignal(BaseModel):
 
 class WardCentrality(BaseModel):
     ward: str
+    facility: str | None = None
     pagerank: float
     betweenness: float
     weighted_degree: float
@@ -136,6 +139,7 @@ def _cluster_from_run(run: list[dict[str, Any]]) -> SpatiotemporalCluster:
     first = run[0]
     return SpatiotemporalCluster(
         ward=first["ward"],
+        facility=first["facility"],
         sequence_type=first["sequence_type"],
         clone_designation=first["clone"],
         gene_aro_id=first["gene_aro_id"],
@@ -162,7 +166,7 @@ def detect_horizontal_gene_transfer(client: GraphClient, level: Literal["species
     WITH g, {taxon} AS taxon, i, ward,
          CASE WHEN carrier:MobileGeneticElement THEN carrier.type + ':' + carrier.replicon END AS replicon
     WITH g, collect(DISTINCT taxon) AS taxa, collect(DISTINCT i) AS isolates,
-         collect(DISTINCT ward.name) AS wards, collect(DISTINCT replicon) AS replicons
+         collect(DISTINCT ward.key) AS wards, collect(DISTINCT replicon) AS replicons
     WHERE size(taxa) > 1
     UNWIND isolates AS isolate
     WITH g, taxa, wards, replicons, count(isolate) AS isolate_count,
@@ -215,7 +219,7 @@ def gds_version(client: GraphClient) -> str | None:
 _WARD_TRANSFERS = """
 MATCH (p:Patient)-[:HAD_ENCOUNTER]->(:Encounter)-[:GENERATED_EVENT]->(le:LocationEvent)-[:AT_LOCATION]->(w:Ward)
 WITH p, le, w ORDER BY le.timestamp
-WITH p, collect(w.name) AS path
+WITH p, collect(w.key) AS path
 UNWIND range(0, size(path) - 2) AS k
 WITH path[k] AS source, path[k + 1] AS target
 WHERE source <> target
@@ -225,7 +229,7 @@ RETURN source, target, count(*) AS transfers
 _PROJECT_WARD_NETWORK = """
 CALL () {
   UNWIND $edges AS edge
-  MATCH (source:Ward {name: edge.source}), (target:Ward {name: edge.target})
+  MATCH (source:Ward {key: edge.source}), (target:Ward {key: edge.target})
   RETURN source, target, edge.weight AS weight
   UNION ALL
   MATCH (source:Ward)
@@ -250,7 +254,8 @@ CALL gds.graph.nodeProperties.stream($graph_name, ['pagerank', 'betweenness', 'd
 YIELD nodeId, nodeProperty, propertyValue
 WITH gds.util.asNode(nodeId) AS ward, collect([nodeProperty, propertyValue]) AS scores
 OPTIONAL MATCH (ward)<-[:AT_LOCATION]-(:LocationEvent)<-[:GENERATED_EVENT]-(e:Encounter)-[:ISOLATED]->(i:Isolate)
-RETURN ward.name AS ward, scores, count(DISTINCT i) AS isolates
+RETURN ward.key AS ward, [(ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility,
+       scores, count(DISTINCT i) AS isolates
 """
 
 
@@ -313,6 +318,7 @@ def rank_wards(client: GraphClient, window_days: int = 14) -> WardNetworkReport:
         wards.append(
             WardCentrality(
                 ward=row["ward"],
+                facility=row["facility"],
                 pagerank=scores["pagerank"],
                 betweenness=scores["betweenness"],
                 weighted_degree=scores["degree"],
