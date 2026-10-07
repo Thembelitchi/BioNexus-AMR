@@ -6,11 +6,24 @@ nodes, so the vocabulary below is the single place to extend coverage.
 
 Provenance of identifiers
 -------------------------
-* Gene accessions (``ARO:``) were resolved against the CARD Antibiotic
-  Resistance Ontology (``aro.owl`` from github.com/arpcard/aro).
-* NCBI Taxonomy IDs and WHO ATC codes are curated reference values. Verify
-  them against https://www.ncbi.nlm.nih.gov/taxonomy and
-  https://atcddd.fhi.no/atc_ddd_index/ when extending the tables.
+Each identifier below was checked against the source named here. Check any
+new entry the same way before adding it.
+
+* Gene accessions (``ARO:``): every entry was resolved by label in CARD's
+  ``aro.owl`` (github.com/arpcard/aro).
+* ATC codes: every entry matches the WHO-ATC-derived ``antimicrobials``
+  table of the AMR package (github.com/msberends/AMR).
+* Species names and genera: all are "accepted" names in the LPSN-based
+  ``microorganisms`` table of the same package.
+* NCBI Taxonomy IDs: 562 (E. coli) and 287 (P. aeruginosa) match
+  NCBI-derived GenBank/UniProt records in Biopython's test data; 1280
+  (S. aureus) matches PDB entry 5I55. 573 (K. pneumoniae) is the standard
+  value but could not be checked against an NCBI-derived source when this
+  was written; confirm at https://www.ncbi.nlm.nih.gov/taxonomy.
+* MLST scheme names and STs 5, 8, 11, 258, 111, 235 exist in the PubMLST
+  profiles shipped with the ``mlst`` tool (Bioconda). USA300 -> ST8 (CC8)
+  is stated in the Staphscope lineage table; USA100 -> ST5 rests on USA100
+  being the CC5 "New York/Japan" clone.
 """
 
 from __future__ import annotations
@@ -37,9 +50,8 @@ ORGANISMS: dict[str, OrganismRef] = {
         OrganismRef(1280, "Staphylococcus aureus", "Staphylococcus", "saureus"),
         OrganismRef(573, "Klebsiella pneumoniae", "Klebsiella", "kpneumoniae"),
         OrganismRef(287, "Pseudomonas aeruginosa", "Pseudomonas", "paeruginosa"),
-        OrganismRef(562, "Escherichia coli", "Escherichia", "ecoli"),
-        OrganismRef(470, "Acinetobacter baumannii", "Acinetobacter", "abaumannii"),
-        OrganismRef(1352, "Enterococcus faecium", "Enterococcus", "efaecium"),
+        # Achtman scheme: the PubMLST "ecoli" scheme is Pasteur, with different ST numbers.
+        OrganismRef(562, "Escherichia coli", "Escherichia", "ecoli_achtman_4"),
     )
 }
 

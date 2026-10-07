@@ -114,6 +114,7 @@ def test_horizontal_gene_transfer_across_species_and_genera(graph):
     assert signal.isolate_count == 1 + sum(1 for r in read_csv(GENOMIC_CSV) if r[1]["GeneDetected"] == "blaNDM-1")
     [genus_signal] = analytics.detect_horizontal_gene_transfer(graph, "genus")
     assert genus_signal.taxa == ["Escherichia", "Klebsiella"]
+    assert graph.query("MATCH (:Isolate {id: 'S-HGT-1'})-[:BELONGS_TO]->(s) RETURN s.key AS key") == [{"key": "ecoli_achtman_4:ST131"}]
 
 
 def test_mobile_elements_do_not_leak_genes_between_isolates(graph):

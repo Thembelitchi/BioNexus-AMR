@@ -105,8 +105,10 @@ uvicorn --factory bionexus.api:create_app --port 8000   # OpenAPI docs at /docs
 ```
 
 Or run everything in containers with `docker compose up --build`. This uses
-the official `neo4j` image with the GDS plugin; the compose file was not run
-in the environment where this backend was developed.
+the official `neo4j:2026.09.0` image, which bundles the GDS plugin, so no
+plugin download is needed. It has been tested end to end: the healthcheck,
+the API, all analytics, and the full test suite run against the
+containerised database with authentication enabled.
 
 ## Tests
 
