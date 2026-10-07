@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Disposable Neo4j + Graph Data Science server for tests, built from Maven
+  Central (no Docker or Neo4j download site needed). See run.sh.
+  Keep neo4j.version and gds.version on the same release.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.bionexus</groupId>
+  <artifactId>embedded-neo4j</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <neo4j.version>2026.09.0</neo4j.version>
+    <gds.version>2026.09.0</gds.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>neo4j</artifactId>
+      <version>${neo4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>neo4j-bolt</artifactId>
+      <version>${neo4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.neo4j.gds</groupId>
+      <artifactId>opengds-extension</artifactId>
+      <version>${gds.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.neo4j.gds</groupId>
+      <artifactId>proc-centrality</artifactId>
+      <version>${gds.version}</version>
+    </dependency>
+  </dependencies>
+</project>

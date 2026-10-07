@@ -1,0 +1,301 @@
+PatientID,SampleID,Organism,Strain_Subtype,GeneDetected,Mechanism,ClinicalImpact
+P-5000,S-20000,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5001,S-20001,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5002,S-20002,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5003,S-20003,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5004,S-20004,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5005,S-20005,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5006,S-20006,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5007,S-20007,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5008,S-20008,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5009,S-20009,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5010,S-20010,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5011,S-20011,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5012,S-20012,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5013,S-20013,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5014,S-20014,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5015,S-20015,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5016,S-20016,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5017,S-20017,Staphylococcus aureus (MRSA),USA100,vanA,Vancomycin Resistance,CRITICAL
+P-5018,S-20018,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5019,S-20019,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5020,S-20020,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5021,S-20021,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5022,S-20022,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5023,S-20023,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5024,S-20024,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5025,S-20025,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5026,S-20026,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5027,S-20027,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5028,S-20028,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5029,S-20029,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5030,S-20030,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5031,S-20031,Staphylococcus aureus (MRSA),USA100,vanA,Vancomycin Resistance,CRITICAL
+P-5032,S-20032,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5033,S-20033,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5034,S-20034,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5035,S-20035,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5036,S-20036,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5037,S-20037,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5038,S-20038,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5039,S-20039,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5040,S-20040,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5041,S-20041,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5042,S-20042,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5043,S-20043,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5044,S-20044,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5045,S-20045,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5046,S-20046,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5047,S-20047,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5048,S-20048,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5049,S-20049,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5050,S-20050,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5051,S-20051,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5052,S-20052,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5053,S-20053,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5054,S-20054,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5055,S-20055,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5056,S-20056,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5057,S-20057,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5058,S-20058,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5059,S-20059,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5060,S-20060,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5061,S-20061,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5062,S-20062,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5063,S-20063,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5064,S-20064,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5065,S-20065,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5066,S-20066,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5067,S-20067,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5068,S-20068,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5069,S-20069,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5070,S-20070,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5071,S-20071,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5072,S-20072,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5073,S-20073,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5074,S-20074,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5075,S-20075,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5076,S-20076,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5077,S-20077,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5078,S-20078,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5079,S-20079,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5080,S-20080,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5081,S-20081,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5082,S-20082,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5083,S-20083,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5084,S-20084,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5085,S-20085,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5086,S-20086,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5087,S-20087,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5088,S-20088,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5089,S-20089,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5090,S-20090,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5091,S-20091,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5092,S-20092,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5093,S-20093,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5094,S-20094,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5095,S-20095,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5096,S-20096,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5097,S-20097,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5098,S-20098,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5099,S-20099,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5100,S-20100,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5101,S-20101,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5102,S-20102,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5103,S-20103,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5104,S-20104,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5105,S-20105,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5106,S-20106,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5107,S-20107,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5108,S-20108,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5109,S-20109,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5110,S-20110,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5111,S-20111,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5112,S-20112,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5113,S-20113,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5114,S-20114,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5115,S-20115,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5116,S-20116,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5117,S-20117,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5118,S-20118,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5119,S-20119,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5120,S-20120,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5121,S-20121,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5122,S-20122,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5123,S-20123,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5124,S-20124,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5125,S-20125,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5126,S-20126,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5127,S-20127,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5128,S-20128,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5129,S-20129,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5130,S-20130,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5131,S-20131,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5132,S-20132,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5133,S-20133,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5134,S-20134,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5135,S-20135,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5136,S-20136,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5137,S-20137,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5138,S-20138,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5139,S-20139,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5140,S-20140,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5141,S-20141,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5142,S-20142,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5143,S-20143,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5144,S-20144,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5145,S-20145,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5146,S-20146,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5147,S-20147,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5148,S-20148,Staphylococcus aureus (MRSA),USA100,vanA,Vancomycin Resistance,CRITICAL
+P-5149,S-20149,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5150,S-20150,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5151,S-20151,Staphylococcus aureus (MRSA),USA100,vanA,Vancomycin Resistance,CRITICAL
+P-5152,S-20152,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5153,S-20153,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5154,S-20154,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5155,S-20155,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5156,S-20156,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5157,S-20157,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5158,S-20158,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5159,S-20159,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5160,S-20160,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5161,S-20161,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5162,S-20162,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5163,S-20163,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5164,S-20164,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5165,S-20165,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5166,S-20166,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5167,S-20167,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5168,S-20168,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5169,S-20169,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5170,S-20170,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5171,S-20171,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5172,S-20172,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5173,S-20173,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5174,S-20174,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5175,S-20175,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5176,S-20176,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5177,S-20177,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5178,S-20178,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5179,S-20179,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5180,S-20180,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5181,S-20181,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5182,S-20182,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5183,S-20183,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5184,S-20184,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5185,S-20185,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5186,S-20186,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5187,S-20187,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5188,S-20188,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5189,S-20189,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5190,S-20190,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5191,S-20191,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5192,S-20192,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5193,S-20193,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5194,S-20194,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5195,S-20195,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5196,S-20196,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5197,S-20197,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5198,S-20198,Staphylococcus aureus (MRSA),USA100,vanA,Vancomycin Resistance,CRITICAL
+P-5199,S-20199,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5200,S-20200,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5201,S-20201,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5202,S-20202,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5203,S-20203,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5204,S-20204,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5205,S-20205,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5206,S-20206,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5207,S-20207,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5208,S-20208,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5209,S-20209,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5210,S-20210,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5211,S-20211,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5212,S-20212,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5213,S-20213,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5214,S-20214,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5215,S-20215,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5216,S-20216,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5217,S-20217,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5218,S-20218,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5219,S-20219,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5220,S-20220,Staphylococcus aureus (MRSA),USA100,vanA,Vancomycin Resistance,CRITICAL
+P-5221,S-20221,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5222,S-20222,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5223,S-20223,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5224,S-20224,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5225,S-20225,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5226,S-20226,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5227,S-20227,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5228,S-20228,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5229,S-20229,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5230,S-20230,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5231,S-20231,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5232,S-20232,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5233,S-20233,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5234,S-20234,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5235,S-20235,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5236,S-20236,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5237,S-20237,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5238,S-20238,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5239,S-20239,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5240,S-20240,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5241,S-20241,Klebsiella pneumoniae (CRE),ST258,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5242,S-20242,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5243,S-20243,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5244,S-20244,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5245,S-20245,Staphylococcus aureus (MRSA),USA100,ermC,rRNA Methylation,CRITICAL
+P-5246,S-20246,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5247,S-20247,Klebsiella pneumoniae (CRE),ST11,None,Wild Type,Standard
+P-5248,S-20248,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5249,S-20249,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5250,S-20250,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5251,S-20251,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5252,S-20252,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5253,S-20253,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5254,S-20254,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5255,S-20255,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5256,S-20256,Pseudomonas aeruginosa,ST235,None,Wild Type,Standard
+P-5257,S-20257,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5258,S-20258,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5259,S-20259,Pseudomonas aeruginosa,ST111,None,Wild Type,Standard
+P-5260,S-20260,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5261,S-20261,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5262,S-20262,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5263,S-20263,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5264,S-20264,Klebsiella pneumoniae (CRE),ST258,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5265,S-20265,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5266,S-20266,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5267,S-20267,Staphylococcus aureus (MRSA),USA300,mecA,Altered PBP2a,CRITICAL
+P-5268,S-20268,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5269,S-20269,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5270,S-20270,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5271,S-20271,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5272,S-20272,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5273,S-20273,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5274,S-20274,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5275,S-20275,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5276,S-20276,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5277,S-20277,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5278,S-20278,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5279,S-20279,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5280,S-20280,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5281,S-20281,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5282,S-20282,Klebsiella pneumoniae (CRE),ST258,blaOXA-48,Oxacillinase,CRITICAL
+P-5283,S-20283,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5284,S-20284,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5285,S-20285,Staphylococcus aureus (MRSA),USA100,None,Wild Type,Standard
+P-5286,S-20286,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5287,S-20287,Klebsiella pneumoniae (CRE),ST11,blaNDM-1,Metallo-Beta-Lactamase,CRITICAL
+P-5288,S-20288,Pseudomonas aeruginosa,ST111,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5289,S-20289,Pseudomonas aeruginosa,ST111,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5290,S-20290,Staphylococcus aureus (MRSA),USA300,None,Wild Type,Standard
+P-5291,S-20291,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL
+P-5292,S-20292,Klebsiella pneumoniae (CRE),ST258,None,Wild Type,Standard
+P-5293,S-20293,Klebsiella pneumoniae (CRE),ST11,blaOXA-48,Oxacillinase,CRITICAL
+P-5294,S-20294,Staphylococcus aureus (MRSA),USA300,vanA,Vancomycin Resistance,CRITICAL
+P-5295,S-20295,Staphylococcus aureus (MRSA),USA100,mecA,Altered PBP2a,CRITICAL
+P-5296,S-20296,Staphylococcus aureus (MRSA),USA300,ermC,rRNA Methylation,CRITICAL
+P-5297,S-20297,Pseudomonas aeruginosa,ST235,blaVIM-2,Metallo-Beta-Lactamase,CRITICAL
+P-5298,S-20298,Klebsiella pneumoniae (CRE),ST11,blaKPC-3,Serine Carbapenemase,CRITICAL
+P-5299,S-20299,Pseudomonas aeruginosa,ST235,oprD-loss,Porin Channel Deletion,CRITICAL

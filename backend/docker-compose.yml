@@ -1,0 +1,35 @@
+# Neo4j with the Graph Data Science plugin plus the BioNexus API.
+#   cp .env.example .env   # set NEO4J_PASSWORD
+#   docker compose up --build
+services:
+  neo4j:
+    image: neo4j:2026.09.0
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?set NEO4J_PASSWORD in .env}
+      NEO4J_PLUGINS: '["graph-data-science"]'
+      NEO4J_dbms_security_procedures_unrestricted: gds.*
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$${NEO4J_PASSWORD}\" 'RETURN gds.version()' || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+    ports:
+      - "8000:8000"
+    depends_on:
+      neo4j:
+        condition: service_healthy
+
+volumes:
+  neo4j-data:
