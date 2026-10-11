@@ -39,8 +39,7 @@ MATCH (p:Patient)-[:HAD_ENCOUNTER]->(e:Encounter)-[:ISOLATED]->(i:Isolate)-[:IDE
 OPTIONAL MATCH (i)-[bt:BELONGS_TO]->(st:SequenceType)
 WITH p, e, i, pathogen, ward, st, bt,
      [(ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility,
-     [(e)-[:TREATED_WITH]->(d:Antibiotic) | d.name] AS treatments,
-     [(e)-[:TREATED_WITH]->(d:Antibiotic) | d.aware] AS treatmentAware,
+     [(e)-[:TREATED_WITH]->(d:Antibiotic) | [d.name, d.aware]] AS treated,
      [(i)-[x:EXHIBITS]->(d:Antibiotic) | {{drug: d.name, atc: d.atc_code, aware: d.aware, sir: x.sir, method: x.method, mic: x.mic, q: x.mic_qualifier, zone: x.zone_mm}}] AS ast,
      [(i)-[c:CARRIES]->(g:Gene) | {{symbol: g.symbol, category: g.category, aro: g.aro_id, carrier: null, context: c.context}}] +
      [(i)-[:CARRIES]->(m:MobileGeneticElement)-[:HARBORS]->(g:Gene) |
@@ -49,7 +48,7 @@ RETURN i.id AS id, p.id AS patient, p.sex AS sex, e.age_years AS age, e.age_band
        i.collected AS collected, facility, ward.key AS ward, ward.name AS wardName, i.specimen AS specimen,
        pathogen.species AS species, pathogen.ncbi_taxid AS taxid, i.phenotype_labels AS labels,
        i.genotype_status AS genotype, st.key AS st, bt.clone_designation AS clone,
-       treatments, treatmentAware, ast, genes
+       treated, ast, genes
 ORDER BY collected, id
 """
 
@@ -83,6 +82,9 @@ def export(client: GraphClient, pseudonymised: bool) -> dict:
     isolates = []
     for row in client.query(_ISOLATES):
         row["collected"] = _iso(row["collected"])
+        treated = sorted(row.pop("treated"))
+        row["treatments"] = [name for name, _ in treated]
+        row["treatmentAware"] = [aware for _, aware in treated]
         row["ast"] = sorted(row["ast"], key=lambda t: t["drug"])
         row["genes"] = sorted(row["genes"], key=lambda g: g["symbol"])
         isolates.append(row)

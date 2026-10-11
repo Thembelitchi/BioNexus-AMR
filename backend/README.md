@@ -152,6 +152,10 @@ containerised database with authentication enabled.
 
 `tools/export_site_snapshot.py` runs all of these against a live
 database and writes the JSON snapshot used by the static dashboard.
+`tools/export_graph.py export` writes the whole graph as a deterministic
+Cypher script, and `tools/export_graph.py load` loads such a script into an
+empty database. The demo graph is published in [`graph/`](../graph/README.md)
+in two forms: that script and a `neo4j-admin` dump.
 
 ## Tests
 

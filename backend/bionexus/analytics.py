@@ -441,7 +441,8 @@ def rank_wards(client: GraphClient, window_days: int = 14) -> WardNetworkReport:
 
     wards = []
     for row in client.read(work):
-        scores = dict(row["scores"])
+        # GDS sums in parallel, so the last bits vary between runs; round them off.
+        scores = {name: round(value, 6) for name, value in row["scores"]}
         wards.append(
             WardCentrality(
                 ward=row["ward"],

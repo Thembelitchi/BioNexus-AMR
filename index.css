@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* Only the dashboard source holds class names; skip the data and backend. */
+@source not "./graph";
+@source not "./backend";
 
 /* Design tokens: surfaces, ink and the validated categorical palette.
    Dark values are their own validated steps, not an automatic flip. */

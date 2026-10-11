@@ -147,6 +147,6 @@ def clinical_alerts(client: GraphClient, sentinel_genes: frozenset[str] = SENTIN
                     species=row["species"],
                 )
             )
-    alerts.sort(key=lambda a: (SEVERITY_ORDER[a.severity], -a.collected.timestamp(), a.rule, a.isolate_id))
+    alerts.sort(key=lambda a: (SEVERITY_ORDER[a.severity], -a.collected.timestamp(), a.rule, a.isolate_id, a.detail))
     log.info("evaluated %d alert rules: %d alerts", len(_QUERIES), len(alerts))
     return alerts
