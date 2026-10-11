@@ -206,3 +206,16 @@ def test_facilities_scope_wards_and_carry_demographics(graph):
         {"key": "KRH:ICU", "name": "ICU", "code": "KRH", "province": "KwaZulu-Natal"},
     ]
     assert graph.query("MATCH (p:Patient {id: 'P-1'})-[:HAD_ENCOUNTER]->(e) RETURN p.sex AS sex, e.age_years AS age") == [{"sex": "F", "age": 0.02}]
+
+
+def test_phenotypic_clusters_find_outbreaks_without_any_sequencing(graph):
+    demo = CLINICAL_CSV.parent / "demo"
+    ingest(graph, demo / "clinical.csv", None, demo / "movements.csv")
+    assert graph.query("MATCH (i:Isolate) WHERE i.genotype_status <> 'not_sequenced' RETURN count(i) AS n") == [{"n": 0}]
+    assert analytics.detect_spatiotemporal_clusters(graph) == []
+    clusters = {(c.ward, c.phenotype): c.size for c in analytics.detect_phenotypic_clusters(graph)}
+    # Planted outbreaks remain visible from susceptibility results alone.
+    assert clusters[("GAH:Neonatal ICU", "CRE")] >= 14
+    assert clusters[("WTH:Haematology-Oncology", "VRE")] >= 8
+    assert clusters[("GAH:Burns", "MRSA")] >= 6
+    assert clusters[("GAH:Adult ICU", "CRE")] >= 6

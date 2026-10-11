@@ -28,7 +28,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from bionexus import ontology  # noqa: E402
-from bionexus.breakpoints import BREAKPOINT_SOURCE, interpret  # noqa: E402
+from bionexus.breakpoints import BREAKPOINT_SOURCE, disk_breakpoint_for, interpret, interpret_disk  # noqa: E402
 
 SAST = timezone(timedelta(hours=2))
 PERIOD_START, PERIOD_END = date(2025, 7, 1), date(2025, 12, 31)
@@ -60,6 +60,9 @@ FACILITIES = {
     )
 }
 FACILITY_SHARE = {"GAH": 0.36, "GDH": 0.1, "KRH": 0.26, "WTH": 0.28}
+# Laboratories that test by disk diffusion; they fall back to an MIC method
+# where CLSI defines no disk breakpoint (e.g. vancomycin for S. aureus).
+DISK_LABS = {"GDH"}
 
 # ----------------------------------------------------------------------------
 # Organisms, strains and resistance determinants
@@ -348,6 +351,18 @@ def phenotype(strain: Strain, rng: random.Random, extra: tuple[str, ...] = ()) -
     return results
 
 
+def choose_zone(taxid: int, code: str, category: str, rng: random.Random) -> str | None:
+    """A zone diameter (mm) that CLSI reads as ``category``, or None without a disk breakpoint."""
+    if disk_breakpoint_for(taxid, code) is None:
+        return None
+    options = [z for z in range(6, 41) if interpret_disk(taxid, code, z) == category]
+    if not options:
+        return None
+    # Resistant isolates often show no zone (6 mm); susceptible ones spread widely.
+    weights = [3.0 if (category == "R" and z == 6) else 1.0 for z in options]
+    return str(rng.choices(options, weights=weights)[0])
+
+
 def lab_labels(organism: str, results: dict[str, tuple[str, str]]) -> list[str]:
     """Phenotypic flags a laboratory would append to the organism name."""
     cat = {code: category for code, (_, category) in results.items()}
@@ -426,6 +441,7 @@ class Isolate:
     sequenced: bool
     carriers_resolved: bool
     scenario: str | None
+    zones: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -450,6 +466,8 @@ class Patient:
 class Builder:
     def __init__(self, seed: int):
         self.rng = random.Random(seed)
+        # Separate stream so adding disk zones leaves every other value unchanged.
+        self.disk_rng = random.Random(seed * 7919 + 1)
         self.patients: list[Patient] = []
         self.scenarios: dict[str, dict] = {}
         self._ids: dict[str, set[int]] = {"PT": set(), "ENC": set(), "LAB": set()}
@@ -462,9 +480,17 @@ class Builder:
                 return f"{prefix}-{n}" if prefix != "LAB" else f"LAB25-{n}"
 
     def isolate(self, day: datetime, ward: str, strain: Strain, *, scenario: str | None = None,
-                specimen: str | None = None, treatment: str | None = None, extra: tuple[str, ...] = ()) -> Isolate:
+                specimen: str | None = None, treatment: str | None = None, extra: tuple[str, ...] = (),
+                facility: str | None = None) -> Isolate:
         rng = self.rng
         results = phenotype(strain, rng, extra)
+        zones: dict[str, str] = {}
+        if facility in DISK_LABS:
+            taxid = ontology.ORGANISMS[SPECIES[strain.organism].lower()].ncbi_taxid
+            for code, (_, category) in results.items():
+                zone = choose_zone(taxid, code, category, self.disk_rng)
+                if zone is not None:
+                    zones[code] = zone
         labels = lab_labels(strain.organism, results)
         if scenario:
             sequenced = True
@@ -489,6 +515,7 @@ class Builder:
             sequenced=sequenced,
             carriers_resolved=bool(scenario) or rng.random() < 0.6,
             scenario=scenario,
+            zones=zones,
         )
 
     def admit(self, facility: str, ward: str, collected: datetime, *, pre_icu: bool = True) -> Encounter:
@@ -530,7 +557,7 @@ class Builder:
             encounter = self.admit(facility, ward, day, pre_icu=False)
             treatment = pick(treatment_bias, rng) if treatment_bias else None
             specimen = pick(specimens, rng) if specimens else None
-            encounter.isolates.append(self.isolate(day, ward, strain, scenario=key, specimen=specimen, treatment=treatment, extra=extra))
+            encounter.isolates.append(self.isolate(day, ward, strain, scenario=key, specimen=specimen, treatment=treatment, extra=extra, facility=facility))
             patient.encounters.append(encounter)
 
     def build(self) -> None:
@@ -610,12 +637,12 @@ class Builder:
             day = self.random_day()
             patient = self.new_patient(ward)
             encounter = self.admit(facility, ward, day)
-            encounter.isolates.append(self.isolate(day, ward, strain))
+            encounter.isolates.append(self.isolate(day, ward, strain, facility=facility))
             if rng.random() < 0.15:  # repeat culture later in the same admission
                 later = day + timedelta(days=rng.randint(3, 14))
                 if later.date() <= PERIOD_END:
                     repeat = strain if rng.random() < 0.6 else draw_background_strain(pick(ORGANISMS_BY_WARD[ward], rng), rng)
-                    encounter.isolates.append(self.isolate(later, ward, repeat))
+                    encounter.isolates.append(self.isolate(later, ward, repeat, facility=facility))
                     if encounter.discharged and encounter.discharged < later:
                         encounter.discharged = later + timedelta(days=rng.randint(1, 10))
             patient.encounters.append(encounter)
@@ -626,7 +653,7 @@ class Builder:
 # ----------------------------------------------------------------------------
 
 CLINICAL_COLUMNS = ["PatientID", "EncounterID", "SampleID", "Date", "Facility", "FacilityName", "Province", "Ward", "Sex", "AgeYears",
-                    "AdmitDate", "DischargeDate", "Specimen", "Treatment", "Organism", "Antibiotic", "MIC", "Result", "Guideline"]
+                    "AdmitDate", "DischargeDate", "Specimen", "Treatment", "Organism", "Antibiotic", "MIC", "Zone", "Result", "Guideline"]
 GENOMIC_COLUMNS = ["PatientID", "SampleID", "Organism", "Strain_Subtype", "GeneDetected", "Mechanism", "MGE_Type", "MGE_Replicon"]
 MOVEMENT_COLUMNS = ["PatientID", "EncounterID", "EventType", "Facility", "FacilityName", "Province", "Ward", "Timestamp"]
 
@@ -657,7 +684,8 @@ def write(builder: Builder, out: Path) -> dict[str, int]:
                         "Date": iso(iso_.collected), **place, "Ward": iso_.ward, "Sex": patient.sex, "AgeYears": f"{patient.age_years:g}",
                         "AdmitDate": iso(enc.admitted), "DischargeDate": iso(enc.discharged), "Specimen": iso_.specimen,
                         "Treatment": iso_.treatment, "Organism": organism, "Antibiotic": CODE_TO_DRUG[code].name,
-                        "MIC": mic, "Result": category, "Guideline": BREAKPOINT_SOURCE,
+                        "MIC": "" if code in iso_.zones else mic, "Zone": iso_.zones.get(code, ""),
+                        "Result": category, "Guideline": BREAKPOINT_SOURCE,
                     })
                 if iso_.sequenced:
                     base = {"PatientID": patient.patient_id, "SampleID": iso_.sample_id, "Organism": species,

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Activity, Bell, Dna, FlaskConical, Info, LayoutDashboard, Moon, Network } from 'lucide-react';
+import { Activity, Bell, Dna, FlaskConical, Info, LayoutDashboard, Moon, Network, Pill } from 'lucide-react';
 import { Snapshot, loadSnapshot } from './data';
 import Overview from './Overview';
 import Outbreaks from './Outbreaks';
 import Networks from './Networks';
-import { About, Alerts, GeneTransfer, Isolates } from './Findings';
+import { About, Alerts, GeneTransfer, Isolates, Stewardship } from './Findings';
 import { Chips, FACILITY_COLOR } from './ui';
 
 const TABS = [
@@ -13,6 +13,7 @@ const TABS = [
   { id: 'networks', label: 'Networks', icon: Network },
   { id: 'hgt', label: 'Gene transfer', icon: Dna },
   { id: 'alerts', label: 'Alerts', icon: Bell },
+  { id: 'stewardship', label: 'Stewardship', icon: Pill },
   { id: 'isolates', label: 'Isolates', icon: FlaskConical },
   { id: 'about', label: 'Provenance', icon: Info },
 ] as const;
@@ -133,6 +134,7 @@ export default function SurveillanceApp() {
         {tab === 'networks' && <Networks snapshot={snapshot} isolates={snapshot.isolates} />}
         {tab === 'hgt' && <GeneTransfer snapshot={snapshot} />}
         {tab === 'alerts' && <Alerts snapshot={snapshot} isolates={isolates} />}
+        {tab === 'stewardship' && <Stewardship snapshot={snapshot} facility={facility} />}
         {tab === 'isolates' && <Isolates isolates={isolates} />}
         {tab === 'about' && <About snapshot={snapshot} />}
       </main>

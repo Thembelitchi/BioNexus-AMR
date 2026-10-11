@@ -18,10 +18,12 @@ export default function Overview({ snapshot, isolates, facilities, onOpen }: {
     const patients = new Set(isolates.map(i => i.patient)).size;
     const sequenced = isolates.filter(i => i.genotype !== 'not_sequenced').length;
     const ids = new Set(isolates.map(i => i.id));
-    const clusters = snapshot.clusters.filter(c => c.members.some(m => ids.has(m.isolate_id)));
-    const priority = new Set(clusters.map(c => `${c.ward}|${c.sequence_type}|${c.first_collected}`)).size;
+    const phenotypic = snapshot.phenotypicClusters.filter(c => c.members.some(m => ids.has(m.isolate_id))).length;
+    const genomic = new Set(
+      snapshot.clusters.filter(c => c.members.some(m => ids.has(m.isolate_id))).map(c => `${c.ward}|${c.sequence_type}|${c.first_collected}`),
+    ).size;
     const critical = snapshot.alerts.filter(a => a.severity === 'critical' && ids.has(a.isolate_id)).length;
-    return { patients, sequenced, clusters: priority, critical };
+    return { patients, sequenced, phenotypic, genomic, critical };
   }, [isolates, snapshot]);
 
   const resistance = useMemo(() => {
@@ -61,7 +63,7 @@ export default function Overview({ snapshot, isolates, facilities, onOpen }: {
         <StatTile label="Isolates" value={isolates.length.toLocaleString()} note={`${snapshot.meta.guideline} interpreted`} />
         <StatTile label="Sequenced" value={stats.sequenced.toLocaleString()} note={`${Math.round((100 * stats.sequenced) / Math.max(1, isolates.length))}% of isolates`} />
         <button onClick={() => onOpen('outbreaks')} className="text-left">
-          <StatTile label="Outbreak clusters" value={stats.clusters} note={`same ward, ST and gene, ≤${snapshot.meta.windowDays} days apart`} />
+          <StatTile label="Outbreak clusters" value={stats.phenotypic} note={`by lab phenotype; ${stats.genomic} confirmed genomically`} />
         </button>
         <button onClick={() => onOpen('alerts')} className="text-left col-span-2 lg:col-span-1">
           <StatTile label="Critical alerts" value={stats.critical} note="colistin resistance, sentinel genes" />
@@ -128,6 +130,7 @@ export default function Overview({ snapshot, isolates, facilities, onOpen }: {
           <ul className="text-[13px] text-ink-2 space-y-2 list-disc pl-4">
             <li><b className="text-ink">Synthetic data.</b> 600 generated patients across four fictional hospitals in Gauteng, KwaZulu-Natal and the Western Cape. Patterns follow published South African surveillance; numbers are illustrative.</li>
             <li><b className="text-ink">Real computation.</b> Every cluster, gene-transfer signal, ward ranking and alert was produced by the BioNexus backend on Neo4j {snapshot.meta.neo4j} with Graph Data Science {snapshot.meta.gds}, then exported for this static page.</li>
+            <li><b className="text-ink">Pseudonymised.</b> Patient and admission IDs are keyed hashes and ages are bands, as the platform does at ingest to support POPIA.</li>
             <li><b className="text-ink">Verified vocabulary.</b> Taxonomy, genes, drug codes, sequence types and {snapshot.meta.guideline} breakpoints are checked against their sources. <button className="underline text-ink" onClick={() => onOpen('about')}>See provenance</button>.</li>
           </ul>
         </Card>

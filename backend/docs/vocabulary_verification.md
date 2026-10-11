@@ -1,6 +1,6 @@
 # Vocabulary verification report
 
-## NCBI Taxonomy IDs (NCBI taxdb release 2026-09-28-09-20-02) (7/7 verified)
+## NCBI Taxonomy IDs (NCBI taxdb release 2026-10-06-01-05-02) (7/7 verified)
 
 | | Entry | Evidence |
 |---|---|---|
@@ -121,7 +121,7 @@
 | ✅ | dataset: saureus ST239 | ST present |
 | ✅ | dataset: saureus ST612 | ST present |
 
-## Breakpoints (CLSI 2025) (53/53 verified)
+## MIC breakpoints (CLSI 2025) (53/53 verified)
 
 | | Entry | Evidence |
 |---|---|---|
@@ -178,6 +178,58 @@
 | ✅ | B_[ORD]_ENTRBCTR / SXT: S≤2, R≥4 | AMR package: [(2.0, 4.0)] |
 | ✅ | B_[ORD]_ENTRBCTR / TGC: S≤2, R≥8 | AMR package: [(2.0, 8.0)] |
 | ✅ | B_[ORD]_ENTRBCTR / TZP: S≤8, R≥32 | AMR package: [(8.0, 32.0)] |
+
+## Disk diffusion breakpoints (CLSI 2025) (47/47 verified)
+
+| | Entry | Evidence |
+|---|---|---|
+| ✅ | B_ACNTB / AMK 30 mcg: S≥17 mm, R≤14 mm | AMR package: [(17.0, 14.0, '30 mcg')] |
+| ✅ | B_ACNTB / CAZ 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
+| ✅ | B_ACNTB / CIP 5 mcg: S≥21 mm, R≤15 mm | AMR package: [(21.0, 15.0, '5 mcg')] |
+| ✅ | B_ACNTB / CRO 30 mcg: S≥21 mm, R≤13 mm | AMR package: [(21.0, 13.0, '30 mcg')] |
+| ✅ | B_ACNTB / FEP 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
+| ✅ | B_ACNTB / GEN 10 mcg: S≥15 mm, R≤12 mm | AMR package: [(15.0, 12.0, '10 mcg')] |
+| ✅ | B_ACNTB / IPM 10 mcg: S≥22 mm, R≤18 mm | AMR package: [(22.0, 18.0, '10 mcg')] |
+| ✅ | B_ACNTB / MEM 10 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '10 mcg')] |
+| ✅ | B_ACNTB / SXT 1.25/23.75 mcg: S≥16 mm, R≤10 mm | AMR package: [(16.0, 10.0, '1.25/23.75 mcg')] |
+| ✅ | B_ACNTB / TZP 100/10 mcg: S≥21 mm, R≤17 mm | AMR package: [(21.0, 17.0, '100/10 mcg')] |
+| ✅ | B_ENTRC / AMP 10 mcg: S≥17 mm, R≤16 mm | AMR package: [(17.0, 16.0, '10 mcg')] |
+| ✅ | B_ENTRC / ERY 15 mcg: S≥23 mm, R≤13 mm | AMR package: [(23.0, 13.0, '15 mcg')] |
+| ✅ | B_ENTRC / LNZ 30 mcg: S≥23 mm, R≤20 mm | AMR package: [(23.0, 20.0, '30 mcg')] |
+| ✅ | B_ENTRC / RIF 5 mcg: S≥20 mm, R≤16 mm | AMR package: [(20.0, 16.0, '5 mcg')] |
+| ✅ | B_ENTRC / VAN 30 mcg: S≥17 mm, R≤14 mm | AMR package: [(17.0, 14.0, '30 mcg')] |
+| ✅ | B_PSDMN_AERG / CAZ 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
+| ✅ | B_PSDMN_AERG / CIP 5 mcg: S≥25 mm, R≤18 mm | AMR package: [(25.0, 18.0, '5 mcg')] |
+| ✅ | B_PSDMN_AERG / CZA 30 mcg: S≥21 mm, R≤20 mm | AMR package: [(21.0, 20.0, '30 mcg')] |
+| ✅ | B_PSDMN_AERG / FEP 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
+| ✅ | B_PSDMN_AERG / IPM 10 mcg: S≥19 mm, R≤15 mm | AMR package: [(19.0, 15.0, '10 mcg')] |
+| ✅ | B_PSDMN_AERG / MEM 10 mcg: S≥19 mm, R≤15 mm | AMR package: [(19.0, 15.0, '10 mcg')] |
+| ✅ | B_PSDMN_AERG / TZP 100/10 mcg: S≥22 mm, R≤17 mm | AMR package: [(22.0, 17.0, '100/10 mcg')] |
+| ✅ | B_STPHY / CIP 5 mcg: S≥21 mm, R≤15 mm | AMR package: [(21.0, 15.0, '5 mcg')] |
+| ✅ | B_STPHY / CLI 2 mcg: S≥21 mm, R≤14 mm | AMR package: [(21.0, 14.0, '2 mcg')] |
+| ✅ | B_STPHY / ERY 15 mcg: S≥23 mm, R≤13 mm | AMR package: [(23.0, 13.0, '15 mcg')] |
+| ✅ | B_STPHY / FOX 30 mcg: S≥25 mm, R≤24 mm | AMR package: [(25.0, 24.0, '30 mcg')] |
+| ✅ | B_STPHY / GEN 10 mcg: S≥15 mm, R≤12 mm | AMR package: [(15.0, 12.0, '10 mcg')] |
+| ✅ | B_STPHY / LNZ 30 mcg: S≥26 mm, R≤22 mm | AMR package: [(26.0, 22.0, '30 mcg')] |
+| ✅ | B_STPHY / RIF 5 mcg: S≥20 mm, R≤16 mm | AMR package: [(20.0, 16.0, '5 mcg')] |
+| ✅ | B_STPHY / SXT 1.25/23.75 mcg: S≥16 mm, R≤10 mm | AMR package: [(16.0, 10.0, '1.25/23.75 mcg')] |
+| ✅ | B_STPHY_AURS / FOX 30 mcg: S≥22 mm, R≤21 mm | AMR package: [(22.0, 21.0, '30 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / AMC 20/10 mcg: S≥18 mm, R≤13 mm | AMR package: [(18.0, 13.0, '20/10 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / AMK 30 mcg: S≥20 mm, R≤16 mm | AMR package: [(20.0, 16.0, '30 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / AMP 10 mcg: S≥17 mm, R≤13 mm | AMR package: [(17.0, 13.0, '10 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / CAZ 30 mcg: S≥21 mm, R≤17 mm | AMR package: [(21.0, 17.0, '30 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / CIP 5 mcg: S≥26 mm, R≤21 mm | AMR package: [(26.0, 21.0, '5 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / CRO 30 mcg: S≥23 mm, R≤19 mm | AMR package: [(23.0, 19.0, '30 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / CZA 30/20 mcg: S≥21 mm, R≤20 mm | AMR package: [(21.0, 20.0, '30/20 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / ETP 10 mcg: S≥22 mm, R≤18 mm | AMR package: [(22.0, 18.0, '10 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / FEP 30 mcg: S≥25 mm, R≤18 mm | AMR package: [(25.0, 18.0, '30 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / FOX 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / GEN 10 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '10 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / IPM 10 mcg: S≥23 mm, R≤19 mm | AMR package: [(23.0, 19.0, '10 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / MEM 10 mcg: S≥23 mm, R≤19 mm | AMR package: [(23.0, 19.0, '10 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / SXT 1.25/23.75 mcg: S≥16 mm, R≤10 mm | AMR package: [(16.0, 10.0, '1.25/23.75 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / TGC 15 mcg: S≥19 mm, R≤14 mm | AMR package: [(19.0, 14.0, '15 mcg')] |
+| ✅ | B_[ORD]_ENTRBCTR / TZP 100/10 mcg: S≥25 mm, R≤20 mm | AMR package: [(25.0, 20.0, '100/10 mcg')] |
 
 ## Dataset coverage (data/demo) (3/3 verified)
 

@@ -19,6 +19,7 @@ from typing import Iterable, TypeVar
 from pydantic import BaseModel, ValidationError
 
 from . import breakpoints, ontology
+from .privacy import Pseudonymiser, age_band
 from .models import (
     AntibioticNode,
     ClinicalRow,
@@ -87,6 +88,28 @@ def _validate(rows: Iterable[tuple[int, dict[str, str]]], model: type[RowT], sou
     return valid
 
 
+def _pseudonymise(p: Pseudonymiser, clinical, genomic, movements):
+    """Replace direct identifiers before any record is built.
+
+    Exact ages are kept only long enough to derive the age band.
+    """
+    clinical = [
+        (line, row.model_copy(update={
+            "patient_id": p.patient(row.patient_id),
+            "encounter_id": p.encounter(encounter_key(row)),
+            "age_years": None,
+            "age_band": age_band(row.age_years),
+        }))
+        for line, row in clinical
+    ]
+    genomic = [(line, row.model_copy(update={"patient_id": p.patient(row.patient_id) if row.patient_id else None})) for line, row in genomic]
+    movements = [
+        (line, row.model_copy(update={"patient_id": p.patient(row.patient_id), "encounter_id": p.encounter(row.encounter_id)}))
+        for line, row in movements
+    ]
+    return clinical, genomic, movements
+
+
 def encounter_key(row: ClinicalRow) -> str:
     # Without an ADT feed, each specimen collection is its own encounter.
     return row.encounter_id or f"{row.patient_id}:{row.collected:%Y%m%d}"
@@ -100,11 +123,14 @@ def transform(
     clinical: Iterable[tuple[int, dict[str, str]]],
     genomic: Iterable[tuple[int, dict[str, str]]] = (),
     movements: Iterable[tuple[int, dict[str, str]]] = (),
+    pseudonymiser: Pseudonymiser | None = None,
 ) -> TransformResult:
     result = TransformResult()
     clinical_rows = _validate(clinical, ClinicalRow, "clinical", result)
     genomic_rows = _validate(genomic, GenomicRow, "genomic", result)
     movement_rows = _validate(movements, MovementRow, "movements", result)
+    if pseudonymiser is not None:
+        clinical_rows, genomic_rows, movement_rows = _pseudonymise(pseudonymiser, clinical_rows, genomic_rows, movement_rows)
 
     by_sample: dict[str, list[tuple[int, ClinicalRow]]] = defaultdict(list)
     for line, row in clinical_rows:
@@ -187,13 +213,16 @@ def _build_isolate(
         admitted = admitted or row.admitted
         discharged = discharged or row.discharged
         if row.treatment:
-            treatments[row.treatment.atc_code] = AntibioticNode(atc_code=row.treatment.atc_code, name=row.treatment.name)
+            treatments[row.treatment.atc_code] = AntibioticNode(atc_code=row.treatment.atc_code, name=row.treatment.name, aware=row.treatment.aware)
         test = SusceptibilityResult(
             atc_code=row.antibiotic.atc_code,
             name=row.antibiotic.name,
+            aware=row.antibiotic.aware,
             sir=row.sir,
+            method="MIC" if row.mic is not None else "DISK" if row.zone_mm is not None else None,
             mic=row.mic,
             mic_qualifier=row.mic_qualifier,
+            zone_mm=row.zone_mm,
             guideline=row.guideline or "as reported",
         )
         _check_interpretation(row, sample_id, line, result)
@@ -215,6 +244,7 @@ def _build_isolate(
         ward=ward,
         sex=first.sex,
         age_years=first.age_years,
+        age_band=first.age_band or age_band(first.age_years),
         isolate_id=sample_id,
         collected=first.collected,
         specimen=first.specimen,
@@ -232,18 +262,24 @@ def _build_isolate(
 
 
 def _check_interpretation(row: ClinicalRow, sample_id: str, line: int, result: TransformResult) -> None:
-    """Warn when a reported category contradicts the MIC under the stated guideline."""
-    if row.mic is None or row.guideline != breakpoints.BREAKPOINT_SOURCE:
+    """Warn when a reported category contradicts the MIC or zone under the stated guideline."""
+    if row.guideline != breakpoints.BREAKPOINT_SOURCE:
         return
-    expected = breakpoints.interpret(row.organism.ncbi_taxid, row.antibiotic.amr_code, row.mic, row.mic_qualifier)
-    if expected is not None and expected != row.sir:
+    taxid, drug = row.organism.ncbi_taxid, row.antibiotic.amr_code
+    checks = []
+    if row.mic is not None:
         mic = f"{row.mic_qualifier if row.mic_qualifier != '=' else ''}{row.mic:g}"
-        result.warn(
-            "clinical",
-            f"{row.antibiotic.name} reported {row.sir} but MIC {mic} mg/L reads {expected} under {row.guideline}",
-            line=line,
-            sample_id=sample_id,
-        )
+        checks.append((breakpoints.interpret(taxid, drug, row.mic, row.mic_qualifier), f"MIC {mic} mg/L"))
+    if row.zone_mm is not None:
+        checks.append((breakpoints.interpret_disk(taxid, drug, row.zone_mm), f"zone {row.zone_mm:g} mm"))
+    for expected, measurement in checks:
+        if expected is not None and expected != row.sir:
+            result.warn(
+                "clinical",
+                f"{row.antibiotic.name} reported {row.sir} but {measurement} reads {expected} under {row.guideline}",
+                line=line,
+                sample_id=sample_id,
+            )
 
 
 def _resolve_genotype(sample_id, clinical: ClinicalRow, genomic: list[tuple[int, GenomicRow]], result: TransformResult):

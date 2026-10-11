@@ -95,6 +95,23 @@ export function SeverityBadge({ severity }: { severity: 'critical' | 'high' }) {
   );
 }
 
+const AWARE_STYLE: Record<string, string> = {
+  Access: 'var(--status-good)',
+  Watch: 'var(--status-warning)',
+  Reserve: 'var(--status-critical)',
+};
+
+/** WHO AWaRe group, always shown as text with a colour cue. */
+export function AwareTag({ group }: { group: string | null | undefined }) {
+  if (!group) return <span className="text-[11px] text-muted" title="Not classified">—</span>;
+  return (
+    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-ink-2 whitespace-nowrap" title={`WHO AWaRe: ${group}`}>
+      <span className="w-1.5 h-1.5 rounded-full" style={{ background: AWARE_STYLE[group] }} aria-hidden />
+      {group}
+    </span>
+  );
+}
+
 export function Tag({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <span className="inline-flex items-center gap-1 h-5 px-1.5 rounded text-[11px] font-medium border border-line text-ink-2 whitespace-nowrap">

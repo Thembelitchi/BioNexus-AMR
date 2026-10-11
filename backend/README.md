@@ -79,11 +79,14 @@ ATC code or taxid) are caught.
 ## Input files
 
 **clinical** (required), one row per susceptibility test:
-`PatientID, SampleID, Date, Ward, Specimen, Treatment, Organism, Antibiotic, Result, MIC`
+`PatientID, SampleID, Date, Ward, Specimen, Treatment, Organism, Antibiotic, Result`
+plus a measurement, either `MIC` (mg/L) or `Zone` (disk diffusion, mm),
 and optionally `EncounterID, AdmitDate, DischargeDate, Guideline, Facility,
-FacilityName, Province, Sex, AgeYears`.
-When `Guideline` is `CLSI 2025`, each MIC is re-interpreted, and a reported
-category that disagrees is flagged as a warning.
+FacilityName, Province, Sex, AgeYears` (or `AgeBand`).
+When `Guideline` is `CLSI 2025`, each MIC or zone diameter is re-interpreted
+against the CLSI MIC or disk breakpoint, and a reported category that
+disagrees is flagged as a warning. Each stored result keeps its `method`
+(`MIC` or `DISK`) so the two are never mixed up.
 Several rows with the same `SampleID` make up one isolate's antibiogram.
 
 **genomic** (optional), one row per determinant call, joined on `SampleID`:
@@ -98,6 +101,14 @@ optionally with `Facility, FacilityName, Province`.
 A realistic 600-patient South African demonstration dataset with planted
 outbreaks lives in `data/demo/`; see its README.
 
+**POPIA pseudonymisation.** When `BIONEXUS_PSEUDONYMISATION_KEY` is set,
+`PatientID` and `EncounterID` are replaced by keyed HMAC-SHA256 pseudonyms
+(`P-…`, `E-…`) and exact ages by age bands during transformation, before
+anything is written to Neo4j. The same key always yields the same
+pseudonym, so repeat loads and linkage across files still work, but the
+graph holds no direct identifiers. Without a key, identifiers are stored as
+received and the ingest report says so (`pseudonymised: false`).
+
 Ingest is idempotent: every write is a `MERGE` on a constrained key, inside
 batched `execute_write` transactions. Loading a new genomic report for an
 isolate replaces its earlier gene, element and ST calls, so a retracted
@@ -107,10 +118,12 @@ call does not linger. A clinical-only reload keeps existing genomics.
 
 | Endpoint / CLI | What it computes |
 |---|---|
-| `GET /analytics/clusters?window_days=14` / `bionexus clusters` | Isolates in the same ward with the same ST and the same acquired gene variant, collected within the window of each other. A cluster is a connected chain of such links. |
+| `GET /analytics/clusters/phenotypic?window_days=14` / `bionexus clusters --basis phenotypic` | Outbreak detection without sequencing: isolates of the same species with the same priority laboratory phenotype (CRE, CRAB, CRPA, MRSA, VRE) on one ward, each within the window of the next. Reports how many members were sequenced and their STs. |
+| `GET /analytics/clusters?window_days=14` / `bionexus clusters` | Genomic confirmation: isolates in the same ward with the same ST and the same acquired gene variant, collected within the window of each other. A cluster is a connected chain of such links. |
 | `GET /analytics/hgt?level=species\|genus` / `bionexus hgt` | One ARO gene variant found in more than one species or genus, with the wards and replicons involved. |
 | `GET /analytics/wards/centrality` / `bionexus wards` | GDS weighted PageRank, betweenness and weighted degree over a ward network. Edges are patient transfers plus cross-ward genomic links within the window. |
-| `GET /analytics/alerts` / `bionexus alerts` | Clinical alert rules (prescribed agent tests resistant, carbapenemase producer, colistin resistance, sentinel genes); criteria documented in `bionexus/alerts.py`. |
+| `GET /analytics/stewardship` / `bionexus stewardship` | Prescriptions per agent and facility grouped by WHO AWaRe (Access, Watch, Reserve), with how many were given to a patient whose isolate tested resistant to that agent. |
+| `GET /analytics/alerts` / `bionexus alerts` | Clinical alert rules: prescribed agent tests resistant, carbapenemase producer, colistin resistance, sentinel genes, and two genotype–phenotype discordance checks (a carbapenemase gene with meropenem not resistant; carbapenem resistance with no carbapenemase found). Criteria are documented in `bionexus/alerts.py`. |
 
 An isolate's ward is the ward of its encounter's latest LocationEvent at or
 before collection time. Clusters and ward link counts come from a single
@@ -157,9 +170,13 @@ centrality and the HTTP API.
 
 ## Known limitations
 
-* Only CLSI 2025 MIC breakpoints are embedded. Rows with another guideline,
-  or none, are stored as reported without re-interpretation. EUCAST is
-  available from the same source table if needed.
+* Only CLSI 2025 MIC and disk breakpoints are embedded. Rows with another
+  guideline, or none, are stored as reported without re-interpretation.
+  EUCAST is available from the same source table if needed.
+* WHO AWaRe groups in `bionexus/ontology.py` are hand-curated from the WHO
+  2023 AWaRe classification for the 25 agents used here; no machine-readable
+  copy of the list could be reached for automatic verification. Agents
+  without a clear WHO group (rifampicin, cefoxitin) are left unclassified.
 * The original sample data in `data/*.csv` are synthetic and not biologically consistent. For
   example, 20 of the 32 vancomycin-resistant *S. aureus* isolates carry no
   *vanA*, while 28 MRSA isolates do carry *vanA*, which is clinically very

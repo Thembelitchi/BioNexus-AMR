@@ -16,7 +16,7 @@ python tools/generate_demo_dataset.py --seed 2025
 |---|---|
 | Patients | 600 |
 | Isolates | 673 (197 sequenced) |
-| Susceptibility results | 7,391 MICs, interpreted with **CLSI 2025** |
+| Susceptibility results | 7,391, interpreted with **CLSI 2025**: 6,765 MICs and 626 disk diffusion zones (GDH) |
 | ADT events | 647 admissions and transfers |
 | Facilities | 4 fictional hospitals in Gauteng, KwaZulu-Natal and the Western Cape |
 | Period | 1 July – 31 December 2025 (timestamps in SAST, UTC+02:00) |
@@ -48,9 +48,9 @@ re-checks all of this:
 * **Antimicrobials:** WHO ATC codes.
 * **Sequence types:** every ST used exists in PubMLST, with schemes named as
   the `mlst` tool names them (for example *E. coli* uses the Achtman scheme).
-* **MIC interpretation:** every S/I/SDD/R follows CLSI M100 2025 breakpoints,
-  as distributed in the AMR package. `tests/test_demo_dataset.py` re-interprets
-  all 7,391 results.
+* **Interpretation:** every S/I/SDD/R follows CLSI M100 2025 MIC or disk
+  breakpoints, as distributed in the AMR package. `tests/test_demo_dataset.py`
+  re-interprets all 7,391 results.
 
 **Grounded in published South African surveillance, qualitatively.** The
 patterns below follow what the NICD (GERMS-SA and AMR reference laboratory
@@ -78,7 +78,11 @@ IncI2) are well documented, but CARD does not encode them, so they could
 not be checked automatically.
 
 **Laboratory realism.**
-* Panels follow automated broth microdilution reporting ranges.
+* Panels follow automated broth microdilution reporting ranges at three
+  hospitals. The district hospital (GDH) reports disk diffusion zones
+  instead, as many smaller South African laboratories do, except for
+  colistin, oxacillin and vancomycin, where CLSI has no reliable disk
+  breakpoint and an MIC is reported.
 * Agents to which a species is intrinsically resistant are not reported.
 * Reserve agents (ceftazidime-avibactam, colistin, tigecycline) are
   cascade-reported only for carbapenem-non-susceptible isolates. The
@@ -107,6 +111,9 @@ asserts that the analytics recover every scenario.
 | S7 | Sentinel: KPC-2 *K. pneumoniae* ST258 (uncommon locally; possible importation) | WTH Adult ICU | Gene present |
 | S8 | Sentinel: plasmid-mediated colistin resistance (mcr-1) in *E. coli* | KRH Medical | Gene present, colistin R |
 
+Without any sequencing, laboratory-phenotype clustering
+(`bionexus clusters --basis phenotypic`) still recovers S1, S4, S5 and S6.
+
 136 isolates (36 of them on meropenem) come from patients prescribed an
 agent the isolate tests resistant to. These are intentional
 antimicrobial-stewardship alert cases.
@@ -119,6 +126,12 @@ antimicrobial-stewardship alert cases.
 | `genomic.csv` | One row per determinant call (or "None") for sequenced isolates | PatientID, SampleID, Organism, Strain_Subtype, GeneDetected, Mechanism, MGE_Type, MGE_Replicon |
 | `movements.csv` | One row per admission or transfer | PatientID, EncounterID, EventType, Facility, FacilityName, Province, Ward, Timestamp |
 | `scenarios.json` | Ground truth for planted scenarios | expected cluster, HGT, transfer and gene signals |
+
+Identifiers in the CSV files are synthetic and stored as generated. The
+public dashboard snapshot was exported with pseudonymisation switched on,
+using the published demo key `bionexus-public-demo-key-not-secret`. That key
+is public by design; a real deployment must use its own secret key
+(`BIONEXUS_PSEUDONYMISATION_KEY`).
 
 Load it with:
 

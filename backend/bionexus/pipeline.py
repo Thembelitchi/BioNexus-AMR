@@ -9,6 +9,7 @@ from .db import GraphClient
 from .etl import read_csv, transform
 from .loader import load_isolates, load_movements
 from .models import IngestReport
+from .privacy import Pseudonymiser
 
 log = logging.getLogger(__name__)
 
@@ -23,12 +24,14 @@ def ingest(
     *,
     batch_size: int = 500,
     dry_run: bool = False,
+    pseudonymiser: Pseudonymiser | None = None,
 ) -> IngestReport:
     """Validate the files and load accepted records unless ``dry_run``."""
     result = transform(
         read_csv(clinical),
         read_csv(genomic) if genomic is not None else (),
         read_csv(movements) if movements is not None else (),
+        pseudonymiser=pseudonymiser,
     )
     if not dry_run:
         if client is None:
@@ -37,6 +40,7 @@ def ingest(
         load_movements(client, result.movements, batch_size)
     report = IngestReport(
         dry_run=dry_run,
+        pseudonymised=pseudonymiser is not None,
         rows_read=result.rows_read,
         rows_rejected=result.rows_rejected,
         isolates=len(result.isolates),

@@ -100,3 +100,43 @@ def test_ward_names_keep_acronyms(raw, expected):
     from bionexus.models import canonical_ward
 
     assert canonical_ward(raw) == expected
+
+
+def test_disk_diffusion_interpretation_follows_clsi():
+    from bionexus.breakpoints import interpret_disk
+
+    assert interpret_disk(573, "MEM", 24) == "S"  # Enterobacterales meropenem: S >= 23 mm
+    assert interpret_disk(573, "MEM", 21) == "I"
+    assert interpret_disk(573, "MEM", 19) == "R"  # R <= 19 mm
+    assert interpret_disk(573, "FEP", 20) == "SDD"
+    assert interpret_disk(1280, "FOX", 21) == "R"  # cefoxitin screen for MRSA
+    # CLSI gives no disk breakpoint where disk testing is unreliable.
+    assert interpret_disk(573, "COL", 20) is None
+    assert interpret_disk(1280, "VAN", 20) is None
+
+
+def test_aware_groups():
+    groups = {d.name: d.aware for d in set(ontology.ANTIBIOTICS.values())}
+    assert {n for n, g in groups.items() if g == "Reserve"} == {"Colistin", "Ceftazidime-avibactam", "Linezolid", "Tigecycline"}
+    assert groups["Meropenem"] == "Watch" and groups["Ampicillin"] == "Access"
+    assert {n for n, g in groups.items() if g is None} == {"Cefoxitin", "Rifampicin"}
+
+
+def test_priority_phenotype_rules_cover_distinct_taxa():
+    seen = set()
+    for rule in ontology.PRIORITY_PHENOTYPES:
+        assert not rule.taxids & seen
+        seen |= rule.taxids
+        assert all(ontology.ATC_PATTERN.match(code) for code in rule.atc_codes)
+
+
+def test_pseudonymiser():
+    from bionexus.privacy import Pseudonymiser, age_band
+
+    p = Pseudonymiser("a-sufficiently-long-key")
+    assert p.patient("PT-1") == p.patient("PT-1") != p.patient("PT-2")
+    assert p.patient("PT-1") != Pseudonymiser("another-long-key-here").patient("PT-1")
+    assert p.patient("X") != p.encounter("X") and p.patient("X").startswith("P-")
+    with pytest.raises(ValueError):
+        Pseudonymiser("short")
+    assert [age_band(a) for a in (0.01, 0.5, 3, 30, 80, None)] == ["0-27 days", "28 days-<1 year", "1-4 years", "25-34 years", "75+ years", None]

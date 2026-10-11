@@ -10,7 +10,7 @@ from pathlib import Path
 from pydantic import BaseModel
 
 from . import alerts, analytics
-from .config import Settings, configure_logging
+from .config import Settings, configure_logging, pseudonymiser_for
 from .db import GraphClient, GraphUnavailableError
 from .pipeline import ingest
 from .schema import ensure_schema
@@ -40,6 +40,8 @@ def main(argv: list[str] | None = None) -> int:
     p_clusters = commands.add_parser("clusters", help="spatiotemporal ST + gene clusters")
     p_clusters.add_argument("--window-days", type=int, default=14)
     p_clusters.add_argument("--min-size", type=int, default=2)
+    p_clusters.add_argument("--basis", choices=["genomic", "phenotypic"], default="genomic",
+                            help="genomic: same ST and gene; phenotypic: same species and resistance phenotype")
 
     p_hgt = commands.add_parser("hgt", help="genes shared across species or genera")
     p_hgt.add_argument("--level", choices=["species", "genus"], default="species")
@@ -48,13 +50,14 @@ def main(argv: list[str] | None = None) -> int:
     p_wards.add_argument("--window-days", type=int, default=14)
 
     commands.add_parser("alerts", help="clinical alert rules")
+    commands.add_parser("stewardship", help="prescribing by WHO AWaRe group")
 
     args = parser.parse_args(argv)
     settings = Settings.from_env()
     configure_logging(settings.log_level)
 
     if args.command == "ingest" and args.dry_run:
-        report = ingest(None, args.clinical, args.genomic, args.movements, dry_run=True)
+        report = ingest(None, args.clinical, args.genomic, args.movements, dry_run=True, pseudonymiser=pseudonymiser_for(settings))
         _emit(report)
         return 1 if any(issue.severity == "error" for issue in report.issues) else 0
 
@@ -64,17 +67,23 @@ def main(argv: list[str] | None = None) -> int:
                 ensure_schema(client)
             elif args.command == "ingest":
                 ensure_schema(client)
-                report = ingest(client, args.clinical, args.genomic, args.movements, batch_size=settings.batch_size)
+                report = ingest(
+                    client, args.clinical, args.genomic, args.movements,
+                    batch_size=settings.batch_size, pseudonymiser=pseudonymiser_for(settings),
+                )
                 _emit(report)
                 return 1 if any(issue.severity == "error" for issue in report.issues) else 0
             elif args.command == "clusters":
-                _emit(analytics.detect_spatiotemporal_clusters(client, args.window_days, args.min_size))
+                detect = analytics.detect_phenotypic_clusters if args.basis == "phenotypic" else analytics.detect_spatiotemporal_clusters
+                _emit(detect(client, args.window_days, args.min_size))
             elif args.command == "hgt":
                 _emit(analytics.detect_horizontal_gene_transfer(client, args.level))
             elif args.command == "wards":
                 _emit(analytics.rank_wards(client, args.window_days))
             elif args.command == "alerts":
                 _emit(alerts.clinical_alerts(client))
+            elif args.command == "stewardship":
+                _emit(analytics.prescribing_by_aware(client))
     except GraphUnavailableError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

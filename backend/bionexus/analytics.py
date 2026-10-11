@@ -17,6 +17,7 @@ from neo4j import ManagedTransaction
 from neo4j.exceptions import ClientError
 from pydantic import BaseModel
 
+from . import ontology
 from .db import GraphClient
 
 log = logging.getLogger(__name__)
@@ -56,6 +57,26 @@ def _typed_isolate_timeline(client: GraphClient) -> dict[tuple[str, str], list[d
 def _days_apart(earlier: datetime, later: datetime) -> int:
     # Whole days, matching Cypher's duration.inDays(...).days for ordered inputs.
     return (later - earlier).days
+
+
+def _linked_runs(rows: list[dict[str, Any]], window_days: int, min_size: int) -> list[list[dict[str, Any]]]:
+    """Split time-sorted rows of one ward and group into linked runs.
+
+    Two isolates are linked when collected no more than ``window_days``
+    apart; a cluster is a connected component of such links. On a
+    time-sorted list those components are exactly the runs with no gap
+    larger than the window.
+    """
+    runs: list[list[dict[str, Any]]] = []
+    run: list[dict[str, Any]] = []
+    for row in rows + [None]:
+        if row is not None and (not run or _days_apart(run[-1]["collected"], row["collected"]) <= window_days):
+            run.append(row)
+            continue
+        if len(run) >= min_size:
+            runs.append(run)
+        run = [row] if row is not None else []
+    return runs
 
 
 class ClusterMember(BaseModel):
@@ -121,8 +142,7 @@ def detect_spatiotemporal_clusters(client: GraphClient, window_days: int = 14, m
     gene variant and were collected no more than ``window_days`` apart. A
     cluster is a connected component of such links, so a chain of isolates
     each within the window of the next forms one cluster even if its total
-    span is longer. On a time-sorted list those components are exactly the
-    runs with no gap larger than the window.
+    span is longer.
     """
     clusters: list[SpatiotemporalCluster] = []
     for rows in _typed_isolate_timeline(client).values():
@@ -130,14 +150,7 @@ def detect_spatiotemporal_clusters(client: GraphClient, window_days: int = 14, m
         for row in rows:
             by_ward[row["ward"]].append(row)
         for ward_rows in by_ward.values():
-            run: list[dict[str, Any]] = []
-            for row in ward_rows + [None]:
-                if row is not None and (not run or _days_apart(run[-1]["collected"], row["collected"]) <= window_days):
-                    run.append(row)
-                    continue
-                if len(run) >= min_size:
-                    clusters.append(_cluster_from_run(run))
-                run = [row] if row is not None else []
+            clusters.extend(_cluster_from_run(run) for run in _linked_runs(ward_rows, window_days, min_size))
     clusters.sort(key=lambda c: (-c.size, c.first_collected, c.ward))
     log.info("found %d spatiotemporal clusters (window %d days)", len(clusters), window_days)
     return clusters
@@ -157,6 +170,112 @@ def _cluster_from_run(run: list[dict[str, Any]]) -> SpatiotemporalCluster:
         last_collected=run[-1]["collected"],
         members=[ClusterMember(isolate_id=r["isolate_id"], patient_id=r["patient_id"], collected=r["collected"]) for r in run],
     )
+
+
+class PhenotypicMember(ClusterMember):
+    sequence_type: str | None = None
+
+
+class PhenotypicCluster(BaseModel):
+    ward: str
+    facility: str | None = None
+    species: str
+    phenotype: str
+    size: int
+    sequenced: int
+    sequence_types: list[str]
+    first_collected: datetime
+    last_collected: datetime
+    members: list[PhenotypicMember]
+
+
+_PHENOTYPE_TIMELINE = f"""
+UNWIND $rules AS rule
+MATCH (p:Patient)-[:HAD_ENCOUNTER]->(e:Encounter)-[:ISOLATED]->(i:Isolate)-[:IDENTIFIED_AS]->(pathogen:Pathogen)
+WHERE pathogen.ncbi_taxid IN rule.taxids
+  AND EXISTS {{ MATCH (i)-[:EXHIBITS {{sir: 'R'}}]->(drug:Antibiotic) WHERE drug.atc_code IN rule.atc_codes }}
+{_ISOLATE_WARD}
+OPTIONAL MATCH (i)-[:BELONGS_TO]->(st:SequenceType)
+RETURN rule.flag AS phenotype, pathogen.species AS species, ward.key AS ward,
+       [(ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility,
+       i.id AS isolate_id, p.id AS patient_id, i.collected AS collected, st.key AS sequence_type
+ORDER BY collected, isolate_id
+"""
+
+
+def detect_phenotypic_clusters(client: GraphClient, window_days: int = 14, min_size: int = 2) -> list[PhenotypicCluster]:
+    """Clusters of one species with the same priority phenotype on one ward.
+
+    Needs only susceptibility results, so it covers the unsequenced majority
+    of isolates. Phenotypes (CRE, CRAB, CRPA, MRSA, VRE) are derived from the
+    results by ``ontology.PRIORITY_PHENOTYPES``. Linking uses the same
+    window rule as the genomic clusters; sequenced members and their
+    sequence types are reported as supporting evidence.
+    """
+    rules = [
+        {"flag": r.flag, "taxids": sorted(r.taxids), "atc_codes": sorted(r.atc_codes)}
+        for r in ontology.PRIORITY_PHENOTYPES
+    ]
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in client.query(_PHENOTYPE_TIMELINE, rules=rules):
+        row["collected"] = row["collected"].to_native()
+        groups[(row["ward"], row["species"], row["phenotype"])].append(row)
+
+    clusters = []
+    for rows in groups.values():
+        for run in _linked_runs(rows, window_days, min_size):
+            types = sorted({r["sequence_type"] for r in run if r["sequence_type"]})
+            clusters.append(
+                PhenotypicCluster(
+                    ward=run[0]["ward"],
+                    facility=run[0]["facility"],
+                    species=run[0]["species"],
+                    phenotype=run[0]["phenotype"],
+                    size=len(run),
+                    sequenced=sum(1 for r in run if r["sequence_type"]),
+                    sequence_types=types,
+                    first_collected=run[0]["collected"],
+                    last_collected=run[-1]["collected"],
+                    members=[
+                        PhenotypicMember(isolate_id=r["isolate_id"], patient_id=r["patient_id"], collected=r["collected"], sequence_type=r["sequence_type"])
+                        for r in run
+                    ],
+                )
+            )
+    clusters.sort(key=lambda c: (-c.size, c.first_collected, c.ward))
+    log.info("found %d phenotypic clusters (window %d days)", len(clusters), window_days)
+    return clusters
+
+
+class PrescribingRow(BaseModel):
+    facility: str | None
+    drug: str
+    atc_code: str
+    aware: Literal["Access", "Watch", "Reserve"] | None
+    encounters: int
+    resistant_encounters: int
+
+
+_PRESCRIBING = """
+MATCH (e:Encounter)-[:TREATED_WITH]->(drug:Antibiotic)
+WITH e, drug,
+     [(e)-[:GENERATED_EVENT]->(:LocationEvent)-[:AT_LOCATION]->(:Ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility,
+     EXISTS { (e)-[:ISOLATED]->(:Isolate)-[:EXHIBITS {sir: 'R'}]->(drug) } AS resistant
+RETURN facility, drug.name AS drug, drug.atc_code AS atc_code, drug.aware AS aware,
+       count(e) AS encounters, sum(CASE WHEN resistant THEN 1 ELSE 0 END) AS resistant_encounters
+ORDER BY facility, encounters DESC, drug
+"""
+
+
+def prescribing_by_aware(client: GraphClient) -> list[PrescribingRow]:
+    """Prescriptions per facility and agent, with the agent's WHO AWaRe group.
+
+    ``resistant_encounters`` counts admissions where an isolate from the
+    same admission tests resistant to the prescribed agent. This reflects
+    prescribing linked to positive cultures, not total antimicrobial
+    consumption (which needs pharmacy data in defined daily doses).
+    """
+    return [PrescribingRow(**row) for row in client.query(_PRESCRIBING)]
 
 
 def detect_horizontal_gene_transfer(client: GraphClient, level: Literal["species", "genus"] = "species") -> list[HorizontalTransferSignal]:

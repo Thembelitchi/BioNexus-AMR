@@ -23,8 +23,9 @@ BACKEND = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BACKEND))
 
 from bionexus import alerts, analytics  # noqa: E402
+from bionexus import ontology  # noqa: E402
 from bionexus.breakpoints import BREAKPOINT_SOURCE  # noqa: E402
-from bionexus.config import Settings, configure_logging  # noqa: E402
+from bionexus.config import Settings, configure_logging, pseudonymiser_for  # noqa: E402
 from bionexus.db import GraphClient  # noqa: E402
 from bionexus.pipeline import ingest  # noqa: E402
 from bionexus.schema import ensure_schema  # noqa: E402
@@ -39,15 +40,16 @@ OPTIONAL MATCH (i)-[bt:BELONGS_TO]->(st:SequenceType)
 WITH p, e, i, pathogen, ward, st, bt,
      [(ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility,
      [(e)-[:TREATED_WITH]->(d:Antibiotic) | d.name] AS treatments,
-     [(i)-[x:EXHIBITS]->(d:Antibiotic) | {{drug: d.name, atc: d.atc_code, sir: x.sir, mic: x.mic, q: x.mic_qualifier}}] AS ast,
+     [(e)-[:TREATED_WITH]->(d:Antibiotic) | d.aware] AS treatmentAware,
+     [(i)-[x:EXHIBITS]->(d:Antibiotic) | {{drug: d.name, atc: d.atc_code, aware: d.aware, sir: x.sir, method: x.method, mic: x.mic, q: x.mic_qualifier, zone: x.zone_mm}}] AS ast,
      [(i)-[c:CARRIES]->(g:Gene) | {{symbol: g.symbol, category: g.category, aro: g.aro_id, carrier: null, context: c.context}}] +
      [(i)-[:CARRIES]->(m:MobileGeneticElement)-[:HARBORS]->(g:Gene) |
         {{symbol: g.symbol, category: g.category, aro: g.aro_id, carrier: m.type + ':' + m.replicon, context: 'mobile'}}] AS genes
-RETURN i.id AS id, p.id AS patient, p.sex AS sex, e.age_years AS age, e.id AS encounter,
+RETURN i.id AS id, p.id AS patient, p.sex AS sex, e.age_years AS age, e.age_band AS ageBand, e.id AS encounter,
        i.collected AS collected, facility, ward.key AS ward, ward.name AS wardName, i.specimen AS specimen,
        pathogen.species AS species, pathogen.ncbi_taxid AS taxid, i.phenotype_labels AS labels,
        i.genotype_status AS genotype, st.key AS st, bt.clone_designation AS clone,
-       treatments, ast, genes
+       treatments, treatmentAware, ast, genes
 ORDER BY collected, id
 """
 
@@ -77,7 +79,7 @@ def verification_summary() -> list[dict]:
     return sections
 
 
-def export(client: GraphClient) -> dict:
+def export(client: GraphClient, pseudonymised: bool) -> dict:
     isolates = []
     for row in client.query(_ISOLATES):
         row["collected"] = _iso(row["collected"])
@@ -94,10 +96,14 @@ def export(client: GraphClient) -> dict:
             "windowDays": WINDOW_DAYS,
             "neo4j": next((v["version"] for v in versions if v["name"] == "Neo4j Kernel"), None),
             "gds": analytics.gds_version(client),
+            "pseudonymised": pseudonymised,
         },
         "facilities": client.query(_FACILITIES),
         "isolates": isolates,
         "clusters": [_dump(c) for c in analytics.detect_spatiotemporal_clusters(client, WINDOW_DAYS)],
+        "phenotypicClusters": [_dump(c) for c in analytics.detect_phenotypic_clusters(client, WINDOW_DAYS)],
+        "phenotypeRules": [{"flag": r.flag, "meaning": r.meaning} for r in ontology.PRIORITY_PHENOTYPES],
+        "prescribing": [_dump(r) for r in analytics.prescribing_by_aware(client)],
         "hgt": {level: [_dump(s) for s in analytics.detect_horizontal_gene_transfer(client, level)] for level in ("species", "genus")},
         "wardNetwork": _dump(analytics.rank_wards(client, WINDOW_DAYS)),
         "alerts": [_dump(a) for a in alerts.clinical_alerts(client)],
@@ -118,11 +124,12 @@ def main() -> int:
         ensure_schema(client)
         if args.load:
             client.write(lambda tx: tx.run("MATCH (n) DETACH DELETE n").consume())
-            report = ingest(client, DEMO / "clinical.csv", DEMO / "genomic.csv", DEMO / "movements.csv")
+            report = ingest(client, DEMO / "clinical.csv", DEMO / "genomic.csv", DEMO / "movements.csv",
+                            pseudonymiser=pseudonymiser_for(settings))
             if report.issues:
                 print(f"demo ingest reported {len(report.issues)} issue(s)", file=sys.stderr)
                 return 1
-        snapshot = export(client)
+        snapshot = export(client, pseudonymised=settings.pseudonymisation_key is not None)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(snapshot, separators=(",", ":")), encoding="utf-8")
     print(f"wrote {args.out} ({args.out.stat().st_size / 1024:.0f} KiB): "

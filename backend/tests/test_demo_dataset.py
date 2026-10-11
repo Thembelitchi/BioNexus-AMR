@@ -19,7 +19,7 @@ from pathlib import Path
 import pytest
 
 from bionexus import ontology
-from bionexus.breakpoints import interpret
+from bionexus.breakpoints import interpret, interpret_disk
 from bionexus.etl import read_csv, transform
 from bionexus.models import parse_mic
 
@@ -53,12 +53,17 @@ def test_dataset_ingests_without_errors_or_warnings():
 
 
 def test_every_category_matches_clsi_2025():
+    """Re-interpret every MIC and every disk zone in the dataset."""
     for row in rows("clinical.csv"):
         organism, _ = ontology.resolve_organism(row["Organism"])
         drug = ontology.resolve_antibiotic(row["Antibiotic"])
-        mic, qualifier = parse_mic(row["MIC"])
         assert row["Guideline"] == "CLSI 2025"
-        assert interpret(organism.ncbi_taxid, drug.amr_code, mic, qualifier) == row["Result"], row
+        assert bool(row["MIC"]) != bool(row["Zone"]), row  # exactly one measurement
+        if row["Zone"]:
+            assert interpret_disk(organism.ncbi_taxid, drug.amr_code, float(row["Zone"])) == row["Result"], row
+        else:
+            mic, qualifier = parse_mic(row["MIC"])
+            assert interpret(organism.ncbi_taxid, drug.amr_code, mic, qualifier) == row["Result"], row
 
 
 GENOTYPE_RULES = [
@@ -253,3 +258,85 @@ def test_ward_network_report_lists_its_edges(loaded_demo):
     assert len(report.links) == report.edges
     assert sum(link.transfers for link in report.links) == report.transfer_links
     assert sum(link.genomic for link in report.links) == report.genomic_links
+
+
+def expected_phenotypic_clusters(window_days: int = 14, min_size: int = 2) -> set:
+    """Independent pure-Python phenotypic cluster detection over the CSVs."""
+    from datetime import datetime
+
+    resistant, context = defaultdict(set), {}
+    for row in rows("clinical.csv"):
+        context[row["SampleID"]] = row
+        if row["Result"] == "R":
+            resistant[row["SampleID"]].add(ontology.resolve_antibiotic(row["Antibiotic"]).atc_code)
+    groups = defaultdict(list)
+    for sample, row in context.items():
+        organism, _ = ontology.resolve_organism(row["Organism"])
+        for rule in ontology.PRIORITY_PHENOTYPES:
+            if organism.ncbi_taxid in rule.taxids and resistant[sample] & rule.atc_codes:
+                groups[(f"{row['Facility']}:{row['Ward']}", organism.species, rule.flag)].append((datetime.fromisoformat(row["Date"]), sample))
+    found = set()
+    for key, items in groups.items():
+        items.sort()
+        run: list = []
+        for when, sample in items + [(None, None)]:
+            if when is not None and (not run or (when - run[-1][0]).days <= window_days):
+                run.append((when, sample))
+                continue
+            if len(run) >= min_size:
+                found.add((*key, frozenset(s for _, s in run)))
+            run = [(when, sample)] if when is not None else []
+    return found
+
+
+@pytest.mark.integration
+def test_phenotypic_clusters_match_independent_computation(loaded_demo):
+    from bionexus import analytics
+
+    clusters = analytics.detect_phenotypic_clusters(loaded_demo)
+    assert {(c.ward, c.species, c.phenotype, frozenset(m.isolate_id for m in c.members)) for c in clusters} == expected_phenotypic_clusters()
+    assert all(c.sequenced == sum(1 for m in c.members if m.sequence_type) for c in clusters)
+
+
+@pytest.mark.integration
+def test_discordance_alerts_match_independent_computation(loaded_demo):
+    from bionexus.alerts import clinical_alerts
+
+    sir = defaultdict(dict)
+    for row in rows("clinical.csv"):
+        sir[row["SampleID"]][row["Antibiotic"]] = row["Result"]
+    genes, sequenced = defaultdict(set), set()
+    for row in rows("genomic.csv"):
+        genes[row["SampleID"]].add(row["GeneDetected"])
+        sequenced.add(row["SampleID"])
+    carbapenemases = {g.symbol for g in ontology.GENES.values() if g.category == "carbapenemase"}
+    porins = {g.symbol for g in ontology.GENES.values() if g.category == "porin"}
+    expected = {
+        "carbapenemase_meropenem_not_r": {s for s in genes if genes[s] & carbapenemases and sir[s].get("Meropenem", "R") != "R"},
+        "unexplained_carbapenem_resistance": {
+            s for s in sequenced
+            if not genes[s] & (carbapenemases | porins) and any(sir[s].get(d) == "R" for d in ("Meropenem", "Imipenem", "Ertapenem"))
+        },
+    }
+    found = defaultdict(set)
+    for alert in clinical_alerts(loaded_demo):
+        found[alert.rule].add(alert.isolate_id)
+    for rule, isolates in expected.items():
+        assert isolates, rule
+        assert found[rule] == isolates, rule
+
+
+@pytest.mark.integration
+def test_stewardship_counts_match_independent_computation(loaded_demo):
+    from bionexus import analytics
+
+    treated, resistant = defaultdict(set), defaultdict(set)
+    for row in rows("clinical.csv"):
+        if row["Treatment"]:
+            treated[row["EncounterID"]].add(row["Treatment"])
+        if row["Result"] == "R":
+            resistant[row["EncounterID"]].add(row["Antibiotic"])
+    report = analytics.prescribing_by_aware(loaded_demo)
+    assert sum(r.encounters for r in report) == sum(len(v) for v in treated.values())
+    assert sum(r.resistant_encounters for r in report) == sum(len(v & resistant[k]) for k, v in treated.items())
+    assert {r.aware for r in report} <= {"Access", "Watch", "Reserve"}

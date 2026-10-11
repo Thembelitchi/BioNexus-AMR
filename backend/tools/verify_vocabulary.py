@@ -35,7 +35,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from bionexus import ontology  # noqa: E402
-from bionexus.breakpoints import BREAKPOINTS, BREAKPOINT_SOURCE  # noqa: E402
+from bionexus.breakpoints import BREAKPOINTS, BREAKPOINT_SOURCE, DISK_BREAKPOINTS  # noqa: E402
 
 NCBI_BUCKET = "https://ncbi-blast-databases.s3.amazonaws.com"
 CARD_OWL = "https://raw.githubusercontent.com/arpcard/aro/master/aro.owl"
@@ -206,14 +206,19 @@ def verify(cache: Path, dataset: Path | None) -> Report:
     for scheme, st in sorted(used_sts):
         rows.append((st in profiles.get(scheme, set()), f"dataset: {scheme} ST{st}", "ST present" if st in profiles.get(scheme, set()) else "ST absent"))
 
-    rows = report.section(f"Breakpoints ({BREAKPOINT_SOURCE})")
-    reference = {}
+    rows = report.section(f"MIC breakpoints ({BREAKPOINT_SOURCE})")
+    reference: dict[tuple[str, str, str], set] = {}
     for r in amr_table(cache, "clinical_breakpoints"):
-        if r["guideline"] == BREAKPOINT_SOURCE and r["method"] == "MIC" and r["type"] == "human" and r["uti"] == "FALSE" and r["breakpoint_S"] and r["breakpoint_R"]:
-            reference.setdefault((r["mo"], r["ab"]), set()).add((float(r["breakpoint_S"]), float(r["breakpoint_R"])))
+        if r["guideline"] == BREAKPOINT_SOURCE and r["type"] == "human" and r["uti"] == "FALSE" and r["breakpoint_S"] and r["breakpoint_R"]:
+            reference.setdefault((r["method"], r["mo"], r["ab"]), set()).add((float(r["breakpoint_S"]), float(r["breakpoint_R"]), r["disk_dose"]))
     for (group, drug), (s, r_) in sorted(BREAKPOINTS.items()):
-        options = reference.get((group, drug), set())
+        options = {(a, b) for a, b, _ in reference.get(("MIC", group, drug), set())}
         rows.append(((s, r_) in options, f"{group} / {drug}: S≤{s:g}, R≥{r_:g}", f"AMR package: {sorted(options) or 'absent'}"))
+
+    rows = report.section(f"Disk diffusion breakpoints ({BREAKPOINT_SOURCE})")
+    for (group, drug), (s, r_, dose) in sorted(DISK_BREAKPOINTS.items()):
+        options = reference.get(("DISK", group, drug), set())
+        rows.append(((s, r_, dose) in options, f"{group} / {drug} {dose}: S≥{s:g} mm, R≤{r_:g} mm", f"AMR package: {sorted(options) or 'absent'}"))
 
     if dataset is not None:
         rows = report.section(f"Dataset coverage ({dataset})")

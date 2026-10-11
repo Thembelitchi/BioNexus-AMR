@@ -9,8 +9,8 @@ transmission hubs.
 
 | Part | Where | What it does |
 |---|---|---|
-| Surveillance dashboard | repository root (Vite + React + D3) | Overview, outbreak timeline, ward and genomic networks, gene-transfer signals, clinical alerts, isolate explorer |
-| Backend | [`backend/`](backend/README.md) (FastAPI + Neo4j + GDS) | Ontology-grounded ingest, analytics and alert rules; REST API and CLI |
+| Surveillance dashboard | repository root (Vite + React + D3) | Overview, outbreak timeline (by lab phenotype or genome), ward and genomic networks, gene-transfer signals, clinical and discordance alerts, WHO AWaRe stewardship, isolate explorer |
+| Backend | [`backend/`](backend/README.md) (FastAPI + Neo4j + GDS) | Ontology-grounded ingest (MIC or disk zones, CLSI 2025; POPIA pseudonymisation), analytics and alert rules; REST API and CLI |
 | Demo dataset | [`backend/data/demo/`](backend/data/demo/README.md) | 600 synthetic patients across four fictional South African hospitals, with eight planted scenarios |
 
 ## Try it: the static demo site
@@ -50,7 +50,8 @@ disposable Neo4j with GDS and export:
 ```bash
 cd backend
 tools/embedded-neo4j/run.sh &        # or: docker compose up neo4j
-NEO4J_USER= python tools/export_site_snapshot.py --load   # wipes that database first
+NEO4J_USER= BIONEXUS_PSEUDONYMISATION_KEY=bionexus-public-demo-key-not-secret \
+  python tools/export_site_snapshot.py --load   # wipes that database first
 cd .. && npm run build:pages
 ```
 

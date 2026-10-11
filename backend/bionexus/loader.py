@@ -42,7 +42,8 @@ MERGE (e:Encounter {id: row.encounter_id})
 MERGE (p)-[:HAD_ENCOUNTER]->(e)
 
 SET p.sex = coalesce(row.sex, p.sex),
-    e.age_years = coalesce(row.age_years, e.age_years)
+    e.age_years = coalesce(row.age_years, e.age_years),
+    e.age_band = coalesce(row.age_band, e.age_band)
 {WARD}MERGE (le:LocationEvent {id: row.location_event_id})
   ON CREATE SET le.timestamp = row.collected, le.source = 'specimen_collection'
 MERGE (e)-[:GENERATED_EVENT]->(le)
@@ -76,13 +77,16 @@ MERGE (i)-[:IDENTIFIED_AS]->(pathogen)
 
 FOREACH (drug IN row.treatments |
   MERGE (ab:Antibiotic {atc_code: drug.atc_code}) ON CREATE SET ab.name = drug.name
+  SET ab.aware = drug.aware
   MERGE (e)-[:TREATED_WITH]->(ab))
 
 FOREACH (test IN row.susceptibility |
   MERGE (ab:Antibiotic {atc_code: test.atc_code}) ON CREATE SET ab.name = test.name
+  SET ab.aware = test.aware
   MERGE (i)-[x:EXHIBITS]->(ab)
-  SET x.sir = test.sir, x.mic = test.mic, x.mic_qualifier = test.mic_qualifier,
-      x.mic_unit = test.mic_unit, x.guideline = test.guideline)
+  SET x.sir = test.sir, x.method = test.method, x.mic = test.mic, x.mic_qualifier = test.mic_qualifier,
+      x.mic_unit = CASE WHEN test.mic IS NULL THEN null ELSE test.mic_unit END,
+      x.zone_mm = test.zone_mm, x.guideline = test.guideline)
 
 FOREACH (st IN CASE WHEN row.sequence_type IS NULL THEN [] ELSE [row.sequence_type] END |
   MERGE (s:SequenceType {key: st.key})

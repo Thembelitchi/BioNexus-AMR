@@ -4,6 +4,8 @@ import logging
 import os
 from dataclasses import dataclass
 
+from .privacy import Pseudonymiser
+
 
 @dataclass(frozen=True)
 class Settings:
@@ -18,6 +20,8 @@ class Settings:
     max_upload_bytes: int = 50 * 1024 * 1024
     cors_origins: tuple[str, ...] = ("http://localhost:3000",)
     log_level: str = "INFO"
+    # When set, patient and encounter IDs are pseudonymised at ingest (POPIA).
+    pseudonymisation_key: str | None = None
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -34,7 +38,12 @@ class Settings:
             max_upload_bytes=int(env.get("BIONEXUS_MAX_UPLOAD_BYTES", cls.max_upload_bytes)),
             cors_origins=tuple(o.strip() for o in env.get("BIONEXUS_CORS_ORIGINS", ",".join(cls.cors_origins)).split(",") if o.strip()),
             log_level=env.get("BIONEXUS_LOG_LEVEL", cls.log_level).upper(),
+            pseudonymisation_key=env.get("BIONEXUS_PSEUDONYMISATION_KEY") or None,
         )
+
+
+def pseudonymiser_for(settings: Settings) -> Pseudonymiser | None:
+    return Pseudonymiser(settings.pseudonymisation_key) if settings.pseudonymisation_key else None
 
 
 def configure_logging(level: str = "INFO") -> None:

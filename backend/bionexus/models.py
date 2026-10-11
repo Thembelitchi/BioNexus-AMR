@@ -122,12 +122,16 @@ class ClinicalRow(_LocatedRow):
     sir: SIR = Field(alias="Result")
     mic: float | None = None
     mic_qualifier: MicQualifier | None = None
+    # Disk diffusion: zone diameter in mm (6 mm = no zone around a 6 mm disk).
+    zone_mm: float | None = Field(default=None, validation_alias=AliasChoices("Zone", "ZoneDiameter", "ZoneMM"), ge=6, le=60)
     guideline: str | None = Field(default=None, alias="Guideline")
     encounter_id: str | None = Field(default=None, alias="EncounterID", pattern=IDENTIFIER_PATTERN)
     admitted: datetime | None = Field(default=None, alias="AdmitDate")
     discharged: datetime | None = Field(default=None, alias="DischargeDate")
     sex: Literal["F", "M", "U"] | None = Field(default=None, alias="Sex")
     age_years: float | None = Field(default=None, alias="AgeYears", ge=0, le=125)
+    # Set by pseudonymisation, which replaces exact ages with bands.
+    age_band: str | None = Field(default=None, alias="AgeBand")
 
     @model_validator(mode="before")
     @classmethod
@@ -252,13 +256,16 @@ class WardRef(_Record):
 class AntibioticNode(_Record):
     atc_code: str = Field(pattern=ontology.ATC_PATTERN.pattern)
     name: str
+    aware: Literal["Access", "Watch", "Reserve"] | None = None
 
 
 class SusceptibilityResult(AntibioticNode):
     sir: SIR
+    method: Literal["MIC", "DISK"] | None = None
     mic: float | None = Field(default=None, ge=0)
     mic_qualifier: MicQualifier | None = None
     mic_unit: Literal["mg/L"] = "mg/L"
+    zone_mm: float | None = None
     guideline: str = "as reported"
 
 
@@ -298,6 +305,7 @@ class IsolateRecord(_Record):
     ward: WardRef
     sex: Literal["F", "M", "U"] | None = None
     age_years: float | None = None
+    age_band: str | None = None
     isolate_id: str
     collected: datetime
     specimen: str
@@ -336,6 +344,7 @@ class IngestIssue(BaseModel):
 
 class IngestReport(BaseModel):
     dry_run: bool
+    pseudonymised: bool = False
     rows_read: dict[str, int]
     rows_rejected: dict[str, int]
     isolates: int

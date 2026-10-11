@@ -93,6 +93,8 @@ class AntibioticRef:
     # Antimicrobial code in the AMR package, used to look up breakpoints.
     amr_code: str
     aliases: tuple[str, ...] = field(default=())
+    # WHO AWaRe group, filled in below from AWARE.
+    aware: str | None = None
 
 
 ATC_PATTERN = re.compile(r"^[A-V]\d{2}[A-Z]{2}\d{2}$")
@@ -125,8 +127,41 @@ _ANTIBIOTICS = (
     AntibioticRef("J01FF01", "Clindamycin", "CLI"),
     AntibioticRef("J04AB02", "Rifampicin", "RIF", ("rifampin",)),
 )
+# WHO AWaRe classification (2023 list), keyed by AMR-package code.
+# Hand-curated: no machine-readable WHO source was reachable when this was
+# written, so confirm against the current WHO AWaRe list before relying on
+# it. Agents we could not place with confidence (rifampicin, cefoxitin) are
+# deliberately left unclassified rather than guessed.
+AWARE: dict[str, str] = {
+    "AMP": "Access",
+    "AMC": "Access",
+    "TZP": "Watch",
+    "CLO": "Access",
+    "OXA": "Access",
+    "CRO": "Watch",
+    "CAZ": "Watch",
+    "CZA": "Reserve",
+    "FEP": "Watch",
+    "ETP": "Watch",
+    "IPM": "Watch",
+    "MEM": "Watch",
+    "AMK": "Access",
+    "GEN": "Access",
+    "CIP": "Watch",
+    "SXT": "Access",
+    "COL": "Reserve",
+    "TGC": "Reserve",
+    "VAN": "Watch",
+    "TEC": "Watch",
+    "LNZ": "Reserve",
+    "ERY": "Watch",
+    "CLI": "Access",
+}
+AWARE_GROUPS = ("Access", "Watch", "Reserve")
+
 ANTIBIOTICS: dict[str, AntibioticRef] = {}
 for _drug in _ANTIBIOTICS:
+    _drug = AntibioticRef(_drug.atc_code, _drug.name, _drug.amr_code, _drug.aliases, AWARE.get(_drug.amr_code))
     for _key in (_drug.name, *_drug.aliases):
         ANTIBIOTICS[_key.lower()] = _drug
 
@@ -136,6 +171,35 @@ def resolve_antibiotic(raw: str) -> AntibioticRef:
     if ref is None:
         raise ValueError(f"antibiotic {raw!r} is not in the ATC vocabulary")
     return ref
+
+
+# --------------------------------------------------------------------------
+# Priority resistance phenotypes (derived from susceptibility results)
+# --------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class PhenotypeRule:
+    """An isolate has ``flag`` when it tests R to any of ``atc_codes``."""
+
+    flag: str
+    meaning: str
+    taxids: frozenset[int]
+    atc_codes: frozenset[str]
+
+
+ENTEROBACTERALES_TAXIDS = frozenset({573, 562, 550})
+CARBAPENEM_ATC = frozenset({"J01DH02", "J01DH51", "J01DH03"})  # meropenem, imipenem, ertapenem
+
+# Defined from results, not from the flag a lab may append to the organism
+# name, so the same definition applies to every laboratory.
+PRIORITY_PHENOTYPES = (
+    PhenotypeRule("CRE", "carbapenem-resistant Enterobacterales", ENTEROBACTERALES_TAXIDS, CARBAPENEM_ATC),
+    PhenotypeRule("CRAB", "carbapenem-resistant Acinetobacter baumannii", frozenset({470}), frozenset({"J01DH02", "J01DH51"})),
+    PhenotypeRule("CRPA", "carbapenem-resistant Pseudomonas aeruginosa", frozenset({287}), frozenset({"J01DH02", "J01DH51"})),
+    PhenotypeRule("MRSA", "methicillin-resistant Staphylococcus aureus", frozenset({1280}), frozenset({"J01CF04", "J01CF02", "J01DC01"})),
+    PhenotypeRule("VRE", "vancomycin-resistant Enterococcus faecium", frozenset({1352}), frozenset({"J01XA01"})),
+)
 
 
 # --------------------------------------------------------------------------

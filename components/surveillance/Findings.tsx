@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
-import { Alert, Isolate, Snapshot, formatDate, formatMic, shortSpecies, wardLabel } from './data';
-import { Card, Chips, FacilityDot, SeverityBadge, SirBadge, StatTile, Table, Tag } from './ui';
+import { Alert, Aware, Isolate, Snapshot, formatAge, formatDate, formatMic, shortSpecies, wardLabel } from './data';
+import { BarList } from './charts';
+import { AwareTag, Card, Chips, FacilityDot, SeverityBadge, SirBadge, StatTile, Table, Tag } from './ui';
 
 // --------------------------------------------------------------------------- gene transfer
 
@@ -46,7 +47,7 @@ export function Alerts({ snapshot, isolates }: { snapshot: Snapshot; isolates: I
   const rules = Object.entries(snapshot.alertRules);
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {rules.map(([key, r]) => (
           <button key={key} onClick={() => setRule(rule === key ? 'all' : key)} className={`text-left rounded-xl ${rule === key ? 'ring-2 ring-accent' : ''}`}>
             <StatTile label={r.title} value={counts(key)} note={<SeverityBadge severity={r.severity} />} />
@@ -154,9 +155,10 @@ function IsolateDetail({ isolate: i }: { isolate: Isolate }) {
       subtitle={<span><i>{i.species}</i> · {i.specimen} · {formatDate(i.collected)}</span>}
     >
       <dl className="grid grid-cols-[7rem_1fr] gap-y-1 text-[13px] mb-4">
-        <dt className="text-ink-2">Patient</dt><dd>{i.patient} · {i.sex ?? '?'} · {i.age === null ? 'age unknown' : i.age < 1 ? `${Math.round(i.age * 365.25)} days` : `${i.age} years`}</dd>
+        <dt className="text-ink-2">Patient</dt><dd><span className="font-mono text-[12px]">{i.patient}</span> · {i.sex ?? '?'} · {formatAge(i)}</dd>
         <dt className="text-ink-2">Ward</dt><dd className="inline-flex items-center gap-1.5"><FacilityDot code={i.facility} />{wardLabel(i.ward)}</dd>
-        <dt className="text-ink-2">Treatment</dt><dd>{i.treatments.join(', ') || '—'}</dd>
+        <dt className="text-ink-2">Treatment</dt>
+        <dd>{i.treatments.length ? i.treatments.map((t, n) => <div key={t} className="flex items-center gap-2">{t} <AwareTag group={i.treatmentAware[n]} /></div>) : '—'}</dd>
         <dt className="text-ink-2">Flags</dt><dd className="flex gap-1 flex-wrap">{i.labels.length ? i.labels.map(l => <Tag key={l}>{l}</Tag>) : '—'}</dd>
         <dt className="text-ink-2">Genotype</dt>
         <dd>
@@ -170,11 +172,12 @@ function IsolateDetail({ isolate: i }: { isolate: Isolate }) {
           )}
         </dd>
       </dl>
-      <Table dense head={['Antimicrobial', 'MIC (mg/L)', 'Result']}>
+      <Table dense head={['Antimicrobial', 'AWaRe', 'Measurement', 'Result']}>
         {i.ast.map(t => (
           <tr key={t.drug} className="border-b border-line last:border-0">
             <td className="px-1 py-1">{t.drug}</td>
-            <td className="px-1 py-1">{formatMic(t)}</td>
+            <td className="px-1 py-1"><AwareTag group={t.aware} /></td>
+            <td className="px-1 py-1 whitespace-nowrap">{formatMic(t)}{t.method === 'DISK' && <span className="text-muted"> disk</span>}</td>
             <td className="px-1 py-1"><SirBadge sir={t.sir} /></td>
           </tr>
         ))}
@@ -217,8 +220,72 @@ export function About({ snapshot }: { snapshot: Snapshot }) {
             <li><b className="text-ink">Static snapshot.</b> Generated {formatDate(m.generatedAt)} by <span className="font-mono text-[12px]">backend/tools/export_site_snapshot.py</span> from Neo4j {m.neo4j} with Graph Data Science {m.gds}. Nothing is computed in the browser except filtering and totals.</li>
             <li><b className="text-ink">Synthetic data.</b> {m.dataset}. Facilities are fictional; do not use for clinical decisions.</li>
             <li><b className="text-ink">Not included here.</b> CSV upload and the AI agent need the backend (and a server-held API key), so they are not part of the static site. Run the full stack with <span className="font-mono text-[12px]">docker compose up</span> in <span className="font-mono text-[12px]">backend/</span>.</li>
-            <li>MICs are interpreted with {m.guideline}; clusters use a {m.windowDays}-day linkage window.</li>
+            <li>MICs and disk zones are interpreted with {m.guideline}; the district hospital laboratory (GDH) reports disk diffusion. Clusters use a {m.windowDays}-day linkage window.</li>
+            <li><b className="text-ink">WHO AWaRe groups</b> are hand-curated from the 2023 list because no machine-readable WHO source was reachable; confirm before relying on them. Rifampicin and cefoxitin are left unclassified.</li>
+            <li><b className="text-ink">Pseudonymisation.</b> {m.pseudonymised ? 'Patient and admission IDs in this snapshot are HMAC-SHA256 pseudonyms made with a public demo key, and ages are bands.' : 'This snapshot was exported without pseudonymisation.'} Real deployments set their own secret key; pseudonymised data is still personal information under POPIA.</li>
           </ul>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+// --------------------------------------------------------------------------- stewardship
+
+const GROUPS: Aware[] = ['Access', 'Watch', 'Reserve'];
+
+export function Stewardship({ snapshot, facility }: { snapshot: Snapshot; facility: string }) {
+  const rows = snapshot.prescribing.filter(r => facility === 'all' || r.facility === facility);
+  const total = rows.reduce((n, r) => n + r.encounters, 0);
+  const byGroup = GROUPS.map(g => {
+    const group = rows.filter(r => r.aware === g);
+    const n = group.reduce((x, r) => x + r.encounters, 0);
+    const resistant = group.reduce((x, r) => x + r.resistant_encounters, 0);
+    return { group: g, n, resistant };
+  });
+  const drugs = new Map<string, { drug: string; aware: Aware | null; n: number; resistant: number }>();
+  rows.forEach(r => {
+    const d = drugs.get(r.drug) ?? { drug: r.drug, aware: r.aware, n: 0, resistant: 0 };
+    d.n += r.encounters;
+    d.resistant += r.resistant_encounters;
+    drugs.set(r.drug, d);
+  });
+  const table = [...drugs.values()].sort((a, b) => b.n - a.n);
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-3">
+        {byGroup.map(g => (
+          <StatTile key={g.group} label={`${g.group} agents`} value={`${total ? Math.round((100 * g.n) / total) : 0}%`}
+            note={<span className="inline-flex items-center gap-2"><AwareTag group={g.group} /> {g.n} of {total} prescriptions</span>} />
+        ))}
+      </div>
+      <div className="grid lg:grid-cols-2 gap-4 items-start">
+        <Card title="Prescribed agent tests resistant" subtitle="Share of prescriptions where an isolate from the same admission tests resistant to that agent">
+          <BarList
+            max={1}
+            items={byGroup.map(g => ({
+              key: g.group,
+              label: <AwareTag group={g.group} />,
+              value: g.n ? g.resistant / g.n : 0,
+              valueLabel: `${g.n ? Math.round((100 * g.resistant) / g.n) : 0}% · ${g.resistant}/${g.n}`,
+              tooltip: <div>{g.resistant} of {g.n} {g.group} prescriptions were to an agent the patient's isolate resisted</div>,
+            }))}
+          />
+          <p className="text-[12px] text-muted mt-3">
+            Counts prescriptions linked to positive cultures, not total antimicrobial consumption, which needs pharmacy data in defined daily doses.
+          </p>
+        </Card>
+        <Card title="Prescriptions by agent" subtitle="WHO AWaRe group (2023 list, hand-curated; see Provenance)">
+          <Table dense head={['Agent', 'AWaRe', 'Prescriptions', 'Isolate resistant']}>
+            {table.map(d => (
+              <tr key={d.drug} className="border-b border-line last:border-0">
+                <td className="px-1 py-1.5">{d.drug}</td>
+                <td className="px-1 py-1.5"><AwareTag group={d.aware} /></td>
+                <td className="px-1 py-1.5">{d.n}</td>
+                <td className="px-1 py-1.5">{d.resistant} <span className="text-muted">({d.n ? Math.round((100 * d.resistant) / d.n) : 0}%)</span></td>
+              </tr>
+            ))}
+          </Table>
         </Card>
       </div>
     </div>

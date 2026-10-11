@@ -2,12 +2,17 @@
 
 export type SIR = 'S' | 'I' | 'SDD' | 'R';
 
+export type Aware = 'Access' | 'Watch' | 'Reserve';
+
 export interface AstResult {
   drug: string;
   atc: string;
+  aware: Aware | null;
   sir: SIR;
+  method: 'MIC' | 'DISK' | null;
   mic: number | null;
   q: '=' | '<' | '<=' | '>' | '>=' | null;
+  zone: number | null;
 }
 
 export interface GeneCall {
@@ -23,6 +28,7 @@ export interface Isolate {
   patient: string;
   sex: 'F' | 'M' | 'U' | null;
   age: number | null;
+  ageBand: string | null;
   encounter: string;
   collected: string;
   facility: string | null;
@@ -36,6 +42,7 @@ export interface Isolate {
   st: string | null;
   clone: string | null;
   treatments: string[];
+  treatmentAware: (Aware | null)[];
   ast: AstResult[];
   genes: GeneCall[];
 }
@@ -51,6 +58,28 @@ export interface Cluster {
   first_collected: string;
   last_collected: string;
   members: { isolate_id: string; patient_id: string; collected: string }[];
+}
+
+export interface PhenotypicCluster {
+  ward: string;
+  facility: string | null;
+  species: string;
+  phenotype: string;
+  size: number;
+  sequenced: number;
+  sequence_types: string[];
+  first_collected: string;
+  last_collected: string;
+  members: { isolate_id: string; patient_id: string; collected: string; sequence_type: string | null }[];
+}
+
+export interface PrescribingRow {
+  facility: string | null;
+  drug: string;
+  atc_code: string;
+  aware: Aware | null;
+  encounters: number;
+  resistant_encounters: number;
 }
 
 export interface HgtSignal {
@@ -111,10 +140,13 @@ export interface Facility {
 }
 
 export interface Snapshot {
-  meta: { title: string; generatedAt: string; dataset: string; guideline: string; windowDays: number; neo4j: string | null; gds: string | null };
+  meta: { title: string; generatedAt: string; dataset: string; guideline: string; windowDays: number; neo4j: string | null; gds: string | null; pseudonymised: boolean };
   facilities: Facility[];
   isolates: Isolate[];
   clusters: Cluster[];
+  phenotypicClusters: PhenotypicCluster[];
+  phenotypeRules: { flag: string; meaning: string }[];
+  prescribing: PrescribingRow[];
   hgt: { species: HgtSignal[]; genus: HgtSignal[] };
   wardNetwork: { window_days: number; edges: number; transfer_links: number; genomic_links: number; wards: WardCentrality[]; links: WardEdge[] };
   alerts: Alert[];
@@ -140,7 +172,16 @@ export const shortSpecies = (species: string) => {
 export const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Africa/Johannesburg' });
 
-export const formatMic = (t: AstResult) => (t.mic === null ? '—' : `${t.q && t.q !== '=' ? t.q : ''}${t.mic}`);
+export const formatMic = (t: AstResult) => {
+  if (t.mic !== null) return `${t.q && t.q !== '=' ? t.q : ''}${t.mic} mg/L`;
+  if (t.zone !== null) return `${t.zone} mm`;
+  return '—';
+};
+
+export const formatAge = (i: Isolate) => {
+  if (i.age !== null) return i.age < 1 ? `${Math.round(i.age * 365.25)} days` : `${i.age} years`;
+  return i.ageBand ?? 'age unknown';
+};
 
 export const monthKey = (iso: string) => {
   const d = new Date(iso);

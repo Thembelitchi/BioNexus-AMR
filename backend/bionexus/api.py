@@ -16,7 +16,7 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
 
 from . import alerts, analytics
-from .config import Settings, configure_logging
+from .config import Settings, configure_logging, pseudonymiser_for
 from .db import GraphClient, GraphUnavailableError
 from .models import IngestReport
 from .pipeline import ingest
@@ -33,6 +33,8 @@ class Health(BaseModel):
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings.from_env()
+    # Fail at startup, not on the first upload, if the key is unusable.
+    pseudonymiser = pseudonymiser_for(settings)
     configure_logging(settings.log_level)
 
     @asynccontextmanager
@@ -87,7 +89,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         files = [await read_upload(upload) for upload in (clinical, genomic, movements)]
         try:
             return await run_in_threadpool(
-                ingest, client, files[0], files[1], files[2], batch_size=settings.batch_size, dry_run=dry_run
+                ingest, client, files[0], files[1], files[2], batch_size=settings.batch_size, dry_run=dry_run,
+                pseudonymiser=pseudonymiser,
             )
         except (UnicodeDecodeError, ValueError) as exc:
             raise HTTPException(422, f"unreadable CSV: {exc}") from exc
@@ -96,6 +99,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def clusters(client: Graph, window_days: WindowDays = 14, min_size: Annotated[int, Query(ge=2)] = 2):
         return analytics.detect_spatiotemporal_clusters(client, window_days, min_size)
 
+    @app.get("/analytics/clusters/phenotypic", response_model=list[analytics.PhenotypicCluster])
+    def phenotypic_clusters(client: Graph, window_days: WindowDays = 14, min_size: Annotated[int, Query(ge=2)] = 2):
+        return analytics.detect_phenotypic_clusters(client, window_days, min_size)
+
     @app.get("/analytics/hgt", response_model=list[analytics.HorizontalTransferSignal])
     def horizontal_gene_transfer(client: Graph, level: Literal["species", "genus"] = "species"):
         return analytics.detect_horizontal_gene_transfer(client, level)
@@ -103,6 +110,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/analytics/wards/centrality", response_model=analytics.WardNetworkReport)
     def ward_centrality(client: Graph, window_days: WindowDays = 14):
         return analytics.rank_wards(client, window_days)
+
+    @app.get("/analytics/stewardship", response_model=list[analytics.PrescribingRow])
+    def stewardship(client: Graph):
+        return analytics.prescribing_by_aware(client)
 
     @app.get("/analytics/alerts", response_model=list[alerts.ClinicalAlert])
     def clinical_alerts(client: Graph):
