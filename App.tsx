@@ -1,12 +1,6 @@
 import React from 'react';
-import Dashboard from './components/Dashboard';
+import SurveillanceApp from './components/surveillance/SurveillanceApp';
 
-const App: React.FC = () => {
-  return (
-    <div className="text-slate-900">
-      <Dashboard />
-    </div>
-  );
-};
+const App: React.FC = () => <SurveillanceApp />;
 
 export default App;

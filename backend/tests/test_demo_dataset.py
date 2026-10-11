@@ -215,3 +215,41 @@ def test_ward_network_spans_facilities(loaded_demo):
     facilities = {w.facility for w in report.wards}
     assert facilities == {"GAH", "GDH", "KRH", "WTH"}
     assert report.transfer_links > 0 and report.genomic_links > 0
+
+
+@pytest.mark.integration
+def test_clinical_alert_rules_match_independent_computation(loaded_demo):
+    from bionexus.alerts import clinical_alerts
+
+    sir, encounter_of, treatments = defaultdict(dict), {}, defaultdict(set)
+    for row in rows("clinical.csv"):
+        sir[row["SampleID"]][row["Antibiotic"]] = row["Result"]
+        encounter_of[row["SampleID"]] = row["EncounterID"]
+        if row["Treatment"]:
+            treatments[row["EncounterID"]].add(row["Treatment"])
+    genes = defaultdict(set)
+    for row in rows("genomic.csv"):
+        genes[row["SampleID"]].add(row["GeneDetected"])
+    carbapenemases = {g.symbol for g in ontology.GENES.values() if g.category == "carbapenemase"}
+    expected = {
+        "stewardship_mismatch": {s for s in sir if any(sir[s].get(t) == "R" for t in treatments[encounter_of[s]])},
+        "carbapenemase_producer": {s for s in genes if genes[s] & carbapenemases},
+        "colistin_resistance": {s for s in sir if sir[s].get("Colistin") == "R" or "mcr-1.1" in genes[s]},
+        "sentinel_gene": {s for s in genes if genes[s] & {"blaKPC-2", "blaKPC-3", "mcr-1.1"}},
+    }
+    found = defaultdict(set)
+    for alert in clinical_alerts(loaded_demo):
+        found[alert.rule].add(alert.isolate_id)
+    for rule, isolates in expected.items():
+        assert isolates, rule
+        assert found[rule] == isolates, rule
+
+
+@pytest.mark.integration
+def test_ward_network_report_lists_its_edges(loaded_demo):
+    from bionexus import analytics
+
+    report = analytics.rank_wards(loaded_demo)
+    assert len(report.links) == report.edges
+    assert sum(link.transfers for link in report.links) == report.transfer_links
+    assert sum(link.genomic for link in report.links) == report.genomic_links

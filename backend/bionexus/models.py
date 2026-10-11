@@ -267,6 +267,7 @@ class GeneCall(_Record):
     name: str
     symbol: str
     mechanism: str
+    category: str
     acquired: bool
     context: Literal["chromosomal", "mobile", "unresolved"]
 

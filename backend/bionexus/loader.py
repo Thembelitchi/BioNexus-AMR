@@ -93,6 +93,7 @@ FOREACH (st IN CASE WHEN row.sequence_type IS NULL THEN [] ELSE [row.sequence_ty
 FOREACH (gene IN row.direct_genes |
   MERGE (g:Gene {aro_id: gene.aro_id})
     ON CREATE SET g.name = gene.name, g.symbol = gene.symbol, g.mechanism = gene.mechanism, g.acquired = gene.acquired
+    SET g.category = gene.category
   MERGE (i)-[c:CARRIES]->(g)
   SET c.context = gene.context)
 
@@ -103,6 +104,7 @@ FOREACH (element IN row.mobile_elements |
   FOREACH (gene IN element.genes |
     MERGE (g:Gene {aro_id: gene.aro_id})
       ON CREATE SET g.name = gene.name, g.symbol = gene.symbol, g.mechanism = gene.mechanism, g.acquired = gene.acquired
+    SET g.category = gene.category
     MERGE (m)-[:HARBORS]->(g)))
 """.replace("{WARD}", _MERGE_WARD)
 

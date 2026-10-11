@@ -15,7 +15,7 @@ from fastapi.responses import JSONResponse
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
 
-from . import analytics
+from . import alerts, analytics
 from .config import Settings, configure_logging
 from .db import GraphClient, GraphUnavailableError
 from .models import IngestReport
@@ -103,6 +103,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/analytics/wards/centrality", response_model=analytics.WardNetworkReport)
     def ward_centrality(client: Graph, window_days: WindowDays = 14):
         return analytics.rank_wards(client, window_days)
+
+    @app.get("/analytics/alerts", response_model=list[alerts.ClinicalAlert])
+    def clinical_alerts(client: Graph):
+        return alerts.clinical_alerts(client)
 
     return app
 

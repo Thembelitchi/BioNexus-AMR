@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from . import analytics
+from . import alerts, analytics
 from .config import Settings, configure_logging
 from .db import GraphClient, GraphUnavailableError
 from .pipeline import ingest
@@ -47,6 +47,8 @@ def main(argv: list[str] | None = None) -> int:
     p_wards = commands.add_parser("wards", help="GDS ward centrality")
     p_wards.add_argument("--window-days", type=int, default=14)
 
+    commands.add_parser("alerts", help="clinical alert rules")
+
     args = parser.parse_args(argv)
     settings = Settings.from_env()
     configure_logging(settings.log_level)
@@ -71,6 +73,8 @@ def main(argv: list[str] | None = None) -> int:
                 _emit(analytics.detect_horizontal_gene_transfer(client, args.level))
             elif args.command == "wards":
                 _emit(analytics.rank_wards(client, args.window_days))
+            elif args.command == "alerts":
+                _emit(alerts.clinical_alerts(client))
     except GraphUnavailableError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

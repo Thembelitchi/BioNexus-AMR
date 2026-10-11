@@ -1,81 +1,64 @@
-# BioNexus AMR 🧬
+# BioNexus AMR
 
-**Revolutionizing Microbial Surveillance through Knowledge Graph Technology and AI Agents.**
+BioNexus AMR is a graph-based intelligence platform for antimicrobial
+resistance (AMR) surveillance, built with South African hospital networks
+in mind. A Neo4j knowledge graph links patients, admissions, wards,
+isolates, pathogens, antibiograms, resistance genes and mobile genetic
+elements, and graph analytics find outbreaks, gene transfer and
+transmission hubs.
 
-BioNexus AMR is an AI-driven, graph-based intelligence platform designed for clinical pathologists, R&D scientists, and medical students. Unlike static dashboards, BioNexus uses a dynamic Knowledge Graph to map relationships between patients, samples, microbes, resistance genes, and treatments, augmented by a "Micro-Brain" AI agent.
+| Part | Where | What it does |
+|---|---|---|
+| Surveillance dashboard | repository root (Vite + React + D3) | Overview, outbreak timeline, ward and genomic networks, gene-transfer signals, clinical alerts, isolate explorer |
+| Backend | [`backend/`](backend/README.md) (FastAPI + Neo4j + GDS) | Ontology-grounded ingest, analytics and alert rules; REST API and CLI |
+| Demo dataset | [`backend/data/demo/`](backend/data/demo/README.md) | 600 synthetic patients across four fictional South African hospitals, with eight planted scenarios |
 
-![BioNexus Dashboard](https://via.placeholder.com/800x400?text=BioNexus+AMR+Dashboard+Preview)
+## Try it: the static demo site
 
-## 🚀 Key Features
+`docs/` holds a static build of the dashboard with a snapshot of the
+backend's output on the demo dataset. GitHub Pages can serve it directly:
 
-### 1. 🕸️ Live Surveillance Knowledge Graph
-- **Interactive Visualization**: Powered by **D3.js**, visualize complex relationships (e.g., `Patient` → `Sample` → `Organism` → `Antibiotic`).
-- **Cluster Detection**: Identify potential outbreaks (e.g., MRSA clusters in ICU) through visual topology.
-- **Deep Dive**: Click any node to see direct neighbors, specific properties, and resistance alerts in a detail panel.
+1. **Settings → Pages → Build and deployment → Source: Deploy from a branch.**
+2. Choose the branch that contains `docs/` and the **`/docs`** folder, then save.
+3. The site appears at `https://<user>.github.io/BioNexus-AMR/`.
 
-### 2. 🤖 BioNexus Micro-Brain Agent
-- **Powered by Google Gemini 1.5 Pro**: Context-aware medical AI orchestrator.
-- **Multimodal Ingestion**: Upload images or PDFs of lab reports; the agent extracts structured JSON data (Patient ID, MIC values, Interpretation).
-- **R&D Scout**: Uses **Google Search Grounding** to find real-time R&D updates, clinical trials, and guidelines (CLSI/EUCAST) when internal data is insufficient.
-- **Text-to-Cypher**: Converts natural language clinical questions into Graph Database queries.
+GitHub Pages needs a public repository, or a paid plan for private ones.
+To preview locally instead:
 
-### 3. 🔬 Smart Clinical Investigation
-- **Context-Aware Logic**: Select an organism (e.g., *Pseudomonas aeruginosa*) and the system automatically filters relevant antibiotics and investigations based on intrinsic resistance rules.
-- **Guideline Guardrails**: Visualizes warnings (e.g., "Intrinsic Resistance") to prevent prescription errors.
-- **Regional Statistics**: Interactive charts visualizing local resistance patterns and risk levels using **Recharts**.
+```bash
+npm install
+npm run build:pages
+python3 -m http.server --directory docs 8080   # open http://localhost:8080
+```
 
-## 🛠️ Technology Stack
+The static site only filters and totals in the browser. Every cluster,
+gene-transfer signal, ward ranking and alert was computed by the backend
+on Neo4j with Graph Data Science and exported to `public/data/snapshot.json`.
+The data is **synthetic** and not for clinical use.
 
-- **Frontend**: React 19, TypeScript
-- **Styling**: Tailwind CSS
-- **Visualization**: D3.js (Force-directed graph), Recharts (Analytics)
-- **AI & Reasoning**: Google GenAI SDK (`@google/genai`)
-- **Icons**: Lucide React
+## Development
 
-## 📦 Setup & Configuration
+```bash
+npm install
+npm run dev          # dashboard on http://localhost:3000 (reads public/data/snapshot.json)
+npm run typecheck
+```
 
-### Prerequisites
-- Node.js (v18+)
-- A valid Google Cloud API Key with access to Gemini models.
+To regenerate the snapshot after changing the backend or dataset, start a
+disposable Neo4j with GDS and export:
 
-### Installation
+```bash
+cd backend
+tools/embedded-neo4j/run.sh &        # or: docker compose up neo4j
+NEO4J_USER= python tools/export_site_snapshot.py --load   # wipes that database first
+cd .. && npm run build:pages
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/bionexus-amr.git
-   cd bionexus-amr
-   ```
+Earlier prototype components (`components/Dashboard.tsx`,
+`AgentInterface.tsx`, `services/geminiService.ts`) are no longer part of
+the build. The Gemini agent needs a server-side API key, so it belongs
+behind the backend rather than in a static page.
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+## License
 
-3. **Environment Setup**
-   The application relies on the `API_KEY` environment variable for the Google Gemini API. Ensure this is set in your build environment or `.env` file.
-
-   ```env
-   API_KEY=your_google_gemini_api_key
-   ```
-
-4. **Run the Application**
-   ```bash
-   npm start
-   ```
-
-## 🖥️ User Guide
-
-### 1. Surveillance Mode
-- **Navigation**: Switch to the "Surveillance Graph" tab.
-- **Interaction**: Drag nodes to rearrange the graph layout. Zoom capabilities are automatic via D3 force simulation.
-- **Inspection**: Click on any node (Patient, Organism, etc.) to view its metadata and list of connected neighbors in the right-hand panel.
-
-### 2. Investigation Mode
-- **Navigation**: Switch to the "Clinical Investigation" tab.
-- **Smart Select**: Use the dropdown to select a detected organism. Observe how the "Antimicrobial Panel" updates to reflect specific drug-bug combinations.
-- **AI Agent**: 
-    - Type questions like *"Show me the latest trials for C. auris"* to trigger a web search.
-    - Click the 📎 **Paperclip icon** to upload a dummy lab report image for analysis.
-
-## 📄 License
-This project is licensed under the MIT License.
+MIT

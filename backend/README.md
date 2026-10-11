@@ -110,6 +110,7 @@ call does not linger. A clinical-only reload keeps existing genomics.
 | `GET /analytics/clusters?window_days=14` / `bionexus clusters` | Isolates in the same ward with the same ST and the same acquired gene variant, collected within the window of each other. A cluster is a connected chain of such links. |
 | `GET /analytics/hgt?level=species\|genus` / `bionexus hgt` | One ARO gene variant found in more than one species or genus, with the wards and replicons involved. |
 | `GET /analytics/wards/centrality` / `bionexus wards` | GDS weighted PageRank, betweenness and weighted degree over a ward network. Edges are patient transfers plus cross-ward genomic links within the window. |
+| `GET /analytics/alerts` / `bionexus alerts` | Clinical alert rules (prescribed agent tests resistant, carbapenemase producer, colistin resistance, sentinel genes); criteria documented in `bionexus/alerts.py`. |
 
 An isolate's ward is the ward of its encounter's latest LocationEvent at or
 before collection time. Clusters and ward link counts come from a single
@@ -135,6 +136,9 @@ the official `neo4j:2026.09.0` image, which bundles the GDS plugin, so no
 plugin download is needed. It has been tested end to end: the healthcheck,
 the API, all analytics, and the full test suite run against the
 containerised database with authentication enabled.
+
+`tools/export_site_snapshot.py` runs all of these against a live
+database and writes the JSON snapshot used by the static dashboard.
 
 ## Tests
 

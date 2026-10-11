@@ -98,12 +98,20 @@ class WardCentrality(BaseModel):
     isolates: int
 
 
+class WardEdge(BaseModel):
+    source: str
+    target: str
+    transfers: int
+    genomic: int
+
+
 class WardNetworkReport(BaseModel):
     window_days: int
     edges: int
     transfer_links: int
     genomic_links: int
     wards: list[WardCentrality]
+    links: list[WardEdge] = []
 
 
 def detect_spatiotemporal_clusters(client: GraphClient, window_days: int = 14, min_size: int = 2) -> list[SpatiotemporalCluster]:
@@ -332,6 +340,10 @@ def rank_wards(client: GraphClient, window_days: int = 14) -> WardNetworkReport:
         transfer_links=sum(transfers.values()),
         genomic_links=sum(genomic.values()),
         wards=wards,
+        links=[
+            WardEdge(source=e["source"], target=e["target"], transfers=transfers[(e["source"], e["target"])], genomic=genomic[(e["source"], e["target"])])
+            for e in edges
+        ],
     )
     log.info("ranked %d wards over %d edges", len(report.wards), report.edges)
     return report

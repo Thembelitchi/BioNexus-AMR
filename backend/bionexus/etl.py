@@ -311,6 +311,7 @@ def _gene_call(gene: ontology.GeneRef, context: str) -> GeneCall:
         name=gene.name,
         symbol=gene.symbol,
         mechanism=gene.mechanism,
+        category=gene.category,
         acquired=gene.acquired,
         context=context,
     )
