@@ -8,10 +8,10 @@ matching in the prototype frontend.
 ## Graph model
 
 ```
-(:Patient {sex})-[:HAD_ENCOUNTER]->(:Encounter {age_years})-[:GENERATED_EVENT]->(:LocationEvent)-[:AT_LOCATION]->(:Ward)-[:PART_OF]->(:Facility {province})
+(:Patient {sex})-[:HAD_ENCOUNTER]->(:Encounter {age_years | age_band})-[:GENERATED_EVENT]->(:LocationEvent)-[:AT_LOCATION]->(:Ward)-[:PART_OF]->(:Facility {province})
 (:Encounter)-[:ISOLATED]->(:Isolate)-[:IDENTIFIED_AS]->(:Pathogen)
-(:Encounter)-[:TREATED_WITH]->(:Antibiotic)
-(:Isolate)-[:EXHIBITS {sir, mic, mic_qualifier, mic_unit, guideline}]->(:Antibiotic)
+(:Encounter)-[:TREATED_WITH]->(:Antibiotic {aware})
+(:Isolate)-[:EXHIBITS {sir, method, mic, mic_qualifier, mic_unit, zone_mm, guideline}]->(:Antibiotic)
 (:Isolate)-[:BELONGS_TO {clone_designation}]->(:SequenceType)
 (:Isolate)-[:CARRIES {context}]->(:Gene)
 (:Isolate)-[:CARRIES]->(:MobileGeneticElement)-[:HARBORS]->(:Gene)
@@ -26,6 +26,9 @@ matching in the prototype frontend.
 | Ward | `key` (`FACILITY:ward`, or the bare ward name without a facility) | source identifiers; ward names repeat across hospitals |
 | Facility | `code` | source identifiers, with name and province |
 | Patient / Encounter / LocationEvent / Isolate / MobileGeneticElement | `id` / `key` | source identifiers |
+
+A diagram of every relationship and its direction, a query cookbook and an
+AMR glossary for developers are in [`graph/MODEL.md`](../graph/MODEL.md).
 
 MIC values are stored as numbers with a separate qualifier (`>16` becomes
 `mic: 16.0, mic_qualifier: ">"`), kept apart from the reported category

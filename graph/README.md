@@ -28,7 +28,7 @@ graph.
 | Gene | 14 | | CARRIES | 224 |
 | MobileGeneticElement | 77 | | HARBORS | 77 |
 
-The graph model is described in [`backend/README.md`](../backend/README.md#graph-model).
+[`MODEL.md`](MODEL.md) explains the model for developers new to knowledge graphs or AMR: every relationship and its direction, design decisions, a query cookbook and a glossary.
 The data is **synthetic** and not for clinical use.
 
 ## Load the dump
