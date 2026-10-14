@@ -62,10 +62,10 @@ export default function Overview({ snapshot, isolates, facilities, onOpen }: {
         <StatTile label="Patients" value={stats.patients.toLocaleString()} note="with a positive culture" />
         <StatTile label="Isolates" value={isolates.length.toLocaleString()} note={`${snapshot.meta.guideline} interpreted`} />
         <StatTile label="Sequenced" value={stats.sequenced.toLocaleString()} note={`${Math.round((100 * stats.sequenced) / Math.max(1, isolates.length))}% of isolates`} />
-        <button onClick={() => onOpen('outbreaks')} className="text-left">
+        <button onClick={() => onOpen('outbreaks')} className="text-left h-full">
           <StatTile label="Outbreak clusters" value={stats.phenotypic} note={`by lab phenotype; ${stats.genomic} confirmed genomically`} />
         </button>
-        <button onClick={() => onOpen('alerts')} className="text-left col-span-2 lg:col-span-1">
+        <button onClick={() => onOpen('alerts')} className="text-left h-full col-span-2 lg:col-span-1">
           <StatTile label="Critical alerts" value={stats.critical} note="colistin resistance, sentinel genes" />
         </button>
       </div>

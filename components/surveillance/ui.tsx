@@ -32,7 +32,7 @@ export function Card({ title, subtitle, actions, children, className = '' }: {
 
 export function StatTile({ label, value, note }: { label: string; value: React.ReactNode; note?: React.ReactNode }) {
   return (
-    <div className="bg-surface border border-line rounded-xl px-4 py-3 min-w-0">
+    <div className="h-full bg-surface border border-line rounded-xl px-4 py-3 min-w-0">
       <div className="text-[12px] text-ink-2">{label}</div>
       <div className="text-[28px] leading-9 font-semibold text-ink mt-1">{value}</div>
       {note && <div className="text-[12px] text-muted mt-0.5">{note}</div>}
