@@ -16,7 +16,7 @@ python tools/generate_demo_dataset.py --seed 2025
 |---|---|
 | Patients | 600 |
 | Isolates | 673 (197 sequenced) |
-| Susceptibility results | 7,391, interpreted with **CLSI 2025**: 6,765 MICs and 626 disk diffusion zones (GDH) |
+| Susceptibility results | 7,391, interpreted with **CLSI 2026**: 6,765 MICs and 626 disk diffusion zones (GDH) |
 | ADT events | 647 admissions and transfers |
 | Facilities | 4 fictional hospitals in Gauteng, KwaZulu-Natal and the Western Cape |
 | Period | 1 July – 31 December 2025 (timestamps in SAST, UTC+02:00) |
@@ -48,7 +48,7 @@ re-checks all of this:
 * **Antimicrobials:** WHO ATC codes.
 * **Sequence types:** every ST used exists in PubMLST, with schemes named as
   the `mlst` tool names them (for example *E. coli* uses the Achtman scheme).
-* **Interpretation:** every S/I/SDD/R follows CLSI M100 2025 MIC or disk
+* **Interpretation:** every S/I/SDD/R follows CLSI M100 2026 MIC or disk
   breakpoints, as distributed in the AMR package. `tests/test_demo_dataset.py`
   re-interprets all 7,391 results.
 

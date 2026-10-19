@@ -10,7 +10,7 @@ transmission hubs.
 | Part | Where | What it does |
 |---|---|---|
 | Surveillance dashboard | repository root (Vite + React + D3) | Overview, outbreak timeline (by lab phenotype or genome), ward and genomic networks, gene-transfer signals, clinical and discordance alerts, WHO AWaRe stewardship, isolate explorer |
-| Backend | [`backend/`](backend/README.md) (FastAPI + Neo4j + GDS) | Ontology-grounded ingest (MIC or disk zones, CLSI 2025; POPIA pseudonymisation), analytics and alert rules; REST API and CLI |
+| Backend | [`backend/`](backend/README.md) (FastAPI + Neo4j + GDS) | Ontology-grounded ingest (MIC or disk zones, CLSI 2026; POPIA pseudonymisation), analytics and alert rules; REST API and CLI |
 | Demo dataset | [`backend/data/demo/`](backend/data/demo/README.md) | 600 synthetic patients across four fictional South African hospitals, with eight planted scenarios |
 | Knowledge graph | [`graph/`](graph/README.md) | The demo graph itself as a Neo4j database dump and a portable Cypher script (3,373 nodes, 13,092 relationships), ready to open in Neo4j Browser |
 

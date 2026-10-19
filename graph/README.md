@@ -9,7 +9,7 @@ graph.
 
 | File | What it is | Use it with |
 |---|---|---|
-| `bionexus-demo.dump` | Neo4j database dump (`neo4j-admin database dump`), about 1 MB | Neo4j **2026.09 or later** (Desktop, server or Docker) |
+| `bionexus-demo.dump` | Neo4j database dump (`neo4j-admin database dump`), about 1.3 MB | Neo4j **2026.09 or later** (Desktop, server or Docker) |
 | `bionexus-demo.cypher` | The same graph as a readable Cypher script: schema, then every node and relationship with all properties | Any Neo4j **5 or later**, including Aura, through `cypher-shell` or the backend's loader |
 
 **Contents:** 3,373 nodes and 13,092 relationships.

@@ -99,12 +99,18 @@ so reloading a file never creates duplicates.
 | LocationEvent | `id` | `timestamp`, `source` (`adt` or `specimen_collection`) | The patient was in a ward at a moment in time | 1,320 |
 | Ward | `key` (`FACILITY:Ward name`) | `name` | A ward; names repeat across hospitals, so the key includes the facility | 17 |
 | Facility | `code` | `name`, `province` | A hospital | 4 |
-| Isolate | `id` | `collected`, `specimen`, `phenotype_labels`, `genotype_status` | One organism grown from one specimen | 673 |
+| Isolate | `id` | `collected`, `specimen`, `screening`, `origin`, `hospital_day`, `phenotype_labels`, `genotype_status` | One organism grown from one specimen | 673 |
 | Pathogen | `ncbi_taxid` | `species`, `genus` | A species, keyed by [NCBI Taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy) ID | 7 |
 | Antibiotic | `atc_code` | `name`, `aware` | An antimicrobial, keyed by WHO ATC code, with its WHO AWaRe group | 24 |
 | SequenceType | `key` (`scheme:STn`) | `scheme`, `st_number` | An MLST sequence type ([PubMLST](https://pubmlst.org/)) | 31 |
 | Gene | `aro_id` | `symbol`, `name`, `category`, `mechanism`, `acquired` | A resistance gene variant, keyed by [CARD ARO](https://card.mcmaster.ca/) accession | 14 |
 | MobileGeneticElement | `key` | `type` (plasmid, integron, transposon), `replicon` | One plasmid, transposon or integron in one isolate | 77 |
+
+`screening` marks colonisation screens such as a rectal CPE swab: they
+count for outbreak detection but not for resistance rates. `origin` is
+`hospital` or `community` by the WHO GLASS rule (more than 2 calendar days
+in hospital at sampling), derived after each ingest; `hospital_day` is the
+day of the admission on which the specimen was taken.
 
 `genotype_status` distinguishes three states that are easy to confuse:
 `not_sequenced`, `no_determinant_detected` (sequenced, nothing found) and
@@ -135,7 +141,7 @@ reference vocabulary. Reference nodes never point back.
 `mic_qualifier` such as `<=` or `>`) when `method = 'MIC'`, or `zone_mm`
 when `method = 'DISK'`. `sir` is the category (S, I, SDD or R), and
 `guideline` names the breakpoint table used to interpret it, such as
-`CLSI 2025`.
+`CLSI 2026`.
 
 ## 5. Design decisions
 
@@ -224,7 +230,9 @@ ORDER BY transfers DESC
 
 **Hospital- or community-origin?** WHO GLASS counts an isolate as
 hospital-origin when the patient had been in hospital more than 2 calendar
-days. Result: 52 of 59 CRE *K. pneumoniae* isolates are hospital-origin.
+days. The loader stores the answer as `Isolate.origin`; this query shows the
+rule itself. Result: 52 of 59 CRE *K. pneumoniae* isolates are
+hospital-origin.
 
 ```cypher
 MATCH (e:Encounter)-[:ISOLATED]->(i:Isolate)-[:IDENTIFIED_AS]->(:Pathogen {species: 'Klebsiella pneumoniae'})
@@ -234,13 +242,14 @@ RETURN CASE WHEN hospital_day > 2 THEN 'hospital origin' ELSE 'community origin'
 ```
 
 **First isolate per patient and species** (the CLSI M39 rule for
-antibiograms), leaving out screening swabs. Result: CRE in 25% of
+antibiograms), leaving out screening swabs. `bionexus resistance` computes
+the same for every priority phenotype. Result: CRE in 25% of
 *K. pneumoniae*, 17% of *E. cloacae* and 7% of *E. coli* patients.
 
 ```cypher
 MATCH (p:Patient)-[:HAD_ENCOUNTER]->(:Encounter)-[:ISOLATED]->(i:Isolate)-[:IDENTIFIED_AS]->(g:Pathogen)
 WHERE g.genus IN ['Klebsiella', 'Escherichia', 'Enterobacter']
-  AND NOT i.specimen STARTS WITH 'Rectal swab'
+  AND NOT i.screening
 WITH g, p, i ORDER BY i.collected
 WITH g, p, collect(i)[0] AS first
 RETURN g.species AS species, count(*) AS patients,
@@ -264,6 +273,7 @@ ranking, alerts, stewardship) are in `backend/bionexus/analytics.py` and
 | Breakpoint | The MIC or zone cut-off that turns a measurement into a category. Published yearly by CLSI and EUCAST | `bionexus/breakpoints.py` |
 | S / I / SDD / R | Susceptible, intermediate, susceptible-dose-dependent, resistant | `EXHIBITS.sir` |
 | CRE, CRAB, CRPA | Carbapenem-resistant Enterobacterales, *A. baumannii*, *P. aeruginosa* | `Isolate.phenotype_labels` |
+| 3GC-R | Third-generation-cephalosporin-resistant Enterobacterales (WHO Critical priority); usually an ESBL producer | outbreak phenotypes, resistance rates |
 | MRSA, VRE, ESBL | Methicillin-resistant *S. aureus*, vancomycin-resistant enterococci, extended-spectrum beta-lactamase producer | `Isolate.phenotype_labels` |
 | Carbapenemase | An enzyme that destroys carbapenems, e.g. OXA-48-like, NDM, KPC | `Gene.category` |
 | MLST / sequence type (ST) | A coarse strain type from seven housekeeping genes; ST307 is a high-risk *K. pneumoniae* clone | `:SequenceType` |

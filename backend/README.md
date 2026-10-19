@@ -46,7 +46,7 @@ Every identifier is checked against its authoritative source by
 | CARD ARO accessions | CARD's `aro.owl` (github.com/arpcard/aro) |
 | WHO ATC codes | the AMR package's antimicrobials table |
 | MLST schemes and STs | PubMLST profiles in the Bioconda `mlst` package |
-| CLSI 2025 MIC breakpoints | the AMR package's clinical_breakpoints table |
+| CLSI 2026 MIC and disk breakpoints | the AMR package's clinical_breakpoints table |
 
 ```bash
 pip install -e ".[verify]"
@@ -86,7 +86,7 @@ ATC code or taxid) are caught.
 plus a measurement, either `MIC` (mg/L) or `Zone` (disk diffusion, mm),
 and optionally `EncounterID, AdmitDate, DischargeDate, Guideline, Facility,
 FacilityName, Province, Sex, AgeYears` (or `AgeBand`).
-When `Guideline` is `CLSI 2025`, each MIC or zone diameter is re-interpreted
+When `Guideline` is `CLSI 2026`, each MIC or zone diameter is re-interpreted
 against the CLSI MIC or disk breakpoint, and a reported category that
 disagrees is flagged as a warning. Each stored result keeps its `method`
 (`MIC` or `DISK`) so the two are never mixed up.
@@ -121,15 +121,20 @@ call does not linger. A clinical-only reload keeps existing genomics.
 
 | Endpoint / CLI | What it computes |
 |---|---|
-| `GET /analytics/clusters/phenotypic?window_days=14` / `bionexus clusters --basis phenotypic` | Outbreak detection without sequencing: isolates of the same species with the same priority laboratory phenotype (CRE, CRAB, CRPA, MRSA, VRE) on one ward, each within the window of the next. Reports how many members were sequenced and their STs. |
+| `GET /analytics/clusters/phenotypic?window_days=14` / `bionexus clusters --basis phenotypic` | Outbreak detection without sequencing: isolates of the same species with the same priority laboratory phenotype on one ward, each within the window of the next. Phenotypes follow the WHO priority pathogens list: CRE, third-generation-cephalosporin-resistant Enterobacterales (3GC-R, counted only when not CRE, and reported from 3 cases because it is endemic), CRAB, CRPA, MRSA and VRE. Reports how many members were sequenced and their STs. |
 | `GET /analytics/clusters?window_days=14` / `bionexus clusters` | Genomic confirmation: isolates in the same ward with the same ST and the same acquired gene variant, collected within the window of each other. A cluster is a connected chain of such links. |
 | `GET /analytics/hgt?level=species\|genus` / `bionexus hgt` | One ARO gene variant found in more than one species or genus, with the wards and replicons involved. |
 | `GET /analytics/wards/centrality` / `bionexus wards` | GDS weighted PageRank, betweenness and weighted degree over a ward network. Edges are patient transfers plus cross-ward genomic links within the window. |
 | `GET /analytics/stewardship` / `bionexus stewardship` | Prescriptions per agent and facility grouped by WHO AWaRe (Access, Watch, Reserve), with how many were given to a patient whose isolate tested resistant to that agent. |
+| `GET /analytics/resistance?facility=GAH` / `bionexus resistance` | Resistance rates by species and priority phenotype, counted as CLSI M39 and WHO GLASS require: the first clinical isolate per patient and species, with colonisation screens (e.g. rectal CPE swabs) left out. |
+| `GET /analytics/notifiable` / `bionexus notifiable` | South African Category 4 notifiable medical conditions found by the laboratory (carbapenemase-producing Enterobacteriaceae, VRE, colistin-resistant *P. aeruginosa* and *A. baumannii*, hGISA/GISA): one case per patient and condition, with its one-month notification due date. Unsequenced carbapenem-resistant Enterobacterales are listed as needing carbapenemase confirmation. Criteria are documented in `bionexus/notifiable.py`. |
 | `GET /analytics/alerts` / `bionexus alerts` | Clinical alert rules: prescribed agent tests resistant, carbapenemase producer, colistin resistance, sentinel genes, and two genotype–phenotype discordance checks (a carbapenemase gene with meropenem not resistant; carbapenem resistance with no carbapenemase found). Criteria are documented in `bionexus/alerts.py`. |
 
 An isolate's ward is the ward of its encounter's latest LocationEvent at or
-before collection time. Clusters and ward link counts come from a single
+before collection time. After every ingest, each isolate also gets its WHO
+GLASS origin: `hospital` when the patient had been in hospital for more than
+2 calendar days at sampling (`hospital_day` > 2), otherwise `community`,
+using the admission time or, failing that, the encounter's first ADT event. Clusters and ward link counts come from a single
 time-sorted pass, so the cost grows roughly linearly with isolates. They were
 checked against brute-force pair enumeration: identical results on 20,000
 isolates, where clusters take 2.5 s and ward ranking 3.2 s.
@@ -177,13 +182,17 @@ centrality and the HTTP API.
 
 ## Known limitations
 
-* Only CLSI 2025 MIC and disk breakpoints are embedded. Rows with another
+* Only CLSI 2026 MIC and disk breakpoints are embedded. Rows with another
   guideline, or none, are stored as reported without re-interpretation.
   EUCAST is available from the same source table if needed.
-* WHO AWaRe groups in `bionexus/ontology.py` are hand-curated from the WHO
-  2023 AWaRe classification for the 25 agents used here; no machine-readable
-  copy of the list could be reached for automatic verification. Agents
-  without a clear WHO group (rifampicin, cefoxitin) are left unclassified.
+* WHO AWaRe groups in `bionexus/ontology.py` are hand-curated for the 25
+  agents used here: checked against the 2023 list and, for cefoxitin and
+  rifampicin (Watch), against excerpts of the 2025 list. No machine-readable
+  copy could be reached for automatic verification, so confirm against the
+  full 2025 list.
+* GLASS also counts a patient transferred in after 2 or more days at another
+  facility as hospital origin. Stays at other facilities are separate
+  encounters here, so that clause is not applied.
 * The original sample data in `data/*.csv` are synthetic and not biologically consistent. For
   example, 20 of the 32 vancomycin-resistant *S. aureus* isolates carry no
   *vanA*, while 28 MRSA isolates do carry *vanA*, which is clinically very

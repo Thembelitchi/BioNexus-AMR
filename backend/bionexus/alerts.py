@@ -91,13 +91,13 @@ WITH *, drug.name + ' prescribed; isolate tests R (' + """ + _MIC_TEXT + """ + '
 """ + _RETURN,
     "carbapenemase_producer": _CONTEXT + """
 MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene {category: 'carbapenemase'})
-WITH p, e, i, pathogen, ward, facility, collect(DISTINCT g.symbol) AS genes
+WITH p, e, i, pathogen, ward, facility, coll.sort(collect(DISTINCT g.symbol)) AS genes
 WITH *, reduce(s = '', x IN genes | s + CASE WHEN s = '' THEN '' ELSE ', ' END + x) AS detail
 """ + _RETURN,
     "colistin_resistance": _CONTEXT + """
 OPTIONAL MATCH (i)-[x:EXHIBITS {sir: 'R'}]->(:Antibiotic {atc_code: $colistin})
 OPTIONAL MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene {category: 'colistin'})
-WITH p, e, i, pathogen, ward, facility, x, collect(DISTINCT g.symbol) AS genes
+WITH p, e, i, pathogen, ward, facility, x, coll.sort(collect(DISTINCT g.symbol)) AS genes
 WHERE x IS NOT NULL OR size(genes) > 0
 WITH *, CASE WHEN x IS NULL THEN 'colistin not tested' ELSE 'colistin R (' + """ + _MIC_TEXT + """ + ')' END +
         CASE WHEN size(genes) > 0 THEN '; ' + genes[0] ELSE '' END AS detail
@@ -105,14 +105,14 @@ WITH *, CASE WHEN x IS NULL THEN 'colistin not tested' ELSE 'colistin R (' + """
     "sentinel_gene": _CONTEXT + """
 MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene)
 WHERE g.symbol IN $sentinels
-WITH p, e, i, pathogen, ward, facility, collect(DISTINCT g.symbol) AS genes
+WITH p, e, i, pathogen, ward, facility, coll.sort(collect(DISTINCT g.symbol)) AS genes
 WITH *, reduce(s = '', x IN genes | s + CASE WHEN s = '' THEN '' ELSE ', ' END + x) AS detail
 """ + _RETURN,
     "carbapenemase_meropenem_not_r": _CONTEXT + """
 MATCH (i)-[x:EXHIBITS]->(:Antibiotic {atc_code: $meropenem})
 WHERE x.sir <> 'R'
 MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene {category: 'carbapenemase'})
-WITH p, e, i, pathogen, ward, facility, x, collect(DISTINCT g.symbol) AS genes
+WITH p, e, i, pathogen, ward, facility, x, coll.sort(collect(DISTINCT g.symbol)) AS genes
 WITH *, reduce(s = '', y IN genes | s + CASE WHEN s = '' THEN '' ELSE ', ' END + y) +
         '; meropenem ' + x.sir + ' (' + """ + _MIC_TEXT + """ + ')' AS detail
 """ + _RETURN,
@@ -121,7 +121,7 @@ WHERE i.genotype_status IN ['determinants_detected', 'no_determinant_detected']
   AND NOT EXISTS { MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene) WHERE g.category IN ['carbapenemase', 'porin'] }
 MATCH (i)-[x:EXHIBITS {sir: 'R'}]->(drug:Antibiotic)
 WHERE drug.atc_code IN $carbapenems
-WITH p, e, i, pathogen, ward, facility, collect(drug.name + ' R') AS results
+WITH p, e, i, pathogen, ward, facility, coll.sort(collect(drug.name + ' R')) AS results
 WITH *, reduce(s = '', y IN results | s + CASE WHEN s = '' THEN '' ELSE ', ' END + y) + '; no carbapenemase or porin mutation found' AS detail
 """ + _RETURN,
 }

@@ -79,8 +79,9 @@ _QUERIES: dict[str, str] = {
     "cpe": _CONTEXT + """
 WHERE pathogen.ncbi_taxid IN $enterobacterales
 OPTIONAL MATCH (i)-[:CARRIES]->()-[:HARBORS*0..1]->(g:Gene {category: 'carbapenemase'})
-WITH p, e, i, pathogen, collect(DISTINCT g.symbol) AS genes,
-     [(i)-[x:EXHIBITS {sir: 'R'}]->(d:Antibiotic) WHERE d.atc_code IN $carbapenems | d.name] AS carbapenems_r
+// Sorted, so the evidence text is the same on every database.
+WITH p, e, i, pathogen, coll.sort(collect(DISTINCT g.symbol)) AS genes,
+     coll.sort([(i)-[:EXHIBITS {sir: 'R'}]->(d:Antibiotic) WHERE d.atc_code IN $carbapenems | d.name]) AS carbapenems_r
 WHERE size(genes) > 0 OR (i.genotype_status = 'not_sequenced' AND size(carbapenems_r) > 0)
 WITH p, e, i, pathogen,
      CASE WHEN size(genes) > 0 THEN 'notify' ELSE 'confirm_carbapenemase' END AS status,
