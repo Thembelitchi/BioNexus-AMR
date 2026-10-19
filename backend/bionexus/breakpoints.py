@@ -1,6 +1,6 @@
 """CLSI MIC and disk-diffusion breakpoints and S/I/SDD/R interpretation.
 
-The table is a subset of CLSI M100 (2025 edition) as distributed in the
+The table is a subset of CLSI M100 (2026, 36th edition) as distributed in the
 ``clinical_breakpoints`` dataset of the AMR package
 (github.com/msberends/AMR), restricted to systemic (non-urinary) human MIC
 breakpoints for the organism groups and drugs in :mod:`bionexus.ontology`.
@@ -19,17 +19,17 @@ from __future__ import annotations
 
 from .models import MicQualifier
 
-BREAKPOINT_SOURCE = "CLSI 2025"
+BREAKPOINT_SOURCE = "CLSI 2026"
 
 # (AMR-package organism group, AMR-package drug code) -> (S <=, R >=), mg/L
 BREAKPOINTS: dict[tuple[str, str], tuple[float, float]] = {
     ("B_ACNTB_BMNN-C", "COL"): (0.0001, 4),
-    ("B_ACNTB", "AMK"): (16, 64),
+    ("B_ACNTB", "AMK"): (8, 32),
     ("B_ACNTB", "CAZ"): (8, 32),
     ("B_ACNTB", "CIP"): (1, 4),
     ("B_ACNTB", "CRO"): (8, 64),
     ("B_ACNTB", "FEP"): (8, 32),
-    ("B_ACNTB", "GEN"): (4, 16),
+    ("B_ACNTB", "GEN"): (2, 8),
     ("B_ACNTB", "IPM"): (2, 8),
     ("B_ACNTB", "MEM"): (2, 8),
     ("B_ACNTB", "SXT"): (2, 4),
@@ -82,12 +82,12 @@ SDD_BREAKPOINTS = frozenset({("B_[ORD]_ENTRBCTR", "FEP"), ("B_[ORD]_ENTRBCTR", "
 
 # (group, drug) -> (S if zone >= , R if zone <= , disk content)
 DISK_BREAKPOINTS: dict[tuple[str, str], tuple[float, float, str]] = {
-    ("B_ACNTB", "AMK"): (17, 14, "30 mcg"),
+    ("B_ACNTB", "AMK"): (20, 16, "30 mcg"),
     ("B_ACNTB", "CAZ"): (18, 14, "30 mcg"),
     ("B_ACNTB", "CIP"): (21, 15, "5 mcg"),
     ("B_ACNTB", "CRO"): (21, 13, "30 mcg"),
     ("B_ACNTB", "FEP"): (18, 14, "30 mcg"),
-    ("B_ACNTB", "GEN"): (15, 12, "10 mcg"),
+    ("B_ACNTB", "GEN"): (19, 13, "10 mcg"),
     ("B_ACNTB", "IPM"): (22, 18, "10 mcg"),
     ("B_ACNTB", "MEM"): (18, 14, "10 mcg"),
     ("B_ACNTB", "SXT"): (16, 10, "1.25/23.75 mcg"),

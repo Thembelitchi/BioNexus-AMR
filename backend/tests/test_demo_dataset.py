@@ -57,7 +57,7 @@ def test_every_category_matches_clsi_2025():
     for row in rows("clinical.csv"):
         organism, _ = ontology.resolve_organism(row["Organism"])
         drug = ontology.resolve_antibiotic(row["Antibiotic"])
-        assert row["Guideline"] == "CLSI 2025"
+        assert row["Guideline"] == "CLSI 2026"
         assert bool(row["MIC"]) != bool(row["Zone"]), row  # exactly one measurement
         if row["Zone"]:
             assert interpret_disk(organism.ncbi_taxid, drug.amr_code, float(row["Zone"])) == row["Result"], row
@@ -264,6 +264,8 @@ def expected_phenotypic_clusters(window_days: int = 14, min_size: int = 2) -> se
     """Independent pure-Python phenotypic cluster detection over the CSVs."""
     from datetime import datetime
 
+    floors = {rule.flag: rule.min_cluster_size for rule in ontology.PRIORITY_PHENOTYPES}
+
     resistant, context = defaultdict(set), {}
     for row in rows("clinical.csv"):
         context[row["SampleID"]] = row
@@ -273,7 +275,7 @@ def expected_phenotypic_clusters(window_days: int = 14, min_size: int = 2) -> se
     for sample, row in context.items():
         organism, _ = ontology.resolve_organism(row["Organism"])
         for rule in ontology.PRIORITY_PHENOTYPES:
-            if organism.ncbi_taxid in rule.taxids and resistant[sample] & rule.atc_codes:
+            if organism.ncbi_taxid in rule.taxids and resistant[sample] & rule.atc_codes and not resistant[sample] & rule.unless:
                 groups[(f"{row['Facility']}:{row['Ward']}", organism.species, rule.flag)].append((datetime.fromisoformat(row["Date"]), sample))
     found = set()
     for key, items in groups.items():
@@ -283,7 +285,7 @@ def expected_phenotypic_clusters(window_days: int = 14, min_size: int = 2) -> se
             if when is not None and (not run or (when - run[-1][0]).days <= window_days):
                 run.append((when, sample))
                 continue
-            if len(run) >= min_size:
+            if len(run) >= max(min_size, floors[key[2]]):
                 found.add((*key, frozenset(s for _, s in run)))
             run = [(when, sample)] if when is not None else []
     return found
@@ -340,3 +342,108 @@ def test_stewardship_counts_match_independent_computation(loaded_demo):
     assert sum(r.encounters for r in report) == sum(len(v) for v in treated.values())
     assert sum(r.resistant_encounters for r in report) == sum(len(v & resistant[k]) for k, v in treated.items())
     assert {r.aware for r in report} <= {"Access", "Watch", "Reserve"}
+
+
+def _samples() -> dict[str, dict]:
+    """First clinical row per sample plus its resistant agents and MICs."""
+    samples: dict[str, dict] = {}
+    for row in rows("clinical.csv"):
+        sample = samples.setdefault(row["SampleID"], {"row": row, "resistant": set(), "mic": {}})
+        atc = ontology.resolve_antibiotic(row["Antibiotic"]).atc_code
+        if row["Result"] == "R":
+            sample["resistant"].add(atc)
+        if row["MIC"]:
+            sample["mic"][atc] = float(row["MIC"].lstrip("<>="))
+    return samples
+
+
+def expected_resistance_rates(facility: str | None = None) -> dict[tuple[str, str], tuple[int, int]]:
+    """CLSI M39 / GLASS rates computed straight from the CSV."""
+    from datetime import datetime
+
+    first: dict[tuple[str, int], dict] = {}
+    for sample in _samples().values():
+        row = sample["row"]
+        if row["Specimen"].startswith("Rectal swab") or (facility and row["Facility"] != facility):
+            continue
+        organism, _ = ontology.resolve_organism(row["Organism"])
+        key = (row["PatientID"], organism.ncbi_taxid)
+        when = (datetime.fromisoformat(row["Date"]), row["SampleID"])
+        if key not in first or when < first[key]["when"]:
+            first[key] = {"when": when, "sample": sample, "organism": organism}
+    counts: dict[tuple[str, str], list[int]] = defaultdict(lambda: [0, 0])
+    for item in first.values():
+        for rule in ontology.PRIORITY_PHENOTYPES:
+            if item["organism"].ncbi_taxid in rule.taxids:
+                cell = counts[(item["organism"].species, rule.flag)]
+                cell[0] += 1
+                cell[1] += bool(item["sample"]["resistant"] & rule.atc_codes)
+    return {key: tuple(value) for key, value in counts.items()}
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize("facility", [None, "GAH", "GDH"])
+def test_resistance_rates_follow_first_isolate_rule(loaded_demo, facility):
+    from bionexus import analytics
+
+    rates = analytics.resistance_rates(loaded_demo, facility=facility)
+    assert {(r.species, r.phenotype): (r.patients, r.resistant) for r in rates} == expected_resistance_rates(facility)
+    assert all(r.percent == round(100 * r.resistant / r.patients, 1) for r in rates)
+
+
+@pytest.mark.integration
+def test_origin_follows_glass_two_calendar_day_rule(loaded_demo):
+    from datetime import date, datetime
+
+    first_adt: dict[str, datetime] = {}
+    for row in rows("movements.csv"):
+        when = datetime.fromisoformat(row["Timestamp"])
+        first_adt[row["EncounterID"]] = min(when, first_adt.get(row["EncounterID"], when))
+    expected = {}
+    for sample in _samples().values():
+        row = sample["row"]
+        admitted = datetime.fromisoformat(row["AdmitDate"]) if row["AdmitDate"] else first_adt.get(row["EncounterID"])
+        if admitted is None:
+            expected[row["SampleID"]] = None
+            continue
+        day = (date.fromisoformat(row["Date"][:10]) - date.fromisoformat(admitted.isoformat()[:10])).days + 1
+        expected[row["SampleID"]] = "hospital" if day > 2 else "community"
+    graph = {r["id"]: r["origin"] for r in loaded_demo.query("MATCH (i:Isolate) RETURN i.id AS id, i.origin AS origin")}
+    assert graph == expected
+    assert set(expected.values()) == {"hospital", "community"}
+
+
+@pytest.mark.integration
+def test_notifiable_cases_match_independent_computation(loaded_demo):
+    from bionexus import notifiable
+
+    genes: dict[str, set[str]] = defaultdict(set)
+    sequenced = set()
+    for row in rows("genomic.csv"):
+        sequenced.add(row["SampleID"])
+        if row["GeneDetected"] != "None":
+            genes[row["SampleID"]].add(ontology.resolve_gene(row["GeneDetected"]).category)
+    candidates: dict[tuple[str, str], list] = defaultdict(list)
+    for sample_id, sample in _samples().items():
+        row = sample["row"]
+        organism, _ = ontology.resolve_organism(row["Organism"])
+        found = []
+        if organism.ncbi_taxid in ontology.ENTEROBACTERALES_TAXIDS:
+            if "carbapenemase" in genes[sample_id]:
+                found.append(("cpe", "notify"))
+            elif sample_id not in sequenced and sample["resistant"] & ontology.CARBAPENEM_ATC:
+                found.append(("cpe", "confirm_carbapenemase"))
+        if organism.genus == "Enterococcus" and "J01XA01" in sample["resistant"]:
+            found.append(("vre", "notify"))
+        if organism.ncbi_taxid in (287, 470) and "J01XB01" in sample["resistant"]:
+            found.append(("colistin_resistant", "notify"))
+        if organism.ncbi_taxid == 1280 and sample["mic"].get("J01XA01", 0) >= 4:
+            found.append(("gisa", "notify"))
+        for condition, status in found:
+            candidates[(condition, row["PatientID"])].append((status != "notify", row["Date"], sample_id, status))
+    expected = {(condition, patient, *min(items)[2:]) for (condition, patient), items in candidates.items()}
+
+    cases = notifiable.notifiable_cases(loaded_demo)
+    assert {(c.condition, c.patient_id, c.isolate_id, c.status) for c in cases} == expected
+    assert {c.condition for c in cases} >= {"cpe", "vre", "colistin_resistant"}
+    assert all(c.due > c.collected.date() for c in cases)

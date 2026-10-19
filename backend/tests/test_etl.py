@@ -129,16 +129,16 @@ def test_conflicting_facility_metadata_is_flagged():
 def test_reported_category_is_checked_against_clsi_breakpoints():
     result = run(
         [
-            clinical_row("S-1", "P-1", KP, Antibiotic="Meropenem", Result="S", MIC=">=16", Guideline="CLSI 2025"),
-            clinical_row("S-1", "P-1", KP, Antibiotic="Cefepime", Result="SDD", MIC="4", Guideline="CLSI 2025"),
-            clinical_row("S-1", "P-1", KP, Antibiotic="Colistin", Result="I", MIC="<=0.5", Guideline="CLSI 2025"),
-            clinical_row("S-1", "P-1", KP, Antibiotic="Ertapenem", Result="S", MIC="4", Guideline="CLSI 2025"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Meropenem", Result="S", MIC=">=16", Guideline="CLSI 2026"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Cefepime", Result="SDD", MIC="4", Guideline="CLSI 2026"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Colistin", Result="I", MIC="<=0.5", Guideline="CLSI 2026"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Ertapenem", Result="S", MIC="4", Guideline="CLSI 2026"),
         ]
     )
     warnings = [issue.message for issue in result.issues if issue.severity == "warning"]
     assert warnings == [
-        "Meropenem reported S but MIC >=16 mg/L reads R under CLSI 2025",
-        "Ertapenem reported S but MIC 4 mg/L reads R under CLSI 2025",
+        "Meropenem reported S but MIC >=16 mg/L reads R under CLSI 2026",
+        "Ertapenem reported S but MIC 4 mg/L reads R under CLSI 2026",
     ]
     assert {t.name: t.sir for t in result.isolates[0].susceptibility}["Cefepime"] == "SDD"
 
@@ -151,14 +151,14 @@ def test_unstated_guideline_is_not_reinterpreted():
 def test_disk_zones_are_stored_and_checked():
     result = run(
         [
-            clinical_row("S-1", "P-1", KP, Antibiotic="Meropenem", Result="R", MIC="", Zone="17", Guideline="CLSI 2025"),
-            clinical_row("S-1", "P-1", KP, Antibiotic="Ertapenem", Result="S", MIC="", Zone="16", Guideline="CLSI 2025"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Meropenem", Result="R", MIC="", Zone="17", Guideline="CLSI 2026"),
+            clinical_row("S-1", "P-1", KP, Antibiotic="Ertapenem", Result="S", MIC="", Zone="16", Guideline="CLSI 2026"),
         ]
     )
     tests = {t.name: t for t in result.isolates[0].susceptibility}
     assert (tests["Meropenem"].method, tests["Meropenem"].zone_mm, tests["Meropenem"].mic) == ("DISK", 17.0, None)
     [warning] = [i.message for i in result.issues]
-    assert warning == "Ertapenem reported S but zone 16 mm reads R under CLSI 2025"
+    assert warning == "Ertapenem reported S but zone 16 mm reads R under CLSI 2026"
 
 
 def test_pseudonymisation_replaces_identifiers_consistently():

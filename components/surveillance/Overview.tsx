@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { BarList, LineChart } from './charts';
-import { FLAG_MEANING, Isolate, KEY_FLAG, Snapshot, shortSpecies } from './data';
+import { Isolate, Snapshot, shortSpecies } from './data';
 import { Card, FACILITY_COLOR, StatTile } from './ui';
 
 const MONTHS = ['2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12'];
@@ -26,17 +26,12 @@ export default function Overview({ snapshot, isolates, facilities, onOpen }: {
     return { patients, sequenced, phenotypic, genomic, critical };
   }, [isolates, snapshot]);
 
-  const resistance = useMemo(() => {
-    const bySpecies = new Map<string, Isolate[]>();
-    isolates.forEach(i => bySpecies.set(i.species, [...(bySpecies.get(i.species) ?? []), i]));
-    return [...bySpecies.entries()]
-      .map(([species, list]) => {
-        const flag = KEY_FLAG[species];
-        const flagged = list.filter(i => i.labels.includes(flag)).length;
-        return { species, flag, flagged, total: list.length, rate: flagged / list.length };
-      })
-      .sort((a, b) => b.rate - a.rate);
-  }, [isolates]);
+  // Rates come from the backend (first clinical isolate per patient and
+  // species, CLSI M39 / WHO GLASS), so repeat cultures and screens cannot skew them.
+  const resistance = useMemo(
+    () => [...(snapshot.resistanceRates[facilities.length === 1 ? facilities[0] : 'all'] ?? [])].sort((a, b) => b.percent - a.percent),
+    [snapshot, facilities],
+  );
 
   const monthly = useMemo(
     () =>
@@ -71,23 +66,23 @@ export default function Overview({ snapshot, isolates, facilities, onOpen }: {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4">
-        <Card title="Key resistance phenotype by organism" subtitle="Share of isolates carrying the laboratory flag clinicians act on">
+        <Card title="Resistance by organism" subtitle="First clinical isolate per patient (CLSI M39, WHO GLASS); screening swabs excluded">
           <BarList
             max={1}
             items={resistance.map(r => ({
-              key: r.species,
+              key: `${r.species}|${r.phenotype}`,
               label: (
                 <span>
-                  <i>{shortSpecies(r.species)}</i> <span className="text-ink-2">{r.flag}</span>
+                  <i>{shortSpecies(r.species)}</i> <span className="text-ink-2">{r.phenotype}</span>
                 </span>
               ),
-              value: r.rate,
-              valueLabel: `${Math.round(r.rate * 100)}% · ${r.flagged}/${r.total}`,
+              value: r.percent / 100,
+              valueLabel: `${Math.round(r.percent)}% · ${r.resistant}/${r.patients}`,
               tooltip: (
                 <div>
                   <div className="font-medium"><i>{r.species}</i></div>
-                  <div className="text-ink-2">{r.flag}: {FLAG_MEANING[r.flag]}</div>
-                  <div className="mt-1 tabular">{r.flagged} of {r.total} isolates</div>
+                  <div className="text-ink-2">{r.phenotype}: {r.meaning}</div>
+                  <div className="mt-1 tabular">{r.resistant} of {r.patients} patients' first clinical isolates</div>
                 </div>
               ),
             }))}

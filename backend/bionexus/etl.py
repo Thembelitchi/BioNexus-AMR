@@ -248,6 +248,7 @@ def _build_isolate(
         isolate_id=sample_id,
         collected=first.collected,
         specimen=first.specimen,
+        screening=ontology.is_screening_specimen(first.specimen),
         ncbi_taxid=first.organism.ncbi_taxid,
         species=first.organism.species,
         genus=first.organism.genus,

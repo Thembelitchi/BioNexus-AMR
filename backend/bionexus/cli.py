@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from . import alerts, analytics
+from . import alerts, analytics, notifiable
 from .config import Settings, configure_logging, pseudonymiser_for
 from .db import GraphClient, GraphUnavailableError
 from .pipeline import ingest
@@ -51,6 +51,9 @@ def main(argv: list[str] | None = None) -> int:
 
     commands.add_parser("alerts", help="clinical alert rules")
     commands.add_parser("stewardship", help="prescribing by WHO AWaRe group")
+    p_resistance = commands.add_parser("resistance", help="first-isolate resistance rates (CLSI M39, WHO GLASS)")
+    p_resistance.add_argument("--facility")
+    commands.add_parser("notifiable", help="South African Category 4 notifiable conditions")
 
     args = parser.parse_args(argv)
     settings = Settings.from_env()
@@ -84,6 +87,10 @@ def main(argv: list[str] | None = None) -> int:
                 _emit(alerts.clinical_alerts(client))
             elif args.command == "stewardship":
                 _emit(analytics.prescribing_by_aware(client))
+            elif args.command == "resistance":
+                _emit(analytics.resistance_rates(client, facility=args.facility))
+            elif args.command == "notifiable":
+                _emit(notifiable.notifiable_cases(client))
     except GraphUnavailableError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

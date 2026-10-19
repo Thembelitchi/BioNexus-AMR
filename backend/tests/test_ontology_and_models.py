@@ -1,3 +1,5 @@
+import itertools
+
 import pytest
 from pydantic import ValidationError
 
@@ -119,15 +121,19 @@ def test_aware_groups():
     groups = {d.name: d.aware for d in set(ontology.ANTIBIOTICS.values())}
     assert {n for n, g in groups.items() if g == "Reserve"} == {"Colistin", "Ceftazidime-avibactam", "Linezolid", "Tigecycline"}
     assert groups["Meropenem"] == "Watch" and groups["Ampicillin"] == "Access"
-    assert {n for n, g in groups.items() if g is None} == {"Cefoxitin", "Rifampicin"}
+    assert groups["Cefoxitin"] == groups["Rifampicin"] == "Watch"
+    assert all(g in ontology.AWARE_GROUPS for g in groups.values())
 
 
-def test_priority_phenotype_rules_cover_distinct_taxa():
-    seen = set()
-    for rule in ontology.PRIORITY_PHENOTYPES:
-        assert not rule.taxids & seen
-        seen |= rule.taxids
-        assert all(ontology.ATC_PATTERN.match(code) for code in rule.atc_codes)
+def test_priority_phenotype_rules_never_flag_one_isolate_twice():
+    rules = ontology.PRIORITY_PHENOTYPES
+    for rule in rules:
+        assert all(ontology.ATC_PATTERN.match(code) for code in rule.atc_codes | rule.unless)
+    for a, b in itertools.combinations(rules, 2):
+        # Rules for the same taxa must be mutually exclusive via ``unless``.
+        if a.taxids & b.taxids:
+            assert a.atc_codes <= b.unless or b.atc_codes <= a.unless, (a.flag, b.flag)
+    assert {r.flag for r in rules} == {"CRE", "3GC-R", "CRAB", "CRPA", "MRSA", "VRE"}
 
 
 def test_pseudonymiser():
@@ -140,3 +146,19 @@ def test_pseudonymiser():
     with pytest.raises(ValueError):
         Pseudonymiser("short")
     assert [age_band(a) for a in (0.01, 0.5, 3, 30, 80, None)] == ["0-27 days", "28 days-<1 year", "1-4 years", "25-34 years", "75+ years", None]
+
+
+def test_screening_specimens():
+    assert ontology.is_screening_specimen("Rectal swab (CPE screen)")
+    assert ontology.is_screening_specimen("MRSA screening nasal swab")
+    assert not ontology.is_screening_specimen("Blood culture")
+    assert not ontology.is_screening_specimen("Pus swab")
+
+
+def test_notification_due_one_month_later():
+    from datetime import date
+
+    from bionexus.notifiable import one_month_after
+
+    assert one_month_after(date(2025, 1, 31)) == date(2025, 2, 28)
+    assert one_month_after(date(2025, 12, 15)) == date(2026, 1, 15)

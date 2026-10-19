@@ -20,7 +20,7 @@ interface Outbreak {
 
 const CARBAPENEMS = ['Ertapenem', 'Meropenem', 'Imipenem'];
 const KEY_TESTS: Record<string, string[]> = {
-  CRE: CARBAPENEMS, CRAB: ['Meropenem', 'Imipenem'], CRPA: ['Meropenem', 'Imipenem'],
+  CRE: CARBAPENEMS, '3GC-R': ['Ceftriaxone', 'Ceftazidime', 'Cefepime'], CRAB: ['Meropenem', 'Imipenem'], CRPA: ['Meropenem', 'Imipenem'],
   MRSA: ['Oxacillin', 'Cefoxitin', 'Vancomycin'], VRE: ['Vancomycin', 'Linezolid'],
 };
 const stNumber = (key: string) => `ST${key.split(':ST')[1]}`;

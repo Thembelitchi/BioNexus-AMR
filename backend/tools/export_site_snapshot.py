@@ -22,7 +22,7 @@ from pathlib import Path
 BACKEND = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BACKEND))
 
-from bionexus import alerts, analytics  # noqa: E402
+from bionexus import alerts, analytics, notifiable  # noqa: E402
 from bionexus import ontology  # noqa: E402
 from bionexus.breakpoints import BREAKPOINT_SOURCE  # noqa: E402
 from bionexus.config import Settings, configure_logging, pseudonymiser_for  # noqa: E402
@@ -46,6 +46,7 @@ WITH p, e, i, pathogen, ward, st, bt,
         {{symbol: g.symbol, category: g.category, aro: g.aro_id, carrier: m.type + ':' + m.replicon, context: 'mobile'}}] AS genes
 RETURN i.id AS id, p.id AS patient, p.sex AS sex, e.age_years AS age, e.age_band AS ageBand, e.id AS encounter,
        i.collected AS collected, facility, ward.key AS ward, ward.name AS wardName, i.specimen AS specimen,
+       coalesce(i.screening, false) AS screening, i.origin AS origin, i.hospital_day AS hospitalDay,
        pathogen.species AS species, pathogen.ncbi_taxid AS taxid, i.phenotype_labels AS labels,
        i.genotype_status AS genotype, st.key AS st, bt.clone_designation AS clone,
        treated, ast, genes
@@ -89,6 +90,7 @@ def export(client: GraphClient, pseudonymised: bool) -> dict:
         row["genes"] = sorted(row["genes"], key=lambda g: g["symbol"])
         isolates.append(row)
     versions = client.query("CALL dbms.components() YIELD name, versions RETURN name, versions[0] AS version")
+    facilities = client.query(_FACILITIES)
     return {
         "meta": {
             "title": "BioNexus AMR surveillance demo",
@@ -100,7 +102,7 @@ def export(client: GraphClient, pseudonymised: bool) -> dict:
             "gds": analytics.gds_version(client),
             "pseudonymised": pseudonymised,
         },
-        "facilities": client.query(_FACILITIES),
+        "facilities": facilities,
         "isolates": isolates,
         "clusters": [_dump(c) for c in analytics.detect_spatiotemporal_clusters(client, WINDOW_DAYS)],
         "phenotypicClusters": [_dump(c) for c in analytics.detect_phenotypic_clusters(client, WINDOW_DAYS)],
@@ -109,6 +111,12 @@ def export(client: GraphClient, pseudonymised: bool) -> dict:
         "hgt": {level: [_dump(s) for s in analytics.detect_horizontal_gene_transfer(client, level)] for level in ("species", "genus")},
         "wardNetwork": _dump(analytics.rank_wards(client, WINDOW_DAYS)),
         "alerts": [_dump(a) for a in alerts.clinical_alerts(client)],
+        "resistanceRates": {
+            key: [_dump(r) for r in analytics.resistance_rates(client, facility=code)]
+            for key, code in [("all", None), *((f["code"], f["code"]) for f in facilities)]
+        },
+        "notifiable": [_dump(c) for c in notifiable.notifiable_cases(client)],
+        "notifiableConditions": notifiable.CONDITIONS,
         "alertRules": {rule: {"severity": sev, "title": title} for rule, (sev, title) in alerts.RULES.items()},
         "scenarios": json.loads((DEMO / "scenarios.json").read_text(encoding="utf-8")),
         "verification": verification_summary(),

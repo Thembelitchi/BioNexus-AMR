@@ -52,6 +52,7 @@ MERGE (le)-[:AT_LOCATION]->(w)
 MERGE (i:Isolate {id: row.isolate_id})
   SET i.collected = row.collected,
       i.specimen = row.specimen,
+      i.screening = row.screening,
       i.phenotype_labels = row.phenotype_labels,
       // A clinical-only re-ingest must not erase an earlier genomic result.
       i.genotype_status = CASE
@@ -151,3 +152,30 @@ def load_isolates(client: GraphClient, records: Sequence[IsolateRecord], batch_s
 
 def load_movements(client: GraphClient, records: Sequence[MovementRecord], batch_size: int = 500) -> int:
     return _load(client, UPSERT_MOVEMENTS, records, "movements", batch_size)
+
+
+# WHO GLASS origin of infection: hospital origin when the patient had been in
+# hospital for more than 2 calendar days at sampling (admission day = day 1),
+# community origin otherwise. Admission is the encounter's admit time, else
+# its earliest ADT event; with neither, origin stays unknown (null). GLASS
+# also counts a transfer from another facility after 2+ days there as
+# hospital origin; inter-facility stays are separate encounters here, so that
+# clause is not applied.
+DERIVE_ORIGIN = """
+MATCH (e:Encounter)-[:ISOLATED]->(i:Isolate)
+CALL (e) {
+  OPTIONAL MATCH (e)-[:GENERATED_EVENT]->(le:LocationEvent {source: 'adt'})
+  RETURN coalesce(e.admitted, min(le.timestamp)) AS admitted
+}
+WITH i, CASE WHEN admitted IS NULL THEN null
+             ELSE duration.inDays(date(admitted), date(i.collected)).days + 1 END AS hospital_day
+SET i.hospital_day = hospital_day,
+    i.origin = CASE WHEN hospital_day IS NULL THEN null
+                    WHEN hospital_day > 2 THEN 'hospital'
+                    ELSE 'community' END
+"""
+
+
+def derive_isolate_origin(client: GraphClient) -> None:
+    """Set ``Isolate.origin`` and ``hospital_day`` from the loaded admissions."""
+    client.write(lambda tx: tx.run(DERIVE_ORIGIN).consume())

@@ -309,6 +309,7 @@ class IsolateRecord(_Record):
     isolate_id: str
     collected: datetime
     specimen: str
+    screening: bool = False
     ncbi_taxid: int
     species: str
     genus: str

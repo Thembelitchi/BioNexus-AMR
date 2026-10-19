@@ -7,7 +7,7 @@ from pathlib import Path
 
 from .db import GraphClient
 from .etl import read_csv, transform
-from .loader import load_isolates, load_movements
+from .loader import derive_isolate_origin, load_isolates, load_movements
 from .models import IngestReport
 from .privacy import Pseudonymiser
 
@@ -38,6 +38,7 @@ def ingest(
             raise ValueError("a graph client is required unless dry_run is set")
         load_isolates(client, result.isolates, batch_size)
         load_movements(client, result.movements, batch_size)
+        derive_isolate_origin(client)
     report = IngestReport(
         dry_run=dry_run,
         pseudonymised=pseudonymiser is not None,

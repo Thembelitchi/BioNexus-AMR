@@ -194,6 +194,7 @@ UNWIND $rules AS rule
 MATCH (p:Patient)-[:HAD_ENCOUNTER]->(e:Encounter)-[:ISOLATED]->(i:Isolate)-[:IDENTIFIED_AS]->(pathogen:Pathogen)
 WHERE pathogen.ncbi_taxid IN rule.taxids
   AND EXISTS {{ MATCH (i)-[:EXHIBITS {{sir: 'R'}}]->(drug:Antibiotic) WHERE drug.atc_code IN rule.atc_codes }}
+  AND NOT EXISTS {{ MATCH (i)-[:EXHIBITS {{sir: 'R'}}]->(drug:Antibiotic) WHERE drug.atc_code IN rule.unless }}
 {_ISOLATE_WARD}
 OPTIONAL MATCH (i)-[:BELONGS_TO]->(st:SequenceType)
 RETURN rule.flag AS phenotype, pathogen.species AS species, ward.key AS ward,
@@ -207,13 +208,15 @@ def detect_phenotypic_clusters(client: GraphClient, window_days: int = 14, min_s
     """Clusters of one species with the same priority phenotype on one ward.
 
     Needs only susceptibility results, so it covers the unsequenced majority
-    of isolates. Phenotypes (CRE, CRAB, CRPA, MRSA, VRE) are derived from the
+    of isolates. Phenotypes (CRE, 3GC-R, CRAB, CRPA, MRSA, VRE) are derived from the
     results by ``ontology.PRIORITY_PHENOTYPES``. Linking uses the same
     window rule as the genomic clusters; sequenced members and their
-    sequence types are reported as supporting evidence.
+    sequence types are reported as supporting evidence. A cluster needs at
+    least ``min_size`` members, or the rule's own ``min_cluster_size`` if
+    larger.
     """
     rules = [
-        {"flag": r.flag, "taxids": sorted(r.taxids), "atc_codes": sorted(r.atc_codes)}
+        {"flag": r.flag, "taxids": sorted(r.taxids), "atc_codes": sorted(r.atc_codes), "unless": sorted(r.unless)}
         for r in ontology.PRIORITY_PHENOTYPES
     ]
     groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
@@ -221,9 +224,10 @@ def detect_phenotypic_clusters(client: GraphClient, window_days: int = 14, min_s
         row["collected"] = row["collected"].to_native()
         groups[(row["ward"], row["species"], row["phenotype"])].append(row)
 
+    floor = {r.flag: max(min_size, r.min_cluster_size) for r in ontology.PRIORITY_PHENOTYPES}
     clusters = []
-    for rows in groups.values():
-        for run in _linked_runs(rows, window_days, min_size):
+    for (_, _, phenotype), rows in groups.items():
+        for run in _linked_runs(rows, window_days, floor[phenotype]):
             types = sorted({r["sequence_type"] for r in run if r["sequence_type"]})
             clusters.append(
                 PhenotypicCluster(
@@ -245,6 +249,69 @@ def detect_phenotypic_clusters(client: GraphClient, window_days: int = 14, min_s
     clusters.sort(key=lambda c: (-c.size, c.first_collected, c.ward))
     log.info("found %d phenotypic clusters (window %d days)", len(clusters), window_days)
     return clusters
+
+
+class ResistanceRate(BaseModel):
+    species: str
+    phenotype: str
+    meaning: str
+    patients: int
+    resistant: int
+    percent: float
+
+
+# One first clinical isolate per patient and species, in the period and (when
+# given) at the facility where it was collected. Screens are left out.
+_FIRST_CLINICAL_ISOLATES = f"""
+MATCH (p:Patient)-[:HAD_ENCOUNTER]->(e:Encounter)-[:ISOLATED]->(i:Isolate)-[:IDENTIFIED_AS]->(pathogen:Pathogen)
+WHERE NOT coalesce(i.screening, false)
+  AND ($start IS NULL OR i.collected >= $start) AND ($end IS NULL OR i.collected < $end)
+{_ISOLATE_WARD}
+WITH p, pathogen, i, [(ward)-[:PART_OF]->(f:Facility) | f.code][0] AS facility
+WHERE $facility IS NULL OR facility = $facility
+WITH p, pathogen, i ORDER BY i.collected, i.id
+WITH p, pathogen, collect(i)[0] AS first
+UNWIND $rules AS rule
+WITH p, pathogen, first, rule WHERE pathogen.ncbi_taxid IN rule.taxids
+RETURN pathogen.species AS species, rule.flag AS phenotype, count(*) AS patients,
+       sum(CASE WHEN EXISTS {{ MATCH (first)-[:EXHIBITS {{sir: 'R'}}]->(d:Antibiotic) WHERE d.atc_code IN rule.atc_codes }}
+                THEN 1 ELSE 0 END) AS resistant
+ORDER BY species, phenotype
+"""
+
+
+def resistance_rates(
+    client: GraphClient,
+    facility: str | None = None,
+    start: datetime | None = None,
+    end: datetime | None = None,
+) -> list[ResistanceRate]:
+    """Percentage of patients whose first clinical isolate has each priority phenotype.
+
+    Follows the CLSI M39 cumulative-antibiogram and WHO GLASS counting rules:
+    the first isolate per patient and species in the period, colonisation
+    screens excluded, so repeat cultures from one patient cannot skew a rate.
+    Phenotypes come from ``ontology.PRIORITY_PHENOTYPES``; a rule's
+    ``unless`` is ignored here, so the 3GC-R rate includes carbapenem-
+    resistant isolates, as WHO reports it.
+    """
+    rules = [
+        {"flag": r.flag, "taxids": sorted(r.taxids), "atc_codes": sorted(r.atc_codes)}
+        for r in ontology.PRIORITY_PHENOTYPES
+    ]
+    meanings = {r.flag: r.meaning.split(" (")[0] for r in ontology.PRIORITY_PHENOTYPES}
+    rows = client.query(_FIRST_CLINICAL_ISOLATES, rules=rules, facility=facility, start=start, end=end)
+    return [
+        ResistanceRate(
+            species=row["species"],
+            phenotype=row["phenotype"],
+            meaning=meanings[row["phenotype"]],
+            patients=row["patients"],
+            resistant=row["resistant"],
+            percent=round(100 * row["resistant"] / row["patients"], 1),
+        )
+        for row in rows
+    ]
 
 
 class PrescribingRow(BaseModel):

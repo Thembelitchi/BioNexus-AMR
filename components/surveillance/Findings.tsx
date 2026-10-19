@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
-import { Alert, Aware, Isolate, Snapshot, formatAge, formatDate, formatMic, shortSpecies, wardLabel } from './data';
+import { Alert, Aware, Isolate, Snapshot, formatAge, formatDate, formatMic, formatOrigin, shortSpecies, wardLabel } from './data';
 import { BarList } from './charts';
 import { AwareTag, Card, Chips, FacilityDot, SeverityBadge, SirBadge, StatTile, Table, Tag } from './ui';
 
@@ -65,7 +65,44 @@ export function Alerts({ snapshot, isolates }: { snapshot: Snapshot; isolates: I
         <AlertTable alerts={shown.slice(0, limit)} />
         <ShowMore shown={Math.min(limit, shown.length)} total={shown.length} onMore={() => setLimit(l => l + 40)} />
       </Card>
+      <Notifiable snapshot={snapshot} visible={visible} />
     </div>
+  );
+}
+
+function Notifiable({ snapshot, visible }: { snapshot: Snapshot; visible: Set<string> }) {
+  const cases = snapshot.notifiable.filter(c => visible.has(c.isolate_id));
+  const [condition, setCondition] = useState<string>('all');
+  const [limit, setLimit] = useState(20);
+  const shown = condition === 'all' ? cases : cases.filter(c => c.condition === condition);
+  const conditions = Object.entries(snapshot.notifiableConditions);
+  return (
+    <Card
+      title="Notifiable medical conditions"
+      subtitle="South African Category 4 conditions laboratories must notify within one month. One case per patient and condition, dated by the first qualifying isolate."
+      actions={
+        <Chips label="Condition" value={condition} onChange={setCondition}
+          options={[{ value: 'all', label: 'All', count: cases.length }, ...conditions.map(([key, title]) => ({ value: key, label: title.split(' (')[0], count: cases.filter(c => c.condition === key).length }))]} />
+      }
+    >
+      <Table head={['Condition', 'Patient', 'Isolate', 'Ward', 'Collected', 'Notify by', 'Evidence']}>
+        {shown.slice(0, limit).map(c => (
+          <tr key={`${c.condition}|${c.patient_id}`} className="border-b border-line last:border-0 align-top">
+            <td className="px-1 py-1.5">
+              {c.title}
+              {c.status === 'confirm_carbapenemase' && <div className="mt-0.5"><Tag color="var(--status-warning)">Confirm carbapenemase first</Tag></div>}
+            </td>
+            <td className="px-1 py-1.5 font-mono text-[12px]">{c.patient_id}</td>
+            <td className="px-1 py-1.5 font-mono text-[12px]">{c.isolate_id}</td>
+            <td className="px-1 py-1.5 whitespace-nowrap"><span className="inline-flex items-center gap-1.5"><FacilityDot code={c.facility} />{wardLabel(c.ward)}</span></td>
+            <td className="px-1 py-1.5 whitespace-nowrap">{formatDate(c.collected)}</td>
+            <td className="px-1 py-1.5 whitespace-nowrap">{formatDate(`${c.due}T12:00:00+02:00`)}</td>
+            <td className="px-1 py-1.5 text-ink-2">{c.evidence}</td>
+          </tr>
+        ))}
+      </Table>
+      <ShowMore shown={Math.min(limit, shown.length)} total={shown.length} onMore={() => setLimit(l => l + 20)} />
+    </Card>
   );
 }
 
@@ -157,6 +194,7 @@ function IsolateDetail({ isolate: i }: { isolate: Isolate }) {
       <dl className="grid grid-cols-[7rem_1fr] gap-y-1 text-[13px] mb-4">
         <dt className="text-ink-2">Patient</dt><dd><span className="font-mono text-[12px]">{i.patient}</span> · {i.sex ?? '?'} · {formatAge(i)}</dd>
         <dt className="text-ink-2">Ward</dt><dd className="inline-flex items-center gap-1.5"><FacilityDot code={i.facility} />{wardLabel(i.ward)}</dd>
+        <dt className="text-ink-2">Origin</dt><dd>{formatOrigin(i)}{i.screening && <> · <Tag>Screening swab</Tag></>}</dd>
         <dt className="text-ink-2">Treatment</dt>
         <dd>{i.treatments.length ? i.treatments.map((t, n) => <div key={t} className="flex items-center gap-2">{t} <AwareTag group={i.treatmentAware[n]} /></div>) : '—'}</dd>
         <dt className="text-ink-2">Flags</dt><dd className="flex gap-1 flex-wrap">{i.labels.length ? i.labels.map(l => <Tag key={l}>{l}</Tag>) : '—'}</dd>
@@ -221,7 +259,8 @@ export function About({ snapshot }: { snapshot: Snapshot }) {
             <li><b className="text-ink">Synthetic data.</b> {m.dataset}. Facilities are fictional; do not use for clinical decisions.</li>
             <li><b className="text-ink">Not included here.</b> CSV upload and the AI agent need the backend (and a server-held API key), so they are not part of the static site. Run the full stack with <span className="font-mono text-[12px]">docker compose up</span> in <span className="font-mono text-[12px]">backend/</span>.</li>
             <li>MICs and disk zones are interpreted with {m.guideline}; the district hospital laboratory (GDH) reports disk diffusion. Clusters use a {m.windowDays}-day linkage window.</li>
-            <li><b className="text-ink">WHO AWaRe groups</b> are hand-curated from the 2023 list because no machine-readable WHO source was reachable; confirm before relying on them. Rifampicin and cefoxitin are left unclassified.</li>
+            <li><b className="text-ink">WHO AWaRe groups</b> are hand-curated: checked against the 2023 list and, for cefoxitin and rifampicin, excerpts of the 2025 list, because no machine-readable WHO source was reachable. Confirm against the full 2025 list before relying on them.</li>
+            <li><b className="text-ink">Counting rules.</b> Resistance rates use the first clinical isolate per patient and species (CLSI M39, WHO GLASS) and leave out screening swabs. Origin follows GLASS: hospital origin after more than 2 calendar days in hospital.</li>
             <li><b className="text-ink">Pseudonymisation.</b> {m.pseudonymised ? 'Patient and admission IDs in this snapshot are HMAC-SHA256 pseudonyms made with a public demo key, and ages are bands.' : 'This snapshot was exported without pseudonymisation.'} Real deployments set their own secret key; pseudonymised data is still personal information under POPIA.</li>
           </ul>
         </Card>
@@ -275,7 +314,7 @@ export function Stewardship({ snapshot, facility }: { snapshot: Snapshot; facili
             Counts prescriptions linked to positive cultures, not total antimicrobial consumption, which needs pharmacy data in defined daily doses.
           </p>
         </Card>
-        <Card title="Prescriptions by agent" subtitle="WHO AWaRe group (2023 list, hand-curated; see Provenance)">
+        <Card title="Prescriptions by agent" subtitle="WHO AWaRe group (hand-curated; see Provenance)">
           <Table dense head={['Agent', 'AWaRe', 'Prescriptions', 'Isolate resistant']}>
             {table.map(d => (
               <tr key={d.drug} className="border-b border-line last:border-0">

@@ -15,7 +15,7 @@ from fastapi.responses import JSONResponse
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
 
-from . import alerts, analytics
+from . import alerts, analytics, notifiable
 from .config import Settings, configure_logging, pseudonymiser_for
 from .db import GraphClient, GraphUnavailableError
 from .models import IngestReport
@@ -118,6 +118,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/analytics/alerts", response_model=list[alerts.ClinicalAlert])
     def clinical_alerts(client: Graph):
         return alerts.clinical_alerts(client)
+
+    @app.get("/analytics/resistance", response_model=list[analytics.ResistanceRate])
+    def resistance_rates(client: Graph, facility: str | None = None):
+        return analytics.resistance_rates(client, facility=facility)
+
+    @app.get("/analytics/notifiable", response_model=list[notifiable.NotifiableCase])
+    def notifiable_cases(client: Graph):
+        return notifiable.notifiable_cases(client)
 
     return app
 

@@ -1,6 +1,6 @@
 # Vocabulary verification report
 
-## NCBI Taxonomy IDs (NCBI taxdb release 2026-10-06-01-05-02) (7/7 verified)
+## NCBI Taxonomy IDs (NCBI taxdb release 2026-10-10-01-05-01) (7/7 verified)
 
 | | Entry | Evidence |
 |---|---|---|
@@ -121,16 +121,16 @@
 | ✅ | dataset: saureus ST239 | ST present |
 | ✅ | dataset: saureus ST612 | ST present |
 
-## MIC breakpoints (CLSI 2025) (53/53 verified)
+## MIC breakpoints (CLSI 2026) (53/53 verified)
 
 | | Entry | Evidence |
 |---|---|---|
-| ✅ | B_ACNTB / AMK: S≤16, R≥64 | AMR package: [(16.0, 64.0)] |
+| ✅ | B_ACNTB / AMK: S≤8, R≥32 | AMR package: [(8.0, 32.0)] |
 | ✅ | B_ACNTB / CAZ: S≤8, R≥32 | AMR package: [(8.0, 32.0)] |
 | ✅ | B_ACNTB / CIP: S≤1, R≥4 | AMR package: [(1.0, 4.0)] |
 | ✅ | B_ACNTB / CRO: S≤8, R≥64 | AMR package: [(8.0, 64.0)] |
 | ✅ | B_ACNTB / FEP: S≤8, R≥32 | AMR package: [(8.0, 32.0)] |
-| ✅ | B_ACNTB / GEN: S≤4, R≥16 | AMR package: [(4.0, 16.0)] |
+| ✅ | B_ACNTB / GEN: S≤2, R≥8 | AMR package: [(2.0, 8.0)] |
 | ✅ | B_ACNTB / IPM: S≤2, R≥8 | AMR package: [(2.0, 8.0)] |
 | ✅ | B_ACNTB / MEM: S≤2, R≥8 | AMR package: [(2.0, 8.0)] |
 | ✅ | B_ACNTB / SXT: S≤2, R≥4 | AMR package: [(2.0, 4.0)] |
@@ -179,16 +179,16 @@
 | ✅ | B_[ORD]_ENTRBCTR / TGC: S≤2, R≥8 | AMR package: [(2.0, 8.0)] |
 | ✅ | B_[ORD]_ENTRBCTR / TZP: S≤8, R≥32 | AMR package: [(8.0, 32.0)] |
 
-## Disk diffusion breakpoints (CLSI 2025) (47/47 verified)
+## Disk diffusion breakpoints (CLSI 2026) (47/47 verified)
 
 | | Entry | Evidence |
 |---|---|---|
-| ✅ | B_ACNTB / AMK 30 mcg: S≥17 mm, R≤14 mm | AMR package: [(17.0, 14.0, '30 mcg')] |
+| ✅ | B_ACNTB / AMK 30 mcg: S≥20 mm, R≤16 mm | AMR package: [(20.0, 16.0, '30 mcg')] |
 | ✅ | B_ACNTB / CAZ 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
 | ✅ | B_ACNTB / CIP 5 mcg: S≥21 mm, R≤15 mm | AMR package: [(21.0, 15.0, '5 mcg')] |
 | ✅ | B_ACNTB / CRO 30 mcg: S≥21 mm, R≤13 mm | AMR package: [(21.0, 13.0, '30 mcg')] |
 | ✅ | B_ACNTB / FEP 30 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '30 mcg')] |
-| ✅ | B_ACNTB / GEN 10 mcg: S≥15 mm, R≤12 mm | AMR package: [(15.0, 12.0, '10 mcg')] |
+| ✅ | B_ACNTB / GEN 10 mcg: S≥19 mm, R≤13 mm | AMR package: [(19.0, 13.0, '10 mcg')] |
 | ✅ | B_ACNTB / IPM 10 mcg: S≥22 mm, R≤18 mm | AMR package: [(22.0, 18.0, '10 mcg')] |
 | ✅ | B_ACNTB / MEM 10 mcg: S≥18 mm, R≤14 mm | AMR package: [(18.0, 14.0, '10 mcg')] |
 | ✅ | B_ACNTB / SXT 1.25/23.75 mcg: S≥16 mm, R≤10 mm | AMR package: [(16.0, 10.0, '1.25/23.75 mcg')] |

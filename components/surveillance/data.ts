@@ -35,6 +35,9 @@ export interface Isolate {
   ward: string;
   wardName: string;
   specimen: string;
+  screening: boolean;
+  origin: 'hospital' | 'community' | null;
+  hospitalDay: number | null;
   species: string;
   taxid: number;
   labels: string[];
@@ -80,6 +83,29 @@ export interface PrescribingRow {
   aware: Aware | null;
   encounters: number;
   resistant_encounters: number;
+}
+
+export interface ResistanceRate {
+  species: string;
+  phenotype: string;
+  meaning: string;
+  patients: number;
+  resistant: number;
+  percent: number;
+}
+
+export interface NotifiableCase {
+  condition: string;
+  title: string;
+  status: 'notify' | 'confirm_carbapenemase';
+  patient_id: string;
+  isolate_id: string;
+  species: string;
+  facility: string | null;
+  ward: string;
+  collected: string;
+  due: string;
+  evidence: string;
 }
 
 export interface HgtSignal {
@@ -151,6 +177,9 @@ export interface Snapshot {
   wardNetwork: { window_days: number; edges: number; transfer_links: number; genomic_links: number; wards: WardCentrality[]; links: WardEdge[] };
   alerts: Alert[];
   alertRules: Record<string, { severity: 'critical' | 'high'; title: string }>;
+  resistanceRates: Record<string, ResistanceRate[]>;
+  notifiable: NotifiableCase[];
+  notifiableConditions: Record<string, string>;
   scenarios: Record<string, Scenario>;
   verification: { title: string; verified: number; total: number }[];
 }
@@ -189,24 +218,7 @@ export const monthKey = (iso: string) => {
   return `${sast.getUTCFullYear()}-${String(sast.getUTCMonth() + 1).padStart(2, '0')}`;
 };
 
-// The flag a clinician reads first for each organism, as the laboratory reports it.
-export const KEY_FLAG: Record<string, string> = {
-  'Klebsiella pneumoniae': 'CRE',
-  'Escherichia coli': 'CRE',
-  'Enterobacter cloacae': 'CRE',
-  'Acinetobacter baumannii': 'CRAB',
-  'Pseudomonas aeruginosa': 'CRPA',
-  'Staphylococcus aureus': 'MRSA',
-  'Enterococcus faecium': 'VRE',
-};
-
-export const FLAG_MEANING: Record<string, string> = {
-  CRE: 'carbapenem-resistant Enterobacterales',
-  CRAB: 'carbapenem-resistant A. baumannii',
-  CRPA: 'carbapenem-resistant P. aeruginosa',
-  MRSA: 'methicillin-resistant S. aureus',
-  VRE: 'vancomycin-resistant enterococci',
-  ESBL: 'extended-spectrum beta-lactamase phenotype',
-};
+export const formatOrigin = (i: Isolate) =>
+  i.origin === null ? 'unknown (no admission time)' : `${i.origin === 'hospital' ? 'Hospital' : 'Community'} origin · hospital day ${i.hospitalDay}`;
 
 export const wardLabel = (key: string) => key.replace(':', ' · ');

@@ -18,7 +18,7 @@ Each identifier below was checked against the source named here.
 * NCBI Taxonomy IDs: every entry matches NCBI's own taxdb name index
   (published in NCBI's BLAST database bucket on AWS).
 * CLSI breakpoints (``bionexus.breakpoints``): every entry matches the AMR
-  package's CLSI 2025 table.
+  package's CLSI 2026 table.
 * MLST scheme names, and every ST a dataset uses, exist in the PubMLST
   profiles shipped with the ``mlst`` tool (Bioconda). USA300 -> ST8 (CC8)
   is stated in the Staphscope lineage table; USA100 -> ST5 rests on USA100
@@ -127,11 +127,11 @@ _ANTIBIOTICS = (
     AntibioticRef("J01FF01", "Clindamycin", "CLI"),
     AntibioticRef("J04AB02", "Rifampicin", "RIF", ("rifampin",)),
 )
-# WHO AWaRe classification (2023 list), keyed by AMR-package code.
-# Hand-curated: no machine-readable WHO source was reachable when this was
-# written, so confirm against the current WHO AWaRe list before relying on
-# it. Agents we could not place with confidence (rifampicin, cefoxitin) are
-# deliberately left unclassified rather than guessed.
+# WHO AWaRe classification, keyed by AMR-package code. Hand-curated: no
+# machine-readable WHO source was reachable from the build environment.
+# Checked against the 2023 list and, for cefoxitin and rifampicin (both
+# Watch), against excerpts of the 2025 list (WHO publication B09489);
+# confirm against the full 2025 list before relying on it.
 AWARE: dict[str, str] = {
     "AMP": "Access",
     "AMC": "Access",
@@ -156,6 +156,8 @@ AWARE: dict[str, str] = {
     "LNZ": "Reserve",
     "ERY": "Watch",
     "CLI": "Access",
+    "FOX": "Watch",
+    "RIF": "Watch",
 }
 AWARE_GROUPS = ("Access", "Watch", "Reserve")
 
@@ -174,27 +176,69 @@ def resolve_antibiotic(raw: str) -> AntibioticRef:
 
 
 # --------------------------------------------------------------------------
+# Specimens
+# --------------------------------------------------------------------------
+
+_SCREENING_WORDS = ("screen", "surveillance", "colonisation", "colonization")
+_SCREENING_SITES = ("rectal swab", "perianal swab", "perirectal swab")
+
+
+def is_screening_specimen(specimen: str) -> bool:
+    """True for colonisation screens (e.g. a rectal swab for CPE).
+
+    Screens count for infection-control outbreak detection, where carriage
+    matters, but CLSI M39 and WHO GLASS leave them out of resistance rates,
+    which describe clinical infections.
+    """
+    name = (specimen or "").strip().lower()
+    return any(word in name for word in _SCREENING_WORDS) or name.startswith(_SCREENING_SITES)
+
+
+# --------------------------------------------------------------------------
 # Priority resistance phenotypes (derived from susceptibility results)
 # --------------------------------------------------------------------------
 
 
 @dataclass(frozen=True)
 class PhenotypeRule:
-    """An isolate has ``flag`` when it tests R to any of ``atc_codes``."""
+    """An isolate has ``flag`` when it tests R to any of ``atc_codes``.
+
+    ``unless`` names agents that move the isolate to a higher-priority rule
+    instead: an isolate R to any of them does not get this flag, so one
+    outbreak is not reported twice under two phenotypes.
+
+    ``min_cluster_size`` is the smallest cluster worth reporting. Two linked
+    cases of a rare phenotype (CRE, VRE) already warrant review; an endemic
+    one needs more before it stands out from the background.
+    """
 
     flag: str
     meaning: str
     taxids: frozenset[int]
     atc_codes: frozenset[str]
+    unless: frozenset[str] = frozenset()
+    min_cluster_size: int = 2
 
 
 ENTEROBACTERALES_TAXIDS = frozenset({573, 562, 550})
 CARBAPENEM_ATC = frozenset({"J01DH02", "J01DH51", "J01DH03"})  # meropenem, imipenem, ertapenem
+THIRD_GEN_CEPHALOSPORIN_ATC = frozenset({"J01DD04", "J01DD01", "J01DD02"})  # ceftriaxone, cefotaxime, ceftazidime
 
 # Defined from results, not from the flag a lab may append to the organism
-# name, so the same definition applies to every laboratory.
+# name, so the same definition applies to every laboratory. The set follows
+# the WHO Bacterial Priority Pathogens List 2024: CRE, 3GC-R Enterobacterales
+# and CRAB are Critical; CRPA, MRSA and VRE are High.
 PRIORITY_PHENOTYPES = (
     PhenotypeRule("CRE", "carbapenem-resistant Enterobacterales", ENTEROBACTERALES_TAXIDS, CARBAPENEM_ATC),
+    PhenotypeRule(
+        "3GC-R",
+        "third-generation-cephalosporin-resistant Enterobacterales (not carbapenem-resistant)",
+        ENTEROBACTERALES_TAXIDS,
+        THIRD_GEN_CEPHALOSPORIN_ATC,
+        unless=CARBAPENEM_ATC,
+        # Endemic: about two-thirds of K. pneumoniae in the demo are 3GC-R.
+        min_cluster_size=3,
+    ),
     PhenotypeRule("CRAB", "carbapenem-resistant Acinetobacter baumannii", frozenset({470}), frozenset({"J01DH02", "J01DH51"})),
     PhenotypeRule("CRPA", "carbapenem-resistant Pseudomonas aeruginosa", frozenset({287}), frozenset({"J01DH02", "J01DH51"})),
     PhenotypeRule("MRSA", "methicillin-resistant Staphylococcus aureus", frozenset({1280}), frozenset({"J01CF04", "J01CF02", "J01DC01"})),
